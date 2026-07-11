@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import { about } from '../data/about';
+import { blog } from '../data/blog';
+import { works } from '../data/works';
 ---
 <!DOCTYPE html>
 <html lang="ja" id="top">
@@ -79,7 +82,7 @@ import '../styles/global.css';
 <svg class="ripple-layer" id="rippleLayer" aria-hidden="true"></svg>
 
 <nav>
-  <a class="logo" href="#/" data-route="home"><span class="kanji">准</span><span class="latin">JUNA</span></a>
+  <a class="logo" href="#/" data-route="home"><span class="kanji">栖</span><span class="latin">SUMIKA</span></a>
   <ul class="nav-links">
     <li><a href="#/" data-route="home">ABOUT</a></li>
     <li><a href="#/works" data-route="works">WORKS</a></li>
@@ -165,40 +168,20 @@ import '../styles/global.css';
     <section id="about">
       <span class="kanji-ghost" aria-hidden="true">私</span>
       <div class="reveal">
-        <p class="eyebrow">ABOUT — 私</p>
-        <h2>About me</h2>
-        <p>
-          川崎准也（ジュナ）です。茨城工業高等専門学校 機械制御系の4年生。
-          いまはLLMエージェントのセキュリティ——ツールチェーンが深くなるほど権限昇格は起きやすくなるのか——を、
-          統計的に検証する卒業研究に取り組んでいます。
-          手を動かして確かめるのが好きで、墨のにじみを物理シミュレーションで再現したり、
-          ブラウザでDJコンソールを組んだり。データ分析はKaggleで修行中です。
-        </p>
+        <p class="eyebrow">{about.eyebrow}</p>
+        <h2>{about.title}</h2>
+        {about.introduction.map((paragraph) => <p>{paragraph}</p>)}
       </div>
 
       <div class="fp reveal">
-        <h3>FootPrint<span class="en">— 足跡</span></h3>
+        <h3>{about.footprint.title}<span class="en">{about.footprint.subtitle}</span></h3>
         <ul class="timeline">
-          <li>
-            <span class="year">2023.04</span>
-            <span class="what">茨城工業高等専門学校 機械制御系 入学</span>
-          </li>
-          <li>
-            <span class="year">20XX.XX</span>
-            <span class="what">茨城県警 サイバー防犯ボランティア 委嘱【時期は要記入】</span>
-          </li>
-          <li>
-            <span class="year">2025</span>
-            <span class="what">DCON2025 本選出場 — 企業評価額5,000万円・企業賞3件</span>
-          </li>
-          <li>
-            <span class="year">2025</span>
-            <span class="what">卒業研究開始：LLMエージェントセキュリティ（ツールチェーン深さ×権限昇格の交互作用）</span>
-          </li>
-          <li>
-            <span class="year">2026 — 現在</span>
-            <span class="what">高専4年。Kaggle Expert を目指して修行中</span>
-          </li>
+          {about.footprint.entries.map((entry) => (
+            <li>
+              <span class="year">{entry.year}</span>
+              <span class="what">{entry.text}</span>
+            </li>
+          ))}
         </ul>
       </div>
     </section>
@@ -211,30 +194,18 @@ import '../styles/global.css';
     <section id="works">
       <span class="kanji-ghost" aria-hidden="true">作</span>
       <div class="reveal">
-        <p class="eyebrow">WORKS — 作</p>
-        <h2>公開アプリケーション</h2>
+        <p class="eyebrow">{works.eyebrow}</p>
+        <h2>{works.title}</h2>
         <div class="cards">
-          <a class="card" href="#/works">
-            <span class="moji" aria-hidden="true">墨</span>
-            <h3>sumi-ink.js</h3>
-            <p class="desc">水墨のにじみを再現する物理シミュレーションライブラリ。セルオートマトンで毛細管拡散を解き、Canvasに墨を落とせる。</p>
-            <div class="tags"><span>JAVASCRIPT</span><span>CANVAS</span><span>PHYSICS</span></div>
-            <div class="links"><span>DEMO ↗</span><span>GITHUB ↗</span></div>
-          </a>
-          <a class="card" href="#/works">
-            <span class="moji" aria-hidden="true">暦</span>
-            <h3>Contribution Todo</h3>
-            <p class="desc">GitHubの「草」をTodoに移植した習慣トラッカー。達成量を分位数でしきい値化して色分けし、カラーテーマ切替に対応。</p>
-            <div class="tags"><span>REACT</span><span>VISUALIZATION</span></div>
-            <div class="links"><span>DEMO ↗</span><span>GITHUB ↗</span></div>
-          </a>
-          <a class="card" href="#/works">
-            <span class="moji" aria-hidden="true">音</span>
-            <h3>Tone.js DJ Console</h3>
-            <p class="desc">Tone.jsで組んだブラウザDJコンソール。文化祭のフロアを自分のコードで鳴らすために制作。</p>
-            <div class="tags"><span>TONE.JS</span><span>WEB AUDIO</span></div>
-            <div class="links"><span>DEMO ↗</span><span>GITHUB ↗</span></div>
-          </a>
+          {works.items.map((item) => (
+            <a class="card" href={item.href}>
+              <span class="moji" aria-hidden="true">{item.character}</span>
+              <h3>{item.title}</h3>
+              <p class="desc">{item.description}</p>
+              <div class="tags">{item.tags.map((tag) => <span>{tag}</span>)}</div>
+              <div class="links">{item.links.map((link) => <span>{link}</span>)}</div>
+            </a>
+          ))}
         </div>
       </div>
     </section>
@@ -247,26 +218,18 @@ import '../styles/global.css';
     <section id="blog">
       <span class="kanji-ghost" aria-hidden="true">記</span>
       <div class="reveal">
-        <p class="eyebrow">BLOG — 記</p>
-        <h2>ブログ</h2>
+        <p class="eyebrow">{blog.eyebrow}</p>
+        <h2>{blog.title}</h2>
         <ul class="posts">
-          <li><a href="#/blog">
-            <span class="date">2026.06</span>
-            <span class="pf" aria-hidden="true">Q</span>
-            <span class="ttl">LLMエージェントのツールチェーンは深いほど危ないのか — arXiv:2507.06323 を読む</span>
-          </a></li>
-          <li><a href="#/blog">
-            <span class="date">2026.05</span>
-            <span class="pf" aria-hidden="true">Z</span>
-            <span class="ttl">墨のにじみをセルオートマトンで再現する — sumi-ink.js の設計メモ</span>
-          </a></li>
-          <li><a href="#/blog">
-            <span class="date">2026.04</span>
-            <span class="pf" aria-hidden="true">Z</span>
-            <span class="ttl">二分木探索を非再帰で書く — スタックで巻き取る</span>
-          </a></li>
+          {blog.posts.map((post) => (
+            <li><a href={post.href}>
+              <span class="date">{post.date}</span>
+              <span class="pf" aria-hidden="true">{post.source}</span>
+              <span class="ttl">{post.title}</span>
+            </a></li>
+          ))}
         </ul>
-        <p class="blog-note">記事の一覧は Zenn / Qiita のプロフィールからどうぞ。</p>
+        <p class="blog-note">{blog.note}</p>
       </div>
     </section>
   </main>
@@ -280,7 +243,7 @@ import '../styles/global.css';
     <a href="#" aria-label="Zenn"><span class="hanko">Z</span><span class="lbl">ZENN</span></a>
     <a href="#" aria-label="Qiita"><span class="hanko">Q</span><span class="lbl">QIITA</span></a>
   </div>
-  <span class="copy">© 2026 JUNA — 墨と余白のポートフォリオ</span>
+  <span class="copy">© 2026 Juna1013</span>
 </footer>
 
 <script src="../scripts/main.js"></script>
