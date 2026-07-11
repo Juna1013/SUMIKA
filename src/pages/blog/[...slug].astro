@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import '../../styles/global.css';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const formattedDate = `${post.data.pubDate.getFullYear()}.${String(post.data.pubDate.getMonth() + 1).padStart(2, '0')}`;
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={post.data.description} />
+    <title>{post.data.title} | 准 — JUNA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="article-nav">
+      <a class="logo" href="/"><span class="kanji">准</span><span class="latin">JUNA</span></a>
+      <a class="back-link" href="/#/blog">BLOG 一覧へ</a>
+    </nav>
+    <main class="article-main">
+      <article class="article-content">
+        <p class="eyebrow">BLOG — {post.data.source}</p>
+        <p class="article-date">{formattedDate}</p>
+        <h1>{post.data.title}</h1>
+        <p class="article-description">{post.data.description}</p>
+        <Content />
+      </article>
+    </main>
+  </body>
+</html>

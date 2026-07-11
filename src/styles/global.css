@@ -255,6 +255,24 @@ footer{
 .sns .lbl{font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:.3em;color:var(--ink-faint)}
 .copy{font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:.3em;color:var(--ink-faint)}
 
+/* ============ blog article ============ */
+.article-nav{
+  position:relative;display:flex;align-items:center;justify-content:space-between;
+  padding:18px 4.5vw;border-bottom:1px solid var(--line);opacity:1;animation:none;
+}
+.back-link{
+  font-family:'Cormorant Garamond',serif;font-size:12px;font-weight:600;
+  letter-spacing:.22em;color:var(--vermilion);text-decoration:none;
+}
+.article-main{max-width:860px;margin:0 auto;padding:16vh 7vw 13vh}
+.article-content{max-width:680px;margin:0 auto}
+.article-date{margin:0 0 .8em;font-family:'Cormorant Garamond',serif;font-size:13px;letter-spacing:.24em;color:var(--ink-faint)}
+.article-content h1{margin:0 0 .8em;font-size:clamp(28px,4vmin,42px);font-weight:500;line-height:1.65;letter-spacing:.08em}
+.article-description{margin:0 0 3em;padding-bottom:2em;border-bottom:1px solid var(--line);font-size:14px;line-height:2;letter-spacing:.08em;color:var(--ink-soft)}
+.article-content h2{margin:2.8em 0 1em;font-size:clamp(20px,2.6vmin,27px);line-height:1.5}
+.article-content p,.article-content li{font-size:15px;line-height:2.35;letter-spacing:.08em;color:#4c453d}
+.article-content ul{padding-left:1.5em}
+
 /* ============ responsive ============ */
 @media (max-width:760px){
   .nav-links{gap:1.6em}
@@ -264,6 +282,7 @@ footer{
   section{padding:14vh 8vw 10vh}
   .kanji-ghost{font-size:42vmin}
   .posts .date{min-width:5.4em;font-size:11px}
+  .article-main{padding:13vh 8vw 10vh}
 }
 
 @media (prefers-reduced-motion:reduce){

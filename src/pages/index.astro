@@ -1,8 +1,15 @@
 ---
 import '../styles/global.css';
+import { getCollection } from 'astro:content';
 import { about } from '../data/about';
 import { blog } from '../data/blog';
 import { works } from '../data/works';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const formatBlogDate = (date: Date) =>
+  `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}`;
 ---
 <!DOCTYPE html>
 <html lang="ja" id="top">
@@ -219,11 +226,11 @@ import { works } from '../data/works';
         <p class="eyebrow">{blog.eyebrow}</p>
         <h2>{blog.title}</h2>
         <ul class="posts">
-          {blog.posts.map((post) => (
-            <li><a href={post.href}>
-              <span class="date">{post.date}</span>
-              <span class="pf" aria-hidden="true">{post.source}</span>
-              <span class="ttl">{post.title}</span>
+          {posts.map((post) => (
+            <li><a href={`/blog/${post.id}/`}>
+              <span class="date">{formatBlogDate(post.data.pubDate)}</span>
+              <span class="pf" aria-hidden="true">{post.data.source}</span>
+              <span class="ttl">{post.data.title}</span>
             </a></li>
           ))}
         </ul>

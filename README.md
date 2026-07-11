@@ -27,7 +27,24 @@ npm run dev
 | --- | --- |
 | 自己紹介・経歴 | `src/data/about.ts` |
 | 作品カード | `src/data/works.ts` |
-| ブログ一覧 | `src/data/blog.ts` |
+| ブログ見出し・補足文 | `src/data/blog.ts` |
+
+### ブログ記事の追加
+
+`src/content/blog/` にMarkdownファイルを1つ追加するだけで、BLOG一覧と記事ページが自動生成されます。
+
+```md
+---
+title: 記事のタイトル
+description: 記事の概要
+pubDate: 2026-07-11
+source: Z
+---
+
+ここに本文を書きます。
+```
+
+ファイル名が記事URLになります。たとえば `src/content/blog/hello.md` は `/blog/hello/` として公開されます。下書きにしたい場合は、フロントマターに `draft: true` を追加してください。
 
 見た目やレイアウトは `src/styles/global.css`、桜・波紋・画面遷移などの動きは `src/scripts/main.js` で編集できます。
 
@@ -36,6 +53,7 @@ npm run dev
 ```text
 src/
 ├── data/          # About / Works / Blog の編集用データ
+├── content/blog/  # Markdownで管理するブログ記事
 ├── pages/
 │   └── index.astro
 ├── scripts/
