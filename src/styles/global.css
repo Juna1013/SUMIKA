@@ -117,8 +117,8 @@ nav{
 .name{
   margin:0;writing-mode:vertical-rl;
   font-size:clamp(44px,7.8vmin,88px);font-weight:500;letter-spacing:.16em;line-height:1.08;
+  opacity:0;animation:charIn .9s 2s cubic-bezier(.2,.6,.2,1) forwards;
 }
-.name span{display:inline-block;opacity:0;animation:charIn .9s var(--cd) cubic-bezier(.2,.6,.2,1) forwards}
 .name-sub{
   margin:0;writing-mode:vertical-rl;padding-top:1.7em;
   font-size:clamp(12px,1.9vmin,17px);letter-spacing:.42em;color:var(--ink-soft);
