@@ -1,0 +1,288 @@
+---
+import '../styles/global.css';
+---
+<!DOCTYPE html>
+<html lang="ja" id="top">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="川崎准也（ジュナ）のポートフォリオ。LLMエージェントセキュリティの研究、公開アプリケーション、技術ブログの記録。">
+<title>准 — JUNA | Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- 共有defs（桜の花・フィルタ） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="inkRough" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.032" numOctaves="4" seed="8" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7"/>
+    </filter>
+    <filter id="inkRoughFine" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="4" result="n2"/>
+      <feDisplacementMap in="SourceGraphic" in2="n2" scale="3.5"/>
+    </filter>
+    <filter id="hakeRough" x="-20%" y="-40%" width="140%" height="180%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.09" numOctaves="4" seed="13" result="h"/>
+      <feDisplacementMap in="SourceGraphic" in2="h" scale="22"/>
+    </filter>
+
+    <path id="spetal" d="M0 -5.2 C-0.6 -6.4 -2.4 -7 -3.6 -6 C-5.4 -4.4 -5.6 -0.8 -4.2 2 C-2.9 4.6 -1.4 5.6 0 6.6 C1.4 5.6 2.9 4.6 4.2 2 C5.6 -0.8 5.4 -4.4 3.6 -6 C2.4 -7 0.6 -6.4 0 -5.2 Z"/>
+    <g id="sb0">
+      <g fill="#e4afba" stroke="#b97f8e" stroke-width=".5">
+        <use href="#spetal" transform="rotate(0) translate(0 -7.4)" opacity=".95"/>
+        <use href="#spetal" transform="rotate(72) translate(0 -7.4)" opacity=".85"/>
+        <use href="#spetal" transform="rotate(144) translate(0 -7.4)" opacity=".9"/>
+        <use href="#spetal" transform="rotate(216) translate(0 -7.4)" opacity=".82"/>
+        <use href="#spetal" transform="rotate(288) translate(0 -7.4)" opacity=".88"/>
+      </g>
+      <circle r="1.7" fill="#a75f6f"/>
+      <g fill="#e9d08a" opacity=".95">
+        <circle cx="0" cy="-3" r=".6"/><circle cx="2.85" cy="-.95" r=".6"/>
+        <circle cx="1.75" cy="2.45" r=".6"/><circle cx="-1.75" cy="2.45" r=".6"/>
+        <circle cx="-2.85" cy="-.95" r=".6"/>
+      </g>
+    </g>
+    <g id="sb1">
+      <g fill="#cf8ea0" stroke="#a4677a" stroke-width=".5">
+        <use href="#spetal" transform="rotate(0) translate(0 -7.4)" opacity=".93"/>
+        <use href="#spetal" transform="rotate(72) translate(0 -7.4)" opacity=".84"/>
+        <use href="#spetal" transform="rotate(144) translate(0 -7.4)" opacity=".9"/>
+        <use href="#spetal" transform="rotate(216) translate(0 -7.4)" opacity=".8"/>
+        <use href="#spetal" transform="rotate(288) translate(0 -7.4)" opacity=".87"/>
+      </g>
+      <circle r="1.7" fill="#8f4c5d"/>
+    </g>
+    <g id="sb2">
+      <g fill="#f0e8d5" stroke="#4a4038" stroke-width=".8">
+        <use href="#spetal" transform="rotate(0) translate(0 -7.4)"/>
+        <use href="#spetal" transform="rotate(72) translate(0 -7.4)"/>
+        <use href="#spetal" transform="rotate(144) translate(0 -7.4)"/>
+        <use href="#spetal" transform="rotate(216) translate(0 -7.4)"/>
+        <use href="#spetal" transform="rotate(288) translate(0 -7.4)"/>
+      </g>
+      <circle r="1.3" fill="#4a4038"/>
+    </g>
+    <g id="sbud">
+      <circle r="2.8" fill="#d59aa9"/>
+      <circle r="2.8" fill="none" stroke="#a4677a" stroke-width=".5"/>
+      <path d="M0 1.8 C-2.2 3.2 -3 4.8 -2.8 6.8" stroke="#4a4038" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </g>
+  </defs>
+</svg>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="wipe" id="wipe" aria-hidden="true"></div>
+<svg class="ripple-layer" id="rippleLayer" aria-hidden="true"></svg>
+
+<nav>
+  <a class="logo" href="#/" data-route="home"><span class="kanji">准</span><span class="latin">JUNA</span></a>
+  <ul class="nav-links">
+    <li><a href="#/" data-route="home">ABOUT</a></li>
+    <li><a href="#/works" data-route="works">WORKS</a></li>
+    <li><a href="#/blog" data-route="blog">BLOG</a></li>
+  </ul>
+</nav>
+
+<!-- ============ HOME ============ -->
+<div class="view" data-route="home">
+  <header class="hero" id="hero">
+    <svg class="hake-svg" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+      <path class="hake" pathLength="1"
+        d="M-70 330 C300 285 820 275 1270 315"
+        stroke="#35302a" stroke-width="120" fill="none" stroke-linecap="round"
+        filter="url(#hakeRough)"/>
+    </svg>
+
+    <svg class="branch" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
+      <g filter="url(#inkRough)">
+        <!-- 幹（三段で先細り・左から横断） -->
+        <path class="stk" pathLength="1" style="--dl:.1s"  stroke="#3b352d" stroke-width="13"  d="M-30 250 C80 238 150 258 260 246 C360 236 420 210 520 202"/>
+        <path class="stk" pathLength="1" style="--dl:.55s" stroke="#43392f" stroke-width="8.5" d="M512 203 C610 196 660 206 750 196 C820 189 856 176 900 170"/>
+        <path class="stk" pathLength="1" style="--dl:.95s" stroke="#4c4034" stroke-width="5"   d="M892 171 C960 160 990 138 1050 126 C1100 116 1140 120 1200 108"/>
+        <path class="stk" pathLength="1" style="--dl:1.35s" stroke="#5d4f41" stroke-width="2.5" d="M1075 122 C1100 108 1112 92 1135 80"/>
+        <!-- 上枝A -->
+        <path class="stk" pathLength="1" style="--dl:.5s"  stroke="#453a30" stroke-width="6"   d="M300 246 C322 214 326 178 356 142"/>
+        <path class="stk" pathLength="1" style="--dl:.85s" stroke="#52453a" stroke-width="3.5" d="M352 146 C372 118 398 100 434 88"/>
+        <path class="stk" pathLength="1" style="--dl:1.15s" stroke="#5d4f41" stroke-width="2"  d="M380 112 C402 104 418 108 442 100"/>
+        <path class="stk" pathLength="1" style="--dl:1.2s"  stroke="#5d4f41" stroke-width="2"  d="M356 140 C344 120 346 100 336 82"/>
+        <!-- 下枝B -->
+        <path class="stk" pathLength="1" style="--dl:.7s"  stroke="#453a30" stroke-width="5.5" d="M598 203 C622 232 630 266 664 292"/>
+        <path class="stk" pathLength="1" style="--dl:1.05s" stroke="#52453a" stroke-width="3"  d="M660 289 C684 306 714 312 748 314"/>
+        <path class="stk" pathLength="1" style="--dl:1.3s"  stroke="#5d4f41" stroke-width="2"  d="M676 298 C690 312 694 330 710 342"/>
+        <path class="stk" pathLength="1" style="--dl:1.4s"  stroke="#5d4f41" stroke-width="1.8" d="M736 312 C748 296 762 290 780 284"/>
+        <!-- 上枝C -->
+        <path class="stk" pathLength="1" style="--dl:1s"   stroke="#453a30" stroke-width="5"   d="M828 181 C846 152 842 120 872 96"/>
+        <path class="stk" pathLength="1" style="--dl:1.3s" stroke="#52453a" stroke-width="3"   d="M868 100 C890 82 916 76 946 72"/>
+        <path class="stk" pathLength="1" style="--dl:1.55s" stroke="#5d4f41" stroke-width="2"  d="M884 88 C902 74 906 58 924 44"/>
+        <path class="stk" pathLength="1" style="--dl:1.5s"  stroke="#5d4f41" stroke-width="1.8" d="M946 72 C972 64 992 68 1016 58"/>
+        <!-- 小枝D -->
+        <path class="stk" pathLength="1" style="--dl:.9s"  stroke="#52453a" stroke-width="3"   d="M428 222 C446 240 470 250 500 252"/>
+        <!-- 追加：上枝E（左） -->
+        <path class="stk" pathLength="1" style="--dl:.45s" stroke="#52453a" stroke-width="3"   d="M182 248 C192 215 184 185 200 152"/>
+        <path class="stk" pathLength="1" style="--dl:.8s"  stroke="#5d4f41" stroke-width="1.8" d="M196 158 C212 140 228 138 248 128"/>
+        <!-- 追加：上小枝G（中央） -->
+        <path class="stk" pathLength="1" style="--dl:.95s" stroke="#5d4f41" stroke-width="2.2" d="M700 199 C712 172 706 148 722 122"/>
+        <!-- 追加：下小枝H（左中） -->
+        <path class="stk" pathLength="1" style="--dl:.75s" stroke="#5d4f41" stroke-width="2.2" d="M352 241 C364 263 382 273 408 277"/>
+        <!-- 追加：下枝F（左） -->
+        <path class="stk" pathLength="1" style="--dl:.6s"  stroke="#52453a" stroke-width="2.5" d="M260 246 C272 270 292 282 320 288"/>
+        <!-- 追加：先端の上小枝 -->
+        <path class="stk" pathLength="1" style="--dl:1.45s" stroke="#5d4f41" stroke-width="1.8" d="M1105 118 C1118 100 1116 82 1128 62"/>
+        <!-- 苔点 -->
+        <g class="mdot" fill="#3b352d">
+          <ellipse cx="180" cy="245" rx="3.2" ry="2" transform="rotate(-12 180 245)"/>
+          <ellipse cx="562" cy="199" rx="2.8" ry="1.8" transform="rotate(8 562 199)"/>
+          <ellipse cx="762" cy="192" rx="2.6" ry="1.7" transform="rotate(-6 762 192)"/>
+          <ellipse cx="1022" cy="130" rx="2.4" ry="1.6" transform="rotate(10 1022 130)"/>
+          <ellipse cx="330" cy="230" rx="2.2" ry="1.5" transform="rotate(-20 330 230)"/>
+        </g>
+      </g>
+      <g id="bloomLayer" filter="url(#inkRoughFine)"></g>
+    </svg>
+
+    <div class="petal-layer" aria-hidden="true"></div>
+
+    <div class="hero-copy">
+      <h1 class="name">
+        <span style="--cd:2s">川</span><span style="--cd:2.2s">崎</span><span style="--cd:2.4s">准</span><span style="--cd:2.6s">也</span>
+      </h1>
+      <p class="name-sub">静かに、手を動かす。</p>
+    </div>
+
+    <p class="lead">
+      茨城高専 機械制御系。LLMエージェントのセキュリティを研究しながら、<br>
+      墨のシミュレーションや、Webの小さな道具を作っています。
+      <span class="lead-en">STUDENT · BUILDER — JUNA</span>
+    </p>
+
+    <a class="scroll-hint" href="#about">巡る<span class="line"></span></a>
+  </header>
+  <main>
+    <section id="about">
+      <span class="kanji-ghost" aria-hidden="true">私</span>
+      <div class="reveal">
+        <p class="eyebrow">ABOUT — 私</p>
+        <h2>About me</h2>
+        <p>
+          川崎准也（ジュナ）です。茨城工業高等専門学校 機械制御系の4年生。
+          いまはLLMエージェントのセキュリティ——ツールチェーンが深くなるほど権限昇格は起きやすくなるのか——を、
+          統計的に検証する卒業研究に取り組んでいます。
+          手を動かして確かめるのが好きで、墨のにじみを物理シミュレーションで再現したり、
+          ブラウザでDJコンソールを組んだり。データ分析はKaggleで修行中です。
+        </p>
+      </div>
+
+      <div class="fp reveal">
+        <h3>FootPrint<span class="en">— 足跡</span></h3>
+        <ul class="timeline">
+          <li>
+            <span class="year">2023.04</span>
+            <span class="what">茨城工業高等専門学校 機械制御系 入学</span>
+          </li>
+          <li>
+            <span class="year">20XX.XX</span>
+            <span class="what">茨城県警 サイバー防犯ボランティア 委嘱【時期は要記入】</span>
+          </li>
+          <li>
+            <span class="year">2025</span>
+            <span class="what">DCON2025 本選出場 — 企業評価額5,000万円・企業賞3件</span>
+          </li>
+          <li>
+            <span class="year">2025</span>
+            <span class="what">卒業研究開始：LLMエージェントセキュリティ（ツールチェーン深さ×権限昇格の交互作用）</span>
+          </li>
+          <li>
+            <span class="year">2026 — 現在</span>
+            <span class="what">高専4年。Kaggle Expert を目指して修行中</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ WORKS ============ -->
+<div class="view" data-route="works">
+  <main>
+    <section id="works">
+      <span class="kanji-ghost" aria-hidden="true">作</span>
+      <div class="reveal">
+        <p class="eyebrow">WORKS — 作</p>
+        <h2>公開アプリケーション</h2>
+        <div class="cards">
+          <a class="card" href="#/works">
+            <span class="moji" aria-hidden="true">墨</span>
+            <h3>sumi-ink.js</h3>
+            <p class="desc">水墨のにじみを再現する物理シミュレーションライブラリ。セルオートマトンで毛細管拡散を解き、Canvasに墨を落とせる。</p>
+            <div class="tags"><span>JAVASCRIPT</span><span>CANVAS</span><span>PHYSICS</span></div>
+            <div class="links"><span>DEMO ↗</span><span>GITHUB ↗</span></div>
+          </a>
+          <a class="card" href="#/works">
+            <span class="moji" aria-hidden="true">暦</span>
+            <h3>Contribution Todo</h3>
+            <p class="desc">GitHubの「草」をTodoに移植した習慣トラッカー。達成量を分位数でしきい値化して色分けし、カラーテーマ切替に対応。</p>
+            <div class="tags"><span>REACT</span><span>VISUALIZATION</span></div>
+            <div class="links"><span>DEMO ↗</span><span>GITHUB ↗</span></div>
+          </a>
+          <a class="card" href="#/works">
+            <span class="moji" aria-hidden="true">音</span>
+            <h3>Tone.js DJ Console</h3>
+            <p class="desc">Tone.jsで組んだブラウザDJコンソール。文化祭のフロアを自分のコードで鳴らすために制作。</p>
+            <div class="tags"><span>TONE.JS</span><span>WEB AUDIO</span></div>
+            <div class="links"><span>DEMO ↗</span><span>GITHUB ↗</span></div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ BLOG ============ -->
+<div class="view" data-route="blog">
+  <main>
+    <section id="blog">
+      <span class="kanji-ghost" aria-hidden="true">記</span>
+      <div class="reveal">
+        <p class="eyebrow">BLOG — 記</p>
+        <h2>ブログ</h2>
+        <ul class="posts">
+          <li><a href="#/blog">
+            <span class="date">2026.06</span>
+            <span class="pf" aria-hidden="true">Q</span>
+            <span class="ttl">LLMエージェントのツールチェーンは深いほど危ないのか — arXiv:2507.06323 を読む</span>
+          </a></li>
+          <li><a href="#/blog">
+            <span class="date">2026.05</span>
+            <span class="pf" aria-hidden="true">Z</span>
+            <span class="ttl">墨のにじみをセルオートマトンで再現する — sumi-ink.js の設計メモ</span>
+          </a></li>
+          <li><a href="#/blog">
+            <span class="date">2026.04</span>
+            <span class="pf" aria-hidden="true">Z</span>
+            <span class="ttl">二分木探索を非再帰で書く — スタックで巻き取る</span>
+          </a></li>
+        </ul>
+        <p class="blog-note">記事の一覧は Zenn / Qiita のプロフィールからどうぞ。</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============ footer ============ -->
+<footer>
+  <div class="sns">
+    <a href="#" aria-label="GitHub"><span class="hanko">G</span><span class="lbl">GITHUB</span></a>
+    <a href="#" aria-label="X"><span class="hanko">X</span><span class="lbl">X</span></a>
+    <a href="#" aria-label="Zenn"><span class="hanko">Z</span><span class="lbl">ZENN</span></a>
+    <a href="#" aria-label="Qiita"><span class="hanko">Q</span><span class="lbl">QIITA</span></a>
+  </div>
+  <span class="copy">© 2026 JUNA — 墨と余白のポートフォリオ</span>
+</footer>
+
+<script src="../scripts/main.js"></script>
+</body>
+</html>
