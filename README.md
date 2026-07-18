@@ -1,6 +1,8 @@
-# JUNA Portfolio
+# 栖 -SUMIKA-
 
-Astro 5とTailwind CSS 4で構築したポートフォリオサイトです。
+Astro 5 と Tailwind CSS 4 で構築した、和風×桜をテーマにしたポートフォリオサイトです。
+
+墨絵の桜、舞い散る花びら、朱の刷毛マーカー、墨のワイプ遷移など、「紙・墨・朱」を基調にした演出を取り入れています。
 
 ## 開発
 
@@ -25,43 +27,38 @@ npm run dev
 
 | 編集対象 | ファイル |
 | --- | --- |
-| 自己紹介・経歴 | `src/data/about.ts` |
+| SEO・ヒーロー・自己紹介・経歴・SNSリンク | `src/data/about.ts` |
 | 作品カード | `src/data/works.ts` |
-| ブログ見出し・補足文 | `src/data/blog.ts` |
+| ブログ見出し・取得元アカウント・表示件数 | `src/data/blog.ts` |
 
-### ブログ記事の追加
+`about.ts` のヒーロー文（`leadLines`）と自己紹介（`introduction`）では、`==語==` のように囲むと朱色の刷毛マーカーが引かれます。
 
-`src/content/blog/` にMarkdownファイルを1つ追加するだけで、BLOG一覧と記事ページが自動生成されます。
+### ブログ一覧について
 
-```md
----
-title: 記事のタイトル
-description: 記事の概要
-pubDate: 2026-07-11
-source: Z
----
+BLOG セクションの記事一覧は、ビルド時に Zenn / Qiita の API から最新記事を自動取得して生成されます。取得元のアカウントと表示件数は `src/data/blog.ts` で設定できます。片方の取得に失敗しても、もう片方だけで一覧を作りビルドは継続されます。
 
-ここに本文を書きます。
-```
+## 見た目のカスタマイズ
 
-ファイル名が記事URLになります。たとえば `src/content/blog/hello.md` は `/blog/hello/` として公開されます。下書きにしたい場合は、フロントマターに `draft: true` を追加してください。
-
-見た目やレイアウトは各AstroファイルのTailwind CSSユーティリティ、カラーテーマやアニメーションは `src/styles/global.css`、桜・波紋・画面遷移などの動きは `src/scripts/main.js` で編集できます。
+- レイアウトや余白: 各 Astro ファイルの Tailwind CSS ユーティリティ
+- カラーテーマ・マーカー・アニメーション: `src/styles/global.css`
+- 桜の配置・花びら・波紋・画面遷移などの動き: `src/scripts/main.js`
+- ファビコン（落款印風の桜ロゴ）: `public/favicon.svg`
 
 ## ディレクトリ構成
 
 ```text
 src/
-├── components/    # 共通Astroコンポーネント
+├── components/    # 共通Astroコンポーネント（ヘッダー・セクション・SEO など）
 ├── data/          # About / Works / Blog の編集用データ
-├── content/blog/  # Markdownで管理するブログ記事
 ├── pages/
-│   ├── blog/      # 記事ページ
 │   └── index.astro
 ├── scripts/
-│   └── main.js
-└── styles/
-    └── global.css
+│   └── main.js    # 桜の描画・花びら・波紋・ハッシュルーティング
+├── styles/
+│   └── global.css
+└── utils/         # 日付整形・Zenn / Qiita のフィード取得
+public/
+└── favicon.svg
 ```
 
-`node_modules/`、`.astro/`、`dist/`、環境変数ファイルはGit管理の対象外です。
+`node_modules/`、`.astro/`、`dist/`、環境変数ファイルは Git 管理の対象外です。

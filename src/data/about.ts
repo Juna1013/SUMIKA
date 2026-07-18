@@ -5,7 +5,7 @@ import { siGithub, siQiita, siX, siZenn } from 'simple-icons';
 // title はブログ記事ページのタイトル末尾（記事名 | 栖 - SUMIKA）や og:site_name にも使われます
 export const seo = {
   title: '栖 - SUMIKA',
-  description: '機械工学を専攻する高専生 Juna1013 のポートフォリオ。Webアプリケーションの制作物、Zenn / Qiita の技術記事、日々の学びの記録。',
+  description: '制作物や技術記事、日々の記録をまとめた個人サイト。',
   // meta author / article:author に使われる名前
   author: 'Juna1013',
 } as const;
