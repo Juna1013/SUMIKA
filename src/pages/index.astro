@@ -82,13 +82,15 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   <SectionShell id="works" ghost="作" ghostSide="left" eyebrow={works.eyebrow} title={works.title}>
     <div class="mt-[3em] grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-[26px]">
       {works.items.map((item) => (
-        <a class="group relative flex flex-col gap-[1em] rounded-sm border border-line bg-[rgba(255,252,242,.4)] px-[1.7em] pt-[2em] pb-[1.7em] text-inherit no-underline transition-[transform,border-color,box-shadow] duration-450 ease-in-out hover:-translate-y-[5px] hover:border-[rgba(177,58,42,.55)] hover:shadow-[0_14px_30px_-18px_rgba(53,48,42,.4)]" href={item.href}>
+        <div class="group relative flex flex-col gap-[1em] rounded-sm border border-line bg-[rgba(255,252,242,.4)] px-[1.7em] pt-[2em] pb-[1.7em] transition-[transform,border-color,box-shadow] duration-450 ease-in-out hover:-translate-y-[5px] hover:border-[rgba(177,58,42,.55)] hover:shadow-[0_14px_30px_-18px_rgba(53,48,42,.4)]">
           <span class="flex h-11 w-11 -rotate-2 items-center justify-center rounded-[3px] border-[1.4px] border-ink text-[22px] font-semibold group-hover:border-vermilion group-hover:text-vermilion" aria-hidden="true">{item.character}</span>
           <h3 class="m-0 text-[17.5px] font-semibold tracking-[.12em]">{item.title}</h3>
           <p class="m-0 flex-1 text-[13px] leading-8 tracking-[.08em] text-ink-soft">{item.description}</p>
           <div class="flex flex-wrap gap-2">{item.tags.map((tag) => <span class="rounded-xs border border-line px-[.8em] py-[.35em] font-latin text-[10.5px] tracking-[.22em] text-ink-faint">{tag}</span>)}</div>
-          <div class="flex gap-[1.6em] font-latin text-[11.5px] font-semibold tracking-[.26em] text-vermilion">{item.links.map((link) => <span>{link}</span>)}</div>
-        </a>
+          <div class="flex gap-[1.6em] font-latin text-[11.5px] font-semibold tracking-[.26em] text-vermilion">
+            {item.links.map((link) => <a class="no-underline underline-offset-4 hover:underline" href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
+          </div>
+        </div>
       ))}
     </div>
   </SectionShell>
