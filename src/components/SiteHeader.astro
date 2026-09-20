@@ -94,45 +94,24 @@ const navItems = [
       window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: theme } }));
     }
 
-    /* 明暗が直接入れ替わると眩しいので、空の色をかぶせてその陰で切り替える。
-       夜明け（暗→明）／日暮れ（明→暗）で色の向きを変える。 */
-    var veil = document.getElementById('skyVeil');
+    /* 明暗が直接入れ替わると眩しいため、背景の色をゆっくり移す。
+       桜の上に何かを重ねると絵が一度消えてしまうので、覆わずに
+       背景と文字の色だけを時間をかけて変える。 */
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var skyBusy = false;
-
-    function applyWithSky(next){
-      var phase = next === 'light' ? 'dawn' : 'dusk';
-      if (!veil || reduce){ apply(next); return; }
-      if (skyBusy) return;           /* 演出中の連打は受け流す */
-      skyBusy = true;
-      toggle.setAttribute('aria-busy', 'true');
-
-      veil.classList.remove('dawn', 'dusk');
-      void veil.offsetWidth;         /* 直前のアニメーションを確実に切る */
-      veil.classList.add(phase);
-
-      /* 背景の変化は、空の濃さが平らな窓に収める。窓を広く取って
-         あるので色は急がずゆっくり移せる。空が引き始めるまでに
-         色が決まり切るため動きも重ならない。
-         日暮れは平らな部分が長い（40〜68%）ぶん、ゆっくり移す。 */
-      var fade = phase === 'dusk' ? 1.35 : 1.1;
-      root.style.setProperty('--theme-fade', fade + 's');
-      var swap = setTimeout(function(){ apply(next); }, 1000);
-
-      veil.addEventListener('animationend', function done(e){
-        if (e.target !== veil) return;
-        veil.removeEventListener('animationend', done);
-        clearTimeout(swap);
-        if (root.dataset.theme !== next) apply(next);  /* 取りこぼし防止 */
-        veil.classList.remove('dawn', 'dusk');
-        root.style.removeProperty('--theme-fade');     /* 既定の尺へ戻す */
-        toggle.removeAttribute('aria-busy');
-        skyBusy = false;
-      });
-    }
+    var FADE = 1.6;
+    var fadeTimer = null;
 
     toggle.addEventListener('click', function(){
-      applyWithSky(root.dataset.theme === 'dark' ? 'light' : 'dark');
+      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      if (!reduce) {
+        root.style.setProperty('--theme-fade', FADE + 's');
+        /* 尺はこの操作にだけ効かせる。OS追従など他の経路は既定のままにする */
+        clearTimeout(fadeTimer);
+        fadeTimer = setTimeout(function(){
+          root.style.removeProperty('--theme-fade');
+        }, FADE * 1000 + 100);
+      }
+      apply(next);
     });
 
     /* 手動で選ぶまでは OS 設定に追従する */
