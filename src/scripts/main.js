@@ -64,7 +64,15 @@
   /* ---------- 花びら ---------- */
   var SPETAL_D = 'M0 -5.2 C-0.6 -6.4 -2.4 -7 -3.6 -6 C-5.4 -4.4 -5.6 -0.8 -4.2 2 C-2.9 4.6 -1.4 5.6 0 6.6 C1.4 5.6 2.9 4.6 4.2 2 C5.6 -0.8 5.4 -4.4 3.6 -6 C2.4 -7 0.6 -6.4 0 -5.2 Z';
   var S_SVG = '<svg viewBox="-6.5 -8 13 16" xmlns="http://www.w3.org/2000/svg"><path d="' + SPETAL_D + '" fill="currentColor" opacity=".88"/></svg>';
-  var COLORS = ['#e2aab6','#d494a4','#c98a9c','#efc9d2','#dda0af'];
+  /* 花びらの色。テーマで切り替えられるよう CSS 変数から読む */
+  var LIGHT_COLORS = ['#e2aab6','#d494a4','#c98a9c','#efc9d2','#dda0af'];
+  var DARK_COLORS  = ['#d7a3b1','#c691a1','#bd8798','#e3c0c9','#cf9aa8'];
+  function petalColors(){
+    return document.documentElement.dataset.theme === 'dark' ? DARK_COLORS : LIGHT_COLORS;
+  }
+  var COLORS = petalColors();
+  /* テーマ切替時は以降に降る花びらから新しい色を使う */
+  window.addEventListener('themechange', function(){ COLORS = petalColors(); });
   if (!reduce){
     var pl = document.querySelector('.petal-layer');
     for (var i = 0; i < 34; i++){
