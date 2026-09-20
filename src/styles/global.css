@@ -53,6 +53,74 @@
   --star-opacity: 0;
 }
 
+/* ---------- 朝（明け方）---------- */
+:root[data-theme="dawn"] {
+  --paper: #f7e3cf;
+  --ink: #3b302a;
+  --ink-soft: #6b5548;
+  --ink-faint: #94765f;
+  --vermilion: #a93c26;
+  --line: rgba(59, 48, 42, 0.18);
+
+  --ink-body: #4f4038;
+  --card: rgba(255, 246, 236, 0.42);
+  /* 下から橙金が差し、上に夜の藍が残る */
+  --sky:
+    radial-gradient(150% 108% at 50% 116%, rgba(246, 196, 138, 0.55), transparent 62%),
+    radial-gradient(118% 92% at 18% 104%, rgba(230, 150, 124, 0.38), transparent 60%),
+    radial-gradient(112% 104% at 86% 2%, rgba(120, 128, 176, 0.34), transparent 62%);
+
+  --branch: #6a5240;
+  --branch-deep: #5d4839;
+  --branch-dark: #4e3c30;
+  --petal: #d98fa0;
+  --petal-line: #ab6478;
+  --petal-pale: #eeb6bd;
+  --petal-pale-line: #c07f8c;
+  --petal-open: #fff3e6;
+  --bud: #eccb86;
+  --petal-glow: drop-shadow(0 0 5px rgba(248, 206, 168, 0.5));
+  --wipe: linear-gradient(100deg, #2a1c18, #35231c 55%, #402b21);
+  --ripple: #4a382e;
+  --ripple-line: #5d4838;
+  --moon-opacity: 0.32;
+  --star-opacity: 0.18;
+}
+
+/* ---------- 夕（日暮れ）---------- */
+:root[data-theme="dusk"] {
+  --paper: #2a1f2e;
+  --ink: #f0ddd2;
+  --ink-soft: #c9aea4;
+  --ink-faint: #9c8279;
+  --vermilion: #e0705a;
+  --line: rgba(240, 221, 210, 0.18);
+
+  --ink-body: #e0cabf;
+  --card: rgba(240, 221, 210, 0.05);
+  /* 茜が下に広がり、上から紫紺が下りてくる */
+  --sky:
+    radial-gradient(150% 110% at 50% 118%, rgba(214, 118, 84, 0.42), transparent 62%),
+    radial-gradient(120% 96% at 74% 100%, rgba(176, 86, 96, 0.34), transparent 60%),
+    radial-gradient(116% 108% at 24% 0%, rgba(70, 72, 130, 0.46), transparent 62%);
+
+  --branch: #7a6472;
+  --branch-deep: #6a5563;
+  --branch-dark: #574453;
+  --petal: #e0a0ab;
+  --petal-line: #b0707f;
+  --petal-pale: #f0c2c9;
+  --petal-pale-line: #c08b97;
+  --petal-open: #fdeade;
+  --bud: #e6bc84;
+  --petal-glow: drop-shadow(0 0 6px rgba(244, 186, 170, 0.42));
+  --wipe: linear-gradient(100deg, #140d16, #1d131f 55%, #271a29);
+  --ripple: #e2ccd6;
+  --ripple-line: #b9a0ad;
+  --moon-opacity: 0.55;
+  --star-opacity: 0.4;
+}
+
 /* ---------- 夜（夜桜）---------- */
 :root[data-theme="dark"] {
   --paper: #14161f;
@@ -225,7 +293,8 @@
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.24  0 0 0 0 0.21  0 0 0 0 0.17  0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 /* 夜は暗い紙目を重ねると濁るため、明るい粒子を screen で乗せる */
-:root[data-theme="dark"] .grain {
+:root[data-theme="dark"] .grain,
+:root[data-theme="dusk"] .grain {
   mix-blend-mode: screen;
   opacity: 0.32;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.78  0 0 0 0 0.80  0 0 0 0 0.90  0 0 0 0.07 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
@@ -278,7 +347,8 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   /* 夜のメニューは紺一色で寂しいため、星を散らす。
      縦長の面なので上下に広く配りたく、ヒーローの星（上部に寄せた配置）
      とは別に置いている。 */
-  :root[data-theme="dark"] .nav-list::before {
+  :root[data-theme="dark"] .nav-list::before,
+  :root[data-theme="dusk"] .nav-list::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -336,7 +406,8 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   .nav-bar { transition-duration: 0.01ms; }
   body.nav-open .nav-item { transition-delay: 0s; }
   /* 星は残し、瞬きだけ止める */
-  :root[data-theme="dark"] .nav-list::before { animation: none; opacity: 0.85; }
+  :root[data-theme="dark"] .nav-list::before,
+  :root[data-theme="dusk"] .nav-list::before { animation: none; opacity: 0.85; }
 }
 
 /* 朱の刷毛マーカー（==語== 記法で MarkedText から付与） */
@@ -403,7 +474,8 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 .rip ellipse { fill: none; stroke: var(--ripple-line); stroke-width: 1.1; opacity: 0; transform-box: fill-box; transform-origin: center; animation: ripple 2.2s ease-out forwards; }
 .hake { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.16; animation: hake 0.55s 0.05s ease-in forwards, hake-settle 1.4s 1s ease-out forwards; }
 /* 夜桜では刷毛の帯が月に重なるため、ダークテーマでは出さない */
-:root[data-theme="dark"] .hake-layer { display: none; }
+:root[data-theme="dark"] .hake-layer,
+:root[data-theme="dusk"] .hake-layer { display: none; }
 
 
 .stk { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.15s var(--dl, 0s) cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
@@ -486,10 +558,79 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   .night-stars { animation: none; }
 }
 
-/* テーマ切替ボタン: 昼は月、夜は日を見せる */
-.theme-icon-sun { display: none; }
-:root[data-theme="dark"] .theme-icon-moon { display: none; }
-:root[data-theme="dark"] .theme-icon-sun { display: block; }
+/* 配色ボタン: いま選ばれている時刻の絵だけを見せる */
+.theme-icon { display: none; }
+:root[data-theme="light"] .theme-icon-sun,
+:root:not([data-theme]) .theme-icon-sun,
+:root[data-theme="dawn"] .theme-icon-dawn,
+:root[data-theme="dusk"] .theme-icon-dusk,
+:root[data-theme="dark"] .theme-icon-moon { display: block; }
+
+/* 配色を選ぶ小窓 */
+.theme-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 50;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  min-width: 150px;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  background-color: var(--color-paper);
+  background-image: var(--sky);
+  box-shadow: 0 12px 28px -16px color-mix(in srgb, var(--color-ink) 55%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.26s ease, transform 0.26s ease, visibility 0.26s;
+}
+.theme-picker.open .theme-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  width: 100%;
+  padding: 0.5em 0.7em;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-ink-soft);
+  font-family: var(--font-mincho);
+  font-size: 13px;
+  letter-spacing: .1em;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+.theme-option:hover,
+.theme-option:focus-visible {
+  color: var(--color-vermilion);
+  background-color: color-mix(in srgb, var(--color-vermilion) 9%, transparent);
+}
+/* 時刻の絵。選んでいるものは朱になる */
+.theme-option-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+}
+.theme-option-icon svg { width: 100%; height: 100%; }
+.theme-option[aria-checked="true"] {
+  color: var(--color-vermilion);
+}
+.theme-option-name { flex: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-menu { transition-duration: 0.01ms; }
+}
 
 /* 画像ロゴを currentColor で塗る（SVGアイコンと色を揃えるため） */
 .logo-mask {
