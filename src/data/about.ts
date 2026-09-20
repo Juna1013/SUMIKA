@@ -1,5 +1,5 @@
 // トップページ（index.astro）の文言はこのファイルでまとめて編集できます。
-import { siGithub, siQiita, siX, siZenn } from 'simple-icons';
+import { siAstro, siC, siCplusplus, siCss, siGithub, siHtml5, siPython, siQiita, siReact, siRuby, siX, siZenn } from 'simple-icons';
 
 // <head> に出力されるページタイトルと説明文
 // title はブログ記事ページのタイトル末尾（記事名 | 栖 - SUMIKA）や og:site_name にも使われます
@@ -35,10 +35,30 @@ export const about = {
     'デザインに限らず、情報工学的な理論も好きです。特に==LLM==については力を入れています。',
     'このサイトでは、個人的な制作物や日々の学び、記録などを残していくつもりです。'
   ],
-  // 使っている技術・学んでいるもの（チップ状に並んで表示されます）
+  // 使っている技術・学んでいるもの
+  // icon: simple-icons のアイコン（https://simpleicons.org/）。
+  //       省略するとその項目だけ従来どおり文字のチップで表示されます
   skills: [
-    { title: 'Things I work with:', items: ['C/C++', 'Python', 'HTML / CSS', 'React', 'Astro'] },
-    { title: 'Currently exploring:', items: ['LLM', 'Ruby', 'AI', 'AtCoder'] },
+    {
+      title: 'Things I work with:',
+      items: [
+        { label: 'C', icon: siC },
+        { label: 'C++', icon: siCplusplus },
+        { label: 'Python', icon: siPython },
+        { label: 'HTML', icon: siHtml5 },
+        { label: 'CSS', icon: siCss },
+        { label: 'React', icon: siReact },
+        { label: 'Astro', icon: siAstro },
+      ],
+    },
+    {
+      title: 'Currently exploring:',
+      items: [
+        { label: 'Ruby', icon: siRuby },
+        // AtCoder は simple-icons にアイコンがないため文字のチップで表示されます
+        { label: 'AtCoder' },
+      ],
+    },
   ],
 } as const;
 

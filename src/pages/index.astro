@@ -57,7 +57,14 @@ const posts = await fetchLatestPosts();
         <div class="mt-[2.2em] first:mt-0">
           <h3 class="m-0 mb-[1.2em] font-latin text-xs font-semibold tracking-[.32em] text-ink-soft">{group.title}</h3>
           <div class="flex flex-wrap gap-2">
-            {group.items.map((item) => <span class="rounded-xs border border-line px-[.9em] py-[.45em] font-latin text-[11px] tracking-[.18em] text-ink-soft transition-colors duration-350 hover:border-[rgba(177,58,42,.5)] hover:text-vermilion">{item}</span>)}
+            {group.items.map((item) => (
+              <span class="group/skill flex items-center gap-[.55em] rounded-xs border border-line px-[.9em] py-[.45em] font-latin text-[11px] tracking-[.18em] text-ink-soft transition-colors duration-350 hover:border-[rgba(177,58,42,.5)] hover:text-vermilion">
+                {'icon' in item && (
+                  <svg class="h-[13px] w-[13px] flex-none fill-current opacity-70 transition-opacity duration-350 group-hover/skill:opacity-100" viewBox="0 0 24 24" aria-hidden="true"><path d={item.icon.path} /></svg>
+                )}
+                {item.label}
+              </span>
+            ))}
           </div>
         </div>
       ))}
