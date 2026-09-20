@@ -12,7 +12,9 @@ export const output = {
   // 記事の取得元アカウント
   zennUsername: 'jun1013',
   qiitaUsername: 'juna1013',
-  // 一覧に表示する件数
-  postCount: 3,
+  // 最初に表示する件数（これより古い記事は「もっと見る」で開きます）
+  initialCount: 10,
+  // 「もっと見る」ボタンの文言（{count} が残りの件数に置き換わります）
+  moreLabel: 'もっと見る（{count}）',
 } as const;
 

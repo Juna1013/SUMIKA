@@ -88,39 +88,83 @@ const posts = await fetchLatestPosts();
 <!-- ============ EXPERIENCE ============ -->
 <div class="view" data-route="experience">
   <SectionShell id="experience" ghost="歴" ghostSide="left" eyebrow={experience.eyebrow} title={experience.title}>
-    <div class="mt-[3em]">
-      <h3 class="m-0 mb-[2.2em] flex items-center gap-3.5 text-[17px] font-semibold tracking-[.3em]">{experience.footprint.title}<span class="font-latin text-[11px] font-medium tracking-[.4em] text-ink-faint">{experience.footprint.subtitle}</span></h3>
-      <ul class="footprint relative m-0 list-none py-0 pr-0 pl-[26px] before:absolute before:top-1.5 before:bottom-1.5 before:left-0 before:w-0.5 before:rounded-sm before:bg-[linear-gradient(to_bottom,var(--color-ink)_0%,rgba(53,48,42,.35)_85%,transparent)] before:content-['']">
-        {experience.footprint.entries.map((entry) => (
-          <li class="relative pb-[2.1em] pl-[22px] before:absolute before:top-[9px] before:left-[-26px] before:h-[9px] before:w-[9px] before:translate-x-[-3.5px] before:rotate-8 before:rounded-full before:bg-ink before:shadow-[1.5px_1px_0_rgba(53,48,42,.35)] before:content-[''] last:before:bg-vermilion">
-            <span class="mb-[.35em] block font-latin text-[13px] font-semibold tracking-[.24em] text-vermilion">{formatFootprintDate(entry.year)}</span>
-            <span class="block text-[14.5px] leading-8 tracking-[.1em] text-[#4c453d]">{entry.text}</span>
-            {entry.description && <span class="mt-[.25em] block text-[12.5px] leading-7 tracking-[.08em] text-ink-faint">{entry.description}</span>}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul class="footprint relative m-0 mt-[3em] list-none py-0 pr-0 pl-[26px] before:absolute before:top-1.5 before:bottom-1.5 before:left-0 before:w-0.5 before:rounded-sm before:bg-[linear-gradient(to_bottom,var(--color-ink)_0%,rgba(53,48,42,.35)_85%,transparent)] before:content-['']">
+      {experience.entries.map((entry) => (
+        <li class="relative pb-[2.4em] last:pb-0 pl-[22px] before:absolute before:top-[9px] before:left-[-26px] before:h-[9px] before:w-[9px] before:translate-x-[-3.5px] before:rotate-8 before:rounded-full before:bg-ink before:shadow-[1.5px_1px_0_rgba(53,48,42,.35)] before:content-[''] first:before:bg-vermilion">
+          <span class="mb-[.35em] block font-latin text-[13px] font-semibold tracking-[.24em] text-vermilion">{formatFootprintDate(entry.year)}</span>
+          <span class="block text-[14.5px] leading-8 tracking-[.1em] text-[#4c453d]">{entry.text}{entry.detail && <span class="ml-[.8em] inline-block font-latin text-[12.5px] whitespace-nowrap tracking-[.16em] text-ink-faint">{entry.detail}</span>}</span>
+          {entry.description && <span class="mt-[.25em] block text-[12.5px] leading-7 tracking-[.08em] text-ink-faint">{entry.description}</span>}
+          {entry.awards.length > 0 && (
+            <span class="mt-[.7em] flex flex-wrap gap-2">
+              {entry.awards.map((award) => <span class="rounded-xs border border-[rgba(177,58,42,.4)] px-[.8em] py-[.3em] text-[11.5px] tracking-[.14em] text-vermilion">{award}</span>)}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
   </SectionShell>
 </div>
 
 <!-- ============ OUTPUT ============ -->
 <div class="view" data-route="output">
   <SectionShell id="output" ghost="記" eyebrow={output.eyebrow} title={output.title}>
-    <ul class="m-0 mt-[2.6em] list-none border-t border-line p-0">
-      {posts.map((post) => (
-        <li><a class="group relative flex items-center gap-[1.6em] border-b border-line px-[.4em] py-[1.5em] text-inherit no-underline transition-all duration-350 before:absolute before:top-1/2 before:left-0 before:h-0 before:w-[3px] before:-translate-y-1/2 before:rounded-full before:bg-vermilion before:opacity-0 before:transition-all before:duration-350 before:content-[''] hover:bg-[rgba(177,58,42,.05)] hover:pl-[1em] hover:before:h-[58%] hover:before:opacity-100" href={post.url} target="_blank" rel="noopener noreferrer">
-          <span class="min-w-[6.2em] font-latin text-xs tracking-[.2em] text-ink-faint max-mobile:min-w-[5.4em] max-mobile:text-[11px]">{formatPostDate(post.pubDate)}</span>
-          <span class="flex h-6 w-6 flex-none -rotate-2 items-center justify-center rounded-[3px] border-[1.3px] border-ink font-latin text-xs font-semibold transition-all duration-350 group-hover:rotate-1 group-hover:border-vermilion group-hover:bg-vermilion group-hover:text-paper" aria-hidden="true">{post.source}</span>
-          <span class="text-[14.5px] leading-[1.9] tracking-[.08em]">{post.title}</span>
-        </a></li>
+    <ul class="m-0 mt-[2.8em] grid list-none grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-[26px] p-0" id="postList">
+      {posts.map((post, index) => (
+        <li class:list={['post-item', { 'is-extra': index >= output.initialCount }]}>
+          <a class="group flex h-full flex-col gap-[1em] rounded-sm border border-line bg-[rgba(255,252,242,.4)] p-[1.1em] text-inherit no-underline transition-[transform,border-color,box-shadow] duration-450 ease-in-out hover:-translate-y-[5px] hover:border-[rgba(177,58,42,.55)] hover:shadow-[0_14px_30px_-18px_rgba(53,48,42,.4)]" href={post.url} target="_blank" rel="noopener noreferrer">
+            <span class="relative block aspect-[1200/630] overflow-hidden rounded-xs border border-line bg-[rgba(53,48,42,.04)]">
+              {post.ogImage ? (
+                <img
+                  class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  src={post.ogImage}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span class="flex h-full w-full items-center justify-center text-[34px] font-semibold text-ink opacity-10" aria-hidden="true">記</span>
+              )}
+            </span>
+            <span class="flex items-center gap-[1em]">
+              <span class="flex h-6 w-6 flex-none -rotate-2 items-center justify-center rounded-[3px] border-[1.3px] border-ink font-latin text-xs font-semibold transition-all duration-350 group-hover:rotate-1 group-hover:border-vermilion group-hover:bg-vermilion group-hover:text-paper" aria-hidden="true">{post.source}</span>
+              <span class="font-latin text-xs tracking-[.2em] text-ink-faint">{formatPostDate(post.pubDate)}</span>
+            </span>
+            <span class="text-[14px] leading-[1.95] tracking-[.08em] transition-colors duration-350 group-hover:text-vermilion">{post.title}</span>
+          </a>
+        </li>
       ))}
     </ul>
-    <p class="mt-[2.2em] mb-[1.4em] text-[12.5px] tracking-[.14em] text-ink-faint">{output.note}</p>
+
+    {posts.length > output.initialCount && (
+      <div class="mt-[2.8em] flex justify-center">
+        <button
+          class="nav-more cursor-pointer rounded-xs border border-line bg-transparent px-[2em] py-[.85em] font-latin text-[11.5px] font-semibold tracking-[.26em] text-ink-soft transition-colors duration-350 hover:border-[rgba(177,58,42,.55)] hover:text-vermilion"
+          id="postMore"
+          type="button"
+          aria-controls="postList"
+          aria-expanded="false"
+        >{output.moreLabel.replace('{count}', String(posts.length - output.initialCount))}</button>
+      </div>
+    )}
+
+    <p class="mt-[2.6em] mb-[1.4em] text-[12.5px] tracking-[.14em] text-ink-faint">{output.note}</p>
     <div class="flex flex-wrap gap-[1.6em] font-latin text-[11.5px] font-semibold tracking-[.26em] text-vermilion">
       {output.profiles.map((profile) => <a class="no-underline underline-offset-4 hover:underline" href={profile.href} target="_blank" rel="noopener noreferrer">{profile.label}</a>)}
     </div>
   </SectionShell>
 </div>
+
+<script is:inline>
+  (function(){
+    var more = document.getElementById('postMore');
+    var list = document.getElementById('postList');
+    if (!more || !list) return;
+    more.addEventListener('click', function(){
+      list.classList.add('show-all');
+      more.remove();
+    });
+  })();
+</script>
 
 <!-- ============ footer ============ -->
 <footer class="flex flex-col items-center gap-[2.4em] px-[7vw] pt-[8vh] pb-[4em] text-center">
