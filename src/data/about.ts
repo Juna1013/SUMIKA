@@ -68,7 +68,7 @@ export const about = {
 // アイコンは simple-icons（https://simpleicons.org/）を使用
 export const socialLinks = [
   { label: 'GitHub', icon: siGithub, text: 'GITHUB', href: 'https://github.com/Juna1013' },
-  { label: 'X', icon: siX, text: 'X', href: '#' },
+  { label: 'X', icon: siX, text: 'X', href: 'https://x.com/juna1013_' },
   { label: 'Zenn', icon: siZenn, text: 'ZENN', href: 'https://zenn.dev/jun1013' },
   { label: 'Qiita', icon: siQiita, text: 'QIITA', href: 'https://qiita.com/juna1013' },
 ] as const;
