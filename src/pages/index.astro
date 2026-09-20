@@ -210,19 +210,16 @@ const posts = await fetchLatestPosts();
     </svg>
     <span class="h-px w-[min(180px,24vw)] bg-[linear-gradient(to_right,var(--color-line),transparent)]"></span>
   </div>
-  <div class="flex flex-wrap justify-center gap-[2.4em]">
+  <div class="flex flex-wrap items-center justify-center gap-[1.15em]">
     {socialLinks.map((link) => (
       <a
-        class="group flex flex-col items-center gap-[.7em] text-ink no-underline"
+        class="flex h-11 w-11 items-center justify-center text-ink-soft no-underline transition-colors duration-350 hover:text-vermilion"
         href={link.href}
         aria-label={link.label}
         target={link.href.startsWith('http') ? '_blank' : undefined}
         rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
       >
-        <span class="flex h-[46px] w-[46px] -rotate-2 items-center justify-center rounded-[3px] border-[1.6px] border-ink transition-all duration-350 group-hover:rotate-1 group-hover:border-vermilion group-hover:bg-vermilion group-hover:text-paper">
-          <svg class="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d={link.icon.path} /></svg>
-        </span>
-        <span class="font-latin text-[10px] tracking-[.3em] text-ink-faint">{link.text}</span>
+        <svg class="h-[22px] w-[22px] fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d={link.icon.path} /></svg>
       </a>
     ))}
   </div>
