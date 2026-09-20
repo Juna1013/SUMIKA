@@ -402,7 +402,10 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 :root[data-theme="dark"] .theme-icon-moon { display: none; }
 :root[data-theme="dark"] .theme-icon-sun { display: block; }
 
-/* 公式ロゴの明暗切替（加工せず配布物を使い分ける） */
-.logo-dark { display: none; }
-:root[data-theme="dark"] .logo-light { display: none; }
-:root[data-theme="dark"] .logo-dark { display: block; }
+/* 画像ロゴを currentColor で塗る（SVGアイコンと色を揃えるため） */
+.logo-mask {
+  display: block;
+  background-color: currentColor;
+  -webkit-mask: var(--logo-src) center / contain no-repeat;
+  mask: var(--logo-src) center / contain no-repeat;
+}
