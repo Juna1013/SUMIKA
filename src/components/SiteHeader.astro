@@ -38,24 +38,78 @@ const navItems = [
     ))}
   </ul>
 
-  <!-- テーマ切替（昼 ⇄ 夜桜） -->
-  <button
-    class="theme-toggle relative z-2 ml-auto flex h-11 w-11 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-ink-soft transition-colors duration-350 hover:text-vermilion max-mobile:mr-1"
-    id="themeToggle"
-    type="button"
-    aria-label="ダークテーマに切り替える"
-  >
-    <!-- 昼は月（夜へ切り替える）、夜は日（昼へ切り替える） -->
-    <svg class="theme-icon theme-icon-moon h-[19px] w-[19px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12.3 2.1a.8.8 0 0 0-.9 1.05 7.6 7.6 0 0 0 9.45 9.45.8.8 0 0 1 .95 1.05A9.6 9.6 0 1 1 12.3 2.1Z"/>
-    </svg>
-    <svg class="theme-icon theme-icon-sun h-[19px] w-[19px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="4.2"/>
-      <g stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
-        <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>
-      </g>
-    </svg>
-  </button>
+  <!-- 時刻のテーマ（昼・朝焼け・夕焼け・夜桜）を選ぶ -->
+  <div class="theme-picker relative z-3 ml-auto max-mobile:mr-1">
+    <button
+      class="theme-toggle flex h-11 w-11 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-ink-soft transition-colors duration-350 hover:text-vermilion"
+      id="themeToggle"
+      type="button"
+      aria-haspopup="true"
+      aria-expanded="false"
+      aria-controls="themeMenu"
+      aria-label="配色を選ぶ"
+    >
+      <!-- 選ばれているテーマの絵を出す（CSSで出し分け） -->
+      <svg class="theme-icon theme-icon-sun h-[19px] w-[19px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <g stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>
+        </g>
+      </svg>
+      <!-- 朝焼け: 地平から昇る日 -->
+      <svg class="theme-icon theme-icon-dawn h-[19px] w-[19px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="13" r="3.6"/>
+        <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none">
+          <path d="M12 4.4v2M4.9 7.4l1.5 1.5M19.1 7.4l-1.5 1.5"/>
+          <path d="M2.8 18.4h18.4"/>
+          <path d="M5.6 21.4h5M13.6 21.4h4.8"/>
+        </g>
+      </svg>
+      <!-- 夕焼け: 地平へ沈む日 -->
+      <svg class="theme-icon theme-icon-dusk h-[19px] w-[19px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M8.4 13a3.6 3.6 0 0 1 7.2 0Z"/>
+        <g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none">
+          <path d="M12 3.2v2.4M5.2 6.6l1.6 1.6M18.8 6.6l-1.6 1.6"/>
+          <path d="M2.8 16.6h18.4"/>
+          <path d="M5.6 20.2h5M13.6 20.2h4.8"/>
+        </g>
+      </svg>
+      <!-- 夜桜: 月 -->
+      <svg class="theme-icon theme-icon-moon h-[19px] w-[19px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12.3 2.1a.8.8 0 0 0-.9 1.05 7.6 7.6 0 0 0 9.45 9.45.8.8 0 0 1 .95 1.05A9.6 9.6 0 1 1 12.3 2.1Z"/>
+      </svg>
+    </button>
+
+    <ul class="theme-menu" id="themeMenu" role="menu" aria-label="配色">
+      {/* 一日の巡りの順に並べる */}
+      {[
+        { value: 'dawn',  name: '朝焼け' },
+        { value: 'light', name: '昼' },
+        { value: 'dusk',  name: '夕焼け' },
+        { value: 'dark',  name: '夜桜' },
+      ].map((opt) => (
+        <li role="none">
+          <button class="theme-option" type="button" role="menuitemradio" aria-checked="false" data-theme-value={opt.value}>
+            <span class="theme-option-icon" aria-hidden="true">
+              {opt.value === 'dawn' && (
+                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="13" r="3.6"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"><path d="M12 4.4v2M4.9 7.4l1.5 1.5M19.1 7.4l-1.5 1.5"/><path d="M2.8 18.4h18.4"/><path d="M5.6 21.4h5M13.6 21.4h4.8"/></g></svg>
+              )}
+              {opt.value === 'light' && (
+                <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="4.2"/><g stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></g></svg>
+              )}
+              {opt.value === 'dusk' && (
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.4 13a3.6 3.6 0 0 1 7.2 0Z"/><g stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"><path d="M12 3.2v2.4M5.2 6.6l1.6 1.6M18.8 6.6l-1.6 1.6"/><path d="M2.8 16.6h18.4"/><path d="M5.6 20.2h5M13.6 20.2h4.8"/></g></svg>
+              )}
+              {opt.value === 'dark' && (
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.3 2.1a.8.8 0 0 0-.9 1.05 7.6 7.6 0 0 0 9.45 9.45.8.8 0 0 1 .95 1.05A9.6 9.6 0 1 1 12.3 2.1Z"/></svg>
+              )}
+            </span>
+            <span class="theme-option-name">{opt.name}</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
 
   <!-- ハンバーガー（モバイルのみ） -->
   <button
@@ -75,20 +129,34 @@ const navItems = [
 </nav>
 
 <script is:inline>
-  /* テーマ切替。初期値は localStorage → OS設定の順で決める */
+  /* 配色の選択。初期値は localStorage → OS設定の順で決める */
   (function(){
     var toggle = document.getElementById('themeToggle');
-    if (!toggle) return;
+    var menu = document.getElementById('themeMenu');
+    if (!toggle || !menu) return;
     var root = document.documentElement;
+    var picker = toggle.closest('.theme-picker');
+    var options = Array.prototype.slice.call(menu.querySelectorAll('.theme-option'));
 
-    function label(theme){
-      return theme === 'dark' ? 'ライトテーマに切り替える' : 'ダークテーマに切り替える';
+    /* 暗い順に並べる。焼けの向きはこの明るさの前後で決めるので、
+       一日の巡りではなく実際の明るさの順にしてある。 */
+    var ORDER = ['dark', 'dusk', 'dawn', 'light'];
+    var NAMES = { light: '昼', dawn: '朝焼け', dusk: '夕焼け', dark: '夜桜' };
+
+    function current(){
+      return NAMES[root.dataset.theme] ? root.dataset.theme : 'light';
     }
-    /* 描画前スクリプトが決めたテーマに合わせてラベルを初期化する */
-    toggle.setAttribute('aria-label', label(root.dataset.theme));
+    function syncMenu(theme){
+      toggle.setAttribute('aria-label', '配色を選ぶ（いまは' + NAMES[theme] + '）');
+      options.forEach(function(btn){
+        btn.setAttribute('aria-checked', btn.dataset.themeValue === theme ? 'true' : 'false');
+      });
+    }
+    syncMenu(current());
+
     function apply(theme){
       root.dataset.theme = theme;
-      toggle.setAttribute('aria-label', label(theme));
+      syncMenu(theme);
       try { localStorage.setItem('theme', theme); } catch (e) {}
       /* 花びらの色など、JS側で色を持つ描画に知らせる */
       window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: theme } }));
@@ -100,12 +168,13 @@ const navItems = [
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var FADE = 1.6;
     var fadeTimer = null;
-
     var body = document.body;
     var skyTimer = null;
 
-    toggle.addEventListener('click', function(){
-      var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    function choose(next){
+      var now = current();
+      if (next === now) { close(); return; }
+
       if (!reduce) {
         root.style.setProperty('--theme-fade', FADE + 's');
         /* 尺はこの操作にだけ効かせる。OS追従など他の経路は既定のままにする */
@@ -114,8 +183,9 @@ const navItems = [
           root.style.removeProperty('--theme-fade');
         }, FADE * 1000 + 100);
 
-        /* 空を朝焼け／夕焼けに染める。桜より下の層なので絵は隠れない */
-        var phase = next === 'light' ? 'sky-dawn' : 'sky-dusk';
+        /* 明るくなる向きなら朝焼け、暗くなる向きなら夕焼けを通す。
+           桜より奥の層なので絵は隠れない。 */
+        var phase = ORDER.indexOf(next) > ORDER.indexOf(now) ? 'sky-dawn' : 'sky-dusk';
         body.classList.remove('sky-dawn', 'sky-dusk');
         void body.offsetWidth;
         body.classList.add(phase);
@@ -125,14 +195,45 @@ const navItems = [
         }, 1900);
       }
       apply(next);
+      close();
+    }
+
+    function open(){
+      picker.classList.add('open');
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+    function close(){
+      picker.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    toggle.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (picker.classList.contains('open')) close(); else open();
+    });
+    options.forEach(function(btn){
+      btn.addEventListener('click', function(){ choose(btn.dataset.themeValue); });
+    });
+    /* 外を触る・Escで閉じる */
+    document.addEventListener('click', function(e){
+      if (!picker.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && picker.classList.contains('open')) { close(); toggle.focus(); }
     });
 
-    /* 手動で選ぶまでは OS 設定に追従する */
+    /* 手動で選ぶまでは OS 設定に追従する。
+       ここで保存すると選んでいないのに追従が止まるため、
+       表示だけを変えて localStorage には書かない。 */
     var media = window.matchMedia('(prefers-color-scheme: dark)');
     function follow(e){
       var saved = null;
       try { saved = localStorage.getItem('theme'); } catch (err) {}
-      if (!saved) apply(e.matches ? 'dark' : 'light');
+      if (saved) return;
+      var next = e.matches ? 'dark' : 'light';
+      root.dataset.theme = next;
+      syncMenu(next);
+      window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
     }
     if (media.addEventListener) media.addEventListener('change', follow);
     else media.addListener(follow);
