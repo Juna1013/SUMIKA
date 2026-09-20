@@ -55,70 +55,87 @@
 
 /* ---------- 朝（明け方）---------- */
 :root[data-theme="dawn"] {
-  --paper: #f7e3cf;
-  --ink: #3b302a;
-  --ink-soft: #6b5548;
-  --ink-faint: #94765f;
-  --vermilion: #a93c26;
-  --line: rgba(59, 48, 42, 0.18);
+  --paper: #f2e4dc;
+  --ink: #2c3a42;
+  --ink-soft: #53656f;
+  --ink-faint: #7d8f99;
+  --vermilion: #b04a3c;
+  --line: rgba(44, 58, 66, 0.16);
 
-  --ink-body: #4f4038;
-  --card: rgba(255, 246, 236, 0.42);
-  /* 下から橙金が差し、上に夜の藍が残る */
+  --ink-body: #3c4d57;
+  --card: rgba(255, 255, 255, 0.46);
+  /* 水平線の桃から空の水色へ。地の色を下端に合わせ、上へ向かって
+     水色が深くなる。層を重ねて境目の出ない空にする。 */
   --sky:
-    radial-gradient(150% 108% at 50% 116%, rgba(246, 196, 138, 0.55), transparent 62%),
-    radial-gradient(118% 92% at 18% 104%, rgba(230, 150, 124, 0.38), transparent 60%),
-    radial-gradient(112% 104% at 86% 2%, rgba(120, 128, 176, 0.34), transparent 62%);
+    radial-gradient(90% 46% at 50% 100%, rgba(255, 206, 184, 0.9), transparent 70%),
+    radial-gradient(70% 38% at 28% 94%, rgba(248, 184, 186, 0.6), transparent 72%),
+    radial-gradient(76% 44% at 74% 88%, rgba(226, 176, 204, 0.5), transparent 74%),
+    linear-gradient(to top,
+      #f6ded2 0%,
+      #f2d5cf 16%,
+      #e3c9d4 34%,
+      #c9c4de 52%,
+      #a8bedd 70%,
+      #8fb0d8 86%,
+      #7ea6d6 100%);
 
-  --branch: #6a5240;
-  --branch-deep: #5d4839;
-  --branch-dark: #4e3c30;
-  --petal: #d98fa0;
-  --petal-line: #ab6478;
-  --petal-pale: #eeb6bd;
-  --petal-pale-line: #c07f8c;
-  --petal-open: #fff3e6;
-  --bud: #eccb86;
-  --petal-glow: drop-shadow(0 0 5px rgba(248, 206, 168, 0.5));
-  --wipe: linear-gradient(100deg, #2a1c18, #35231c 55%, #402b21);
-  --ripple: #4a382e;
-  --ripple-line: #5d4838;
-  --moon-opacity: 0.32;
-  --star-opacity: 0.18;
+  --branch: #4f5c66;
+  --branch-deep: #45515a;
+  --branch-dark: #3a444d;
+  --petal: #e2a0ac;
+  --petal-line: #ab6e7e;
+  --petal-pale: #f2c3cb;
+  --petal-pale-line: #bf8b97;
+  --petal-open: #fdfbfa;
+  --bud: #e8c49a;
+  --petal-glow: drop-shadow(0 0 5px rgba(255, 214, 200, 0.55));
+  --wipe: linear-gradient(100deg, #1e2a32, #26343d 55%, #2f3f49);
+  --ripple: #3c4a54;
+  --ripple-line: #4e5e69;
+  --moon-opacity: 0.26;
+  --star-opacity: 0.14;
 }
 
 /* ---------- 夕（日暮れ）---------- */
 :root[data-theme="dusk"] {
-  --paper: #2a1f2e;
-  --ink: #f0ddd2;
-  --ink-soft: #c9aea4;
-  --ink-faint: #9c8279;
-  --vermilion: #e0705a;
-  --line: rgba(240, 221, 210, 0.18);
+  --paper: #f0dcd0;
+  --ink: #2b2b38;
+  --ink-soft: #4f5062;
+  --ink-faint: #6f7186;
+  --vermilion: #97392f;
+  --line: rgba(43, 43, 56, 0.18);
 
-  --ink-body: #e0cabf;
-  --card: rgba(240, 221, 210, 0.05);
-  /* 茜が下に広がり、上から紫紺が下りてくる */
+  --ink-body: #3a3b4b;
+  --card: rgba(255, 255, 255, 0.32);
+  /* 水平線の橙から藤、薄縹へ。上へ向かうほど青が深くなる */
   --sky:
-    radial-gradient(150% 110% at 50% 118%, rgba(214, 118, 84, 0.42), transparent 62%),
-    radial-gradient(120% 96% at 74% 100%, rgba(176, 86, 96, 0.34), transparent 60%),
-    radial-gradient(116% 108% at 24% 0%, rgba(70, 72, 130, 0.46), transparent 62%);
+    radial-gradient(92% 44% at 50% 100%, rgba(253, 198, 152, 0.88), transparent 70%),
+    radial-gradient(72% 38% at 70% 94%, rgba(244, 170, 160, 0.62), transparent 72%),
+    radial-gradient(78% 46% at 26% 86%, rgba(210, 162, 200, 0.52), transparent 74%),
+    linear-gradient(to top,
+      #f7dcc6 0%,
+      #f2cfc4 16%,
+      #dfbfd0 34%,
+      #bdb4dc 52%,
+      #97a8d6 70%,
+      #7b92cd 86%,
+      #6a84c6 100%);
 
-  --branch: #7a6472;
-  --branch-deep: #6a5563;
-  --branch-dark: #574453;
-  --petal: #e0a0ab;
-  --petal-line: #b0707f;
-  --petal-pale: #f0c2c9;
-  --petal-pale-line: #c08b97;
-  --petal-open: #fdeade;
-  --bud: #e6bc84;
-  --petal-glow: drop-shadow(0 0 6px rgba(244, 186, 170, 0.42));
-  --wipe: linear-gradient(100deg, #140d16, #1d131f 55%, #271a29);
-  --ripple: #e2ccd6;
-  --ripple-line: #b9a0ad;
-  --moon-opacity: 0.55;
-  --star-opacity: 0.4;
+  --branch: #4a4b5c;
+  --branch-deep: #414252;
+  --branch-dark: #373846;
+  --petal: #d894a6;
+  --petal-line: #a2647a;
+  --petal-pale: #eebac6;
+  --petal-pale-line: #b58393;
+  --petal-open: #fbf7f8;
+  --bud: #d8b88e;
+  --petal-glow: drop-shadow(0 0 6px rgba(226, 196, 220, 0.5));
+  --wipe: linear-gradient(100deg, #1a1b26, #22232f 55%, #2b2c3a);
+  --ripple: #3f4152;
+  --ripple-line: #525468;
+  --moon-opacity: 0.5;
+  --star-opacity: 0.34;
 }
 
 /* ---------- 夜（夜桜）---------- */
@@ -167,7 +184,8 @@
     overflow-x: hidden;
     color: var(--color-ink);
     font-family: var(--font-mincho);
-    background-color: var(--color-paper);
+    /* 地の色は html が持つ。body にも置くと ::before の空が
+       その奥に回り込んで見えなくなる。 */
   }
 
   /* テーマ切替を一拍おいて馴染ませる（初回描画時は効かせない） */
