@@ -380,19 +380,19 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 /* 日暮れ: 茜金から紫紺、藍へと沈んでいく */
 .sky-veil.dusk {
   visibility: visible;
-  animation: sky-fade 2.8s cubic-bezier(0.45, 0, 0.3, 1) forwards;
+  animation: sky-fade-dusk 2.8s cubic-bezier(0.45, 0, 0.3, 1) forwards;
 }
 .sky-veil.dusk::before {
   background-image: linear-gradient(
     to top,
-    #fac98a 0%,
-    #ef9f6d 12%,
-    #d97d80 25%,
-    #a87aa4 40%,
-    #7a75b0 56%,
-    #5967a4 74%,
-    #465795 88%,
-    #3d4f8d 100%);
+    #f6c288 0%,
+    #e89a6b 12%,
+    #cf7576 25%,
+    #a06590 40%,
+    #6d5c8e 54%,
+    #43406a 70%,
+    #22233f 86%,
+    #141a2c 100%);
   animation: sky-sink 2.8s cubic-bezier(0.45, 0, 0.3, 1) forwards;
 }
 /* 濃さ。長い平らな山をつくり、その間に背景を入れ替える。
@@ -405,6 +405,18 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   62%  { opacity: 0.74; }
   74%  { opacity: 0.62; }
   88%  { opacity: 0.26; }
+  100% { opacity: 0; }
+}
+/* 日暮れは夜へ着地する。背景が紺に決まり切るまで濃さを残し、
+   最後は空の上端（ほぼ夜の紺）のまま溶けるので境目が出ない。 */
+@keyframes sky-fade-dusk {
+  0%   { opacity: 0; }
+  18%  { opacity: 0.42; }
+  30%  { opacity: 0.66; }
+  40%  { opacity: 0.76; }
+  68%  { opacity: 0.76; }
+  82%  { opacity: 0.58; }
+  93%  { opacity: 0.22; }
   100% { opacity: 0; }
 }
 /* 空そのものの昇り降り。transform のみで合成に載せる */

@@ -111,10 +111,12 @@ const navItems = [
       void veil.offsetWidth;         /* 直前のアニメーションを確実に切る */
       veil.classList.add(phase);
 
-      /* 背景の変化は、空の濃さが平らな窓（約1120〜1740ms）に収める。
-         窓を広く取ってあるので、色は急がずゆっくり移せる。
-         空が引き始めるまでに色が決まり切るため動きも重ならない。 */
-      root.style.setProperty('--theme-fade', '1.1s');
+      /* 背景の変化は、空の濃さが平らな窓に収める。窓を広く取って
+         あるので色は急がずゆっくり移せる。空が引き始めるまでに
+         色が決まり切るため動きも重ならない。
+         日暮れは平らな部分が長い（40〜68%）ぶん、ゆっくり移す。 */
+      var fade = phase === 'dusk' ? 1.35 : 1.1;
+      root.style.setProperty('--theme-fade', fade + 's');
       var swap = setTimeout(function(){ apply(next); }, 1000);
 
       veil.addEventListener('animationend', function done(e){
