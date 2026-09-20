@@ -111,11 +111,11 @@ const navItems = [
       void veil.offsetWidth;         /* 直前のアニメーションを確実に切る */
       veil.classList.add(phase);
 
-      /* 背景の変化は空がいちばん濃い窓（約540〜930ms）に収める。
-         空が引き始めるまでに色を決め切ることで、空の動きと背景の
-         動きが重ならず、紺や白へ移るときのぐらつきがなくなる。 */
-      root.style.setProperty('--theme-fade', '0.48s');
-      var swap = setTimeout(function(){ apply(next); }, 600);
+      /* 背景の変化は、空の濃さが平らな窓（約1120〜1740ms）に収める。
+         窓を広く取ってあるので、色は急がずゆっくり移せる。
+         空が引き始めるまでに色が決まり切るため動きも重ならない。 */
+      root.style.setProperty('--theme-fade', '1.1s');
+      var swap = setTimeout(function(){ apply(next); }, 1000);
 
       veil.addEventListener('animationend', function done(e){
         if (e.target !== veil) return;

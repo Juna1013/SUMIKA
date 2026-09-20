@@ -328,63 +328,98 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 
 /* ---------- 空の帳（テーマ切替の朝焼け／夕焼け） ----------
    明暗が直接入れ替わると眩しいため、空の色を一度かぶせて
-   その陰で切り替える。ただし板で覆うと桜と文字が消えてしまうので、
+   その陰で切り替える。板で覆うと桜と文字が消えるので、
    ブレンドで色だけを重ね、下の描画は透かしたまま残す。
-   夜明けは screen で暗い背景を持ち上げ、日暮れは multiply で
-   明るい背景を落とす。いずれも形は保たれる。 */
+   ブレンド（screen / multiply）は背景の明暗で効きが反転し、
+   切替の途中で色が飛ぶうえ全画面合成が重いため使わない。
+   通常合成のまま濃さを抑え、桜と文字が透けて見えるようにする。
+
+   動かすのは transform と opacity だけに絞る。background-position
+   を動かすと毎フレーム塗り直しになり、全画面では重い。 */
 .sky-veil {
   opacity: 0;
   visibility: hidden;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: 100% 190%;
+  overflow: hidden;
+  contain: strict;
+  /* 合成を自前のレイヤーに固定し、ブレンドのたびに背後を
+     作り直さないようにする */
+  will-change: opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+/* 実際に動く面。画面より高くしておき、上下にずらして空を昇降させる */
+.sky-veil::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: -60%;
+  height: 220%;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 /* 夜明け: 藍から薄紫、茜、橙金へと下から明けていく */
 .sky-veil.dawn {
   visibility: visible;
-  mix-blend-mode: screen;
+  animation: sky-fade 2.8s cubic-bezier(0.45, 0, 0.3, 1) forwards;
+}
+.sky-veil.dawn::before {
   background-image: linear-gradient(
     to top,
-    #f0c68e 0%,
-    #e0a071 14%,
-    #c27a72 30%,
-    #8d6a92 48%,
-    #4b4f7e 68%,
-    #1e2742 86%,
-    #10162b 100%);
-  animation: sky-dawn 1.6s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
+    #f4cf9c 0%,
+    #e6ab7c 12%,
+    #cf8a7a 25%,
+    #a4779b 40%,
+    #6a6494 56%,
+    #333c60 74%,
+    #161d33 88%,
+    #0d1226 100%);
+  animation: sky-rise 2.8s cubic-bezier(0.45, 0, 0.3, 1) forwards;
 }
 /* 日暮れ: 茜金から紫紺、藍へと沈んでいく */
 .sky-veil.dusk {
   visibility: visible;
-  mix-blend-mode: multiply;
+  animation: sky-fade 2.8s cubic-bezier(0.45, 0, 0.3, 1) forwards;
+}
+.sky-veil.dusk::before {
   background-image: linear-gradient(
     to top,
-    #f7c07a 0%,
-    #e8905f 12%,
-    #cf6f77 26%,
-    #9c6a9e 42%,
-    #6e6cab 58%,
-    #51619d 78%,
-    #42538f 100%);
-  animation: sky-dusk 1.6s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
+    #fac98a 0%,
+    #ef9f6d 12%,
+    #d97d80 25%,
+    #a87aa4 40%,
+    #7a75b0 56%,
+    #5967a4 74%,
+    #465795 88%,
+    #3d4f8d 100%);
+  animation: sky-sink 2.8s cubic-bezier(0.45, 0, 0.3, 1) forwards;
 }
-/* 昇ってから引いていく。山で背景色を差し替える */
-@keyframes sky-dawn {
-  0%   { opacity: 0;    background-position: center 100%; }
-  34%  { opacity: 0.88; background-position: center 46%; }
-  58%  { opacity: 0.82; background-position: center 24%; }
-  100% { opacity: 0;    background-position: center 0%; }
+/* 濃さ。長い平らな山をつくり、その間に背景を入れ替える。
+   前半でゆっくり満ち、後半でゆっくり引く。 */
+@keyframes sky-fade {
+  0%   { opacity: 0; }
+  18%  { opacity: 0.42; }
+  30%  { opacity: 0.66; }
+  40%  { opacity: 0.74; }
+  62%  { opacity: 0.74; }
+  74%  { opacity: 0.62; }
+  88%  { opacity: 0.26; }
+  100% { opacity: 0; }
 }
-@keyframes sky-dusk {
-  0%   { opacity: 0;    background-position: center 0%; }
-  34%  { opacity: 0.88; background-position: center 30%; }
-  58%  { opacity: 0.82; background-position: center 54%; }
-  100% { opacity: 0;    background-position: center 100%; }
+/* 空そのものの昇り降り。transform のみで合成に載せる */
+@keyframes sky-rise {
+  0%   { transform: translate3d(0, 34%, 0); }
+  100% { transform: translate3d(0, -30%, 0); }
+}
+@keyframes sky-sink {
+  0%   { transform: translate3d(0, -30%, 0); }
+  100% { transform: translate3d(0, 34%, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
   /* 動きを抑える設定では空を出さず、色の変化だけに留める */
   .sky-veil.dawn, .sky-veil.dusk { animation: none; visibility: hidden; }
+  .sky-veil.dawn::before, .sky-veil.dusk::before { animation: none; }
 }
 .stk { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.15s var(--dl, 0s) cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
 .mdot { opacity: 0; animation: fade-in 0.9s 1.95s forwards; }
