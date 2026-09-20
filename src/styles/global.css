@@ -319,6 +319,62 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 .hake { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.16; animation: hake 0.55s 0.05s ease-in forwards, hake-settle 1.4s 1s ease-out forwards; }
 /* 夜桜では刷毛の帯が月に重なるため、ダークテーマでは出さない */
 :root[data-theme="dark"] .hake-layer { display: none; }
+
+/* ---------- 空の帳（テーマ切替の朝焼け／夕焼け） ----------
+   明暗が直接入れ替わると眩しいため、空の色を一度かぶせて
+   その陰で切り替える。既定では不可視で、切替中のみ現れる。 */
+.sky-veil {
+  opacity: 0;
+  visibility: hidden;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 100% 190%;
+}
+/* 夜明け: 藍から薄紫、茜、橙金へと下から明けていく */
+.sky-veil.dawn {
+  visibility: visible;
+  background-image: linear-gradient(
+    to top,
+    #f7d9a0 0%,
+    #f0b97f 14%,
+    #e08a76 30%,
+    #b9708f 48%,
+    #6f5f96 68%,
+    #2f3a63 86%,
+    #1b2340 100%);
+  animation: sky-dawn 1.5s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
+}
+/* 日暮れ: 茜金から紫紺、藍へと沈んでいく */
+.sky-veil.dusk {
+  visibility: visible;
+  background-image: linear-gradient(
+    to top,
+    #f0b56a 0%,
+    #e08a5c 12%,
+    #c66a6e 26%,
+    #9c5f88 42%,
+    #6a5490 58%,
+    #3d4370 78%,
+    #161c33 100%);
+  animation: sky-dusk 1.5s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
+}
+/* 昇ってから引いていく。山（不透明の頂点）で背景色を差し替える */
+@keyframes sky-dawn {
+  0%   { opacity: 0;    background-position: center 100%; }
+  34%  { opacity: 0.97; background-position: center 46%; }
+  58%  { opacity: 0.95; background-position: center 24%; }
+  100% { opacity: 0;    background-position: center 0%; }
+}
+@keyframes sky-dusk {
+  0%   { opacity: 0;    background-position: center 0%; }
+  34%  { opacity: 0.97; background-position: center 30%; }
+  58%  { opacity: 0.95; background-position: center 54%; }
+  100% { opacity: 0;    background-position: center 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* 動きを抑える設定では空を出さず、色の変化だけに留める */
+  .sky-veil.dawn, .sky-veil.dusk { animation: none; visibility: hidden; }
+}
 .stk { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.15s var(--dl, 0s) cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
 .mdot { opacity: 0; animation: fade-in 0.9s 1.95s forwards; }
 .bloom-unit { opacity: 0; transform-box: fill-box; transform-origin: center; animation: bloom 0.7s var(--bd, 1.4s) cubic-bezier(0.3, 0.9, 0.35, 1.2) forwards; }

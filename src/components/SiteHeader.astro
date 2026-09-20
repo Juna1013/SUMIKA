@@ -94,8 +94,39 @@ const navItems = [
       window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: theme } }));
     }
 
+    /* 明暗が直接入れ替わると眩しいので、空の色をかぶせてその陰で切り替える。
+       夜明け（暗→明）／日暮れ（明→暗）で色の向きを変える。 */
+    var veil = document.getElementById('skyVeil');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var skyBusy = false;
+
+    function applyWithSky(next){
+      var phase = next === 'light' ? 'dawn' : 'dusk';
+      if (!veil || reduce){ apply(next); return; }
+      if (skyBusy) return;           /* 演出中の連打は受け流す */
+      skyBusy = true;
+      toggle.setAttribute('aria-busy', 'true');
+
+      veil.classList.remove('dawn', 'dusk');
+      void veil.offsetWidth;         /* 直前のアニメーションを確実に切る */
+      veil.classList.add(phase);
+
+      /* 空がいちばん濃くなる頃に背景を入れ替え、切替の瞬間を隠す */
+      var swap = setTimeout(function(){ apply(next); }, 620);
+
+      veil.addEventListener('animationend', function done(e){
+        if (e.target !== veil) return;
+        veil.removeEventListener('animationend', done);
+        clearTimeout(swap);
+        if (root.dataset.theme !== next) apply(next);  /* 取りこぼし防止 */
+        veil.classList.remove('dawn', 'dusk');
+        toggle.removeAttribute('aria-busy');
+        skyBusy = false;
+      });
+    }
+
     toggle.addEventListener('click', function(){
-      apply(root.dataset.theme === 'dark' ? 'light' : 'dark');
+      applyWithSky(root.dataset.theme === 'dark' ? 'light' : 'dark');
     });
 
     /* 手動で選ぶまでは OS 設定に追従する */
