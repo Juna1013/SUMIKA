@@ -136,6 +136,50 @@
     background: var(--sky);
   }
 
+  /* 切替のあいだ、空に朝焼け／夕焼けを重ねる層。
+     桜（z-index: 0 以上）より下の -1 に置くので、絵は覆われない。
+     手前に帳を重ねる作りだと桜が一度消えてしまうため、この形にした。 */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    /* 負の値だと body の背景色より奥になり隠れてしまうため 0 に置く。
+       桜は header 内で重なり文脈を持つので、これより手前に出る。 */
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+  body.sky-dawn::after,
+  body.sky-dusk::after {
+    animation: sky-glow 1.9s cubic-bezier(0.4, 0.1, 0.2, 1);
+  }
+  /* 夜明け: 下から橙金が差し、上には藍が残る */
+  body.sky-dawn::after {
+    background-image:
+      radial-gradient(1500px 940px at 50% 116%, rgba(246, 188, 124, 0.9), transparent 62%),
+      radial-gradient(1150px 780px at 20% 102%, rgba(228, 138, 118, 0.62), transparent 60%),
+      radial-gradient(1050px 860px at 84% 4%, rgba(74, 86, 144, 0.55), transparent 62%);
+  }
+  /* 日暮れ: 茜が広がり、上から紫紺が下りてくる */
+  body.sky-dusk::after {
+    background-image:
+      radial-gradient(1500px 940px at 50% 116%, rgba(242, 162, 96, 0.9), transparent 62%),
+      radial-gradient(1150px 800px at 76% 98%, rgba(208, 108, 116, 0.65), transparent 60%),
+      radial-gradient(1100px 900px at 24% 2%, rgba(62, 70, 136, 0.62), transparent 62%);
+  }
+  /* 満ちてから引く。背景の差し替えはこの山の間に起きる */
+  @keyframes sky-glow {
+    0%   { opacity: 0; }
+    26%  { opacity: 1; }
+    62%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body.sky-dawn::after,
+    body.sky-dusk::after { animation: none; }
+  }
+
   ::selection {
     background: color-mix(in srgb, var(--color-vermilion) 22%, transparent);
   }

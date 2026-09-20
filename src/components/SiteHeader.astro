@@ -101,6 +101,9 @@ const navItems = [
     var FADE = 1.6;
     var fadeTimer = null;
 
+    var body = document.body;
+    var skyTimer = null;
+
     toggle.addEventListener('click', function(){
       var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
       if (!reduce) {
@@ -110,6 +113,16 @@ const navItems = [
         fadeTimer = setTimeout(function(){
           root.style.removeProperty('--theme-fade');
         }, FADE * 1000 + 100);
+
+        /* 空を朝焼け／夕焼けに染める。桜より下の層なので絵は隠れない */
+        var phase = next === 'light' ? 'sky-dawn' : 'sky-dusk';
+        body.classList.remove('sky-dawn', 'sky-dusk');
+        void body.offsetWidth;
+        body.classList.add(phase);
+        clearTimeout(skyTimer);
+        skyTimer = setTimeout(function(){
+          body.classList.remove('sky-dawn', 'sky-dusk');
+        }, 1900);
       }
       apply(next);
     });
