@@ -88,36 +88,20 @@ const posts = await fetchLatestPosts();
 <!-- ============ EXPERIENCE ============ -->
 <div class="view" data-route="experience">
   <SectionShell id="experience" ghost="歴" ghostSide="left" eyebrow={experience.eyebrow} title={experience.title}>
-    <div class="mt-[3em]">
-      <h3 class="m-0 mb-[2.2em] flex items-center gap-3.5 text-[17px] font-semibold tracking-[.3em]">{experience.footprint.title}<span class="font-latin text-[11px] font-medium tracking-[.4em] text-ink-faint">{experience.footprint.subtitle}</span></h3>
-      <ul class="footprint relative m-0 list-none py-0 pr-0 pl-[26px] before:absolute before:top-1.5 before:bottom-1.5 before:left-0 before:w-0.5 before:rounded-sm before:bg-[linear-gradient(to_bottom,var(--color-ink)_0%,rgba(53,48,42,.35)_85%,transparent)] before:content-['']">
-        {experience.footprint.entries.map((entry) => (
-          <li class="relative pb-[2.1em] last:pb-0 pl-[22px] before:absolute before:top-[9px] before:left-[-26px] before:h-[9px] before:w-[9px] before:translate-x-[-3.5px] before:rotate-8 before:rounded-full before:bg-ink before:shadow-[1.5px_1px_0_rgba(53,48,42,.35)] before:content-[''] first:before:bg-vermilion">
-            <span class="mb-[.35em] block font-latin text-[13px] font-semibold tracking-[.24em] text-vermilion">{formatFootprintDate(entry.year)}</span>
-            <span class="block text-[14.5px] leading-8 tracking-[.1em] text-[#4c453d]">{entry.text}</span>
-            {entry.description && <span class="mt-[.25em] block text-[12.5px] leading-7 tracking-[.08em] text-ink-faint">{entry.description}</span>}
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div class="reveal mt-[5em] border-t border-line pt-[3.4em]">
-      <h3 class="m-0 mb-[2.2em] flex items-center gap-3.5 text-[17px] font-semibold tracking-[.3em]">{experience.achievements.title}<span class="font-latin text-[11px] font-medium tracking-[.4em] text-ink-faint">{experience.achievements.subtitle}</span></h3>
-      <ul class="m-0 list-none p-0">
-        {experience.achievements.entries.map((entry) => (
-          <li class="flex gap-[1.8em] border-b border-line py-[1.35em] last:border-b-0 max-mobile:flex-col max-mobile:gap-[.5em]">
-            <span class="min-w-[6.4em] pt-[.15em] font-latin text-[12.5px] font-semibold tracking-[.24em] text-vermilion">{formatFootprintDate(entry.date)}</span>
-            <span class="flex-1">
-              <span class="block text-[14.5px] leading-8 tracking-[.1em] text-[#4c453d]">{entry.text}{entry.detail && <span class="ml-[.8em] font-latin text-[12.5px] tracking-[.16em] text-ink-faint">{entry.detail}</span>}</span>
-              {entry.awards.length > 0 && (
-                <span class="mt-[.6em] flex flex-wrap gap-2">
-                  {entry.awards.map((award) => <span class="rounded-xs border border-[rgba(177,58,42,.4)] px-[.8em] py-[.3em] text-[11.5px] tracking-[.14em] text-vermilion">{award}</span>)}
-                </span>
-              )}
+    <ul class="footprint relative m-0 mt-[3em] list-none py-0 pr-0 pl-[26px] before:absolute before:top-1.5 before:bottom-1.5 before:left-0 before:w-0.5 before:rounded-sm before:bg-[linear-gradient(to_bottom,var(--color-ink)_0%,rgba(53,48,42,.35)_85%,transparent)] before:content-['']">
+      {experience.entries.map((entry) => (
+        <li class="relative pb-[2.4em] last:pb-0 pl-[22px] before:absolute before:top-[9px] before:left-[-26px] before:h-[9px] before:w-[9px] before:translate-x-[-3.5px] before:rotate-8 before:rounded-full before:bg-ink before:shadow-[1.5px_1px_0_rgba(53,48,42,.35)] before:content-[''] first:before:bg-vermilion">
+          <span class="mb-[.35em] block font-latin text-[13px] font-semibold tracking-[.24em] text-vermilion">{formatFootprintDate(entry.year)}</span>
+          <span class="block text-[14.5px] leading-8 tracking-[.1em] text-[#4c453d]">{entry.text}{entry.detail && <span class="ml-[.8em] inline-block font-latin text-[12.5px] whitespace-nowrap tracking-[.16em] text-ink-faint">{entry.detail}</span>}</span>
+          {entry.description && <span class="mt-[.25em] block text-[12.5px] leading-7 tracking-[.08em] text-ink-faint">{entry.description}</span>}
+          {entry.awards.length > 0 && (
+            <span class="mt-[.7em] flex flex-wrap gap-2">
+              {entry.awards.map((award) => <span class="rounded-xs border border-[rgba(177,58,42,.4)] px-[.8em] py-[.3em] text-[11.5px] tracking-[.14em] text-vermilion">{award}</span>)}
             </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+          )}
+        </li>
+      ))}
+    </ul>
   </SectionShell>
 </div>
 
