@@ -214,6 +214,12 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 }
 .view { display: none; }
 .view.active { display: block; }
+
+/* Output: 初期表示を超える記事は「もっと見る」まで隠す */
+.post-item.is-extra { display: none; }
+.post-list.show-all .post-item.is-extra,
+#postList.show-all .post-item.is-extra { display: block; }
+
 .wipe.cover { animation: wipe-in 0.36s cubic-bezier(0.6, 0.1, 0.4, 1) forwards; }
 .wipe.out { animation: wipe-out 0.44s cubic-bezier(0.5, 0.1, 0.4, 1) forwards; }
 .rip-drop { fill: #3a342c; opacity: 0; transform-box: fill-box; animation: drop-in 0.38s ease-in forwards; }
