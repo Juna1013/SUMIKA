@@ -55,20 +55,20 @@ export const works = {
       ],
     },
   ],
-  // 受賞・活動歴（awards: 受賞内容がある場合に朱色で併記されます）
+  // 受賞・活動歴（新しい順に並べてください。awards: 受賞内容がある場合に朱色で併記されます）
   achievements: {
     title: '受賞・活動歴',
     subtitle: '— 賞',
     entries: [
       {
-        date: '2025.05',
-        text: 'DCON2025 本選出場',
-        detail: '95チーム中5位',
-        awards: ['TOPY工業賞', '日立産業制御ソリューションズ賞', 'Quick賞'],
+        date: '2025.11',
+        text: '第8回 CTF神奈川',
+        detail: '60人中6位',
+        awards: [],
       },
       {
-        date: '2025.08',
-        text: '茨城県警 サイバーセキュリティボランティア 委嘱',
+        date: '2025.11',
+        text: '第5回 得意技・先進技術交流会 参加',
         detail: '',
         awards: [],
       },
@@ -79,16 +79,16 @@ export const works = {
         awards: [],
       },
       {
-        date: '2025.11',
-        text: '第5回 得意技・先進技術交流会 参加',
+        date: '2025.08',
+        text: '茨城県警 サイバーセキュリティボランティア 委嘱',
         detail: '',
         awards: [],
       },
       {
-        date: '2025.11',
-        text: '第8回 CTF神奈川',
-        detail: '60人中6位',
-        awards: [],
+        date: '2025.05',
+        text: 'DCON2025 本選出場',
+        detail: '95チーム中5位',
+        awards: ['TOPY工業賞', '日立産業制御ソリューションズ賞', 'Quick賞'],
       },
     ],
   },
