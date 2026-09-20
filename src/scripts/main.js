@@ -110,7 +110,7 @@
   });
 
   /* ---------- ページ遷移（ハッシュルーティング＋墨ワイプ） ---------- */
-  var ROUTES = ['home', 'works', 'blog'];
+  var ROUTES = ['home', 'works', 'experience', 'output'];
   var wipe = $('wipe');
   var current = null;
   var busy = false;

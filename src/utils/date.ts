@@ -1,4 +1,4 @@
-export const formatBlogDate = (date: Date) =>
+export const formatPostDate = (date: Date) =>
   `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}`;
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
