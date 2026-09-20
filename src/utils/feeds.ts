@@ -1,6 +1,6 @@
-import { blog } from '../data/blog';
+import { output } from '../data/output';
 
-// ブログ一覧に表示する記事（Zenn / Qiita からビルド時に取得）
+// Output ページに表示する記事（Zenn / Qiita からビルド時に取得）
 export type FeedPost = {
   title: string;
   url: string;
@@ -13,7 +13,7 @@ type ZennArticle = { title: string; path: string; published_at: string };
 type QiitaItem = { title: string; url: string; created_at: string };
 
 const fetchZennPosts = async (): Promise<FeedPost[]> => {
-  const res = await fetch(`https://zenn.dev/api/articles?username=${blog.zennUsername}&order=latest`);
+  const res = await fetch(`https://zenn.dev/api/articles?username=${output.zennUsername}&order=latest`);
   if (!res.ok) throw new Error(`Zenn API が ${res.status} を返しました`);
   const data = (await res.json()) as { articles: ZennArticle[] };
   return data.articles.map((article) => ({
@@ -25,7 +25,7 @@ const fetchZennPosts = async (): Promise<FeedPost[]> => {
 };
 
 const fetchQiitaPosts = async (): Promise<FeedPost[]> => {
-  const res = await fetch(`https://qiita.com/api/v2/users/${blog.qiitaUsername}/items?per_page=20`);
+  const res = await fetch(`https://qiita.com/api/v2/users/${output.qiitaUsername}/items?per_page=20`);
   if (!res.ok) throw new Error(`Qiita API が ${res.status} を返しました`);
   const items = (await res.json()) as QiitaItem[];
   return items.map((item) => ({
@@ -41,10 +41,10 @@ const fetchQiitaPosts = async (): Promise<FeedPost[]> => {
 export const fetchLatestPosts = async (): Promise<FeedPost[]> => {
   const results = await Promise.allSettled([fetchZennPosts(), fetchQiitaPosts()]);
   for (const result of results) {
-    if (result.status === 'rejected') console.warn('[blog] 記事の取得に失敗:', result.reason);
+    if (result.status === 'rejected') console.warn('[output] 記事の取得に失敗:', result.reason);
   }
   return results
     .flatMap((result) => (result.status === 'fulfilled' ? result.value : []))
     .sort((a, b) => b.pubDate.valueOf() - a.pubDate.valueOf())
-    .slice(0, blog.postCount);
+    .slice(0, output.postCount);
 };

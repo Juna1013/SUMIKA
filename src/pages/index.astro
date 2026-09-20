@@ -6,9 +6,10 @@ import SeoHead from '../components/SeoHead.astro';
 import SectionShell from '../components/SectionShell.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import { about, acknowledgment, copyright, hero, seo, socialLinks } from '../data/about';
-import { blog } from '../data/blog';
+import { experience } from '../data/experience';
+import { output } from '../data/output';
 import { works } from '../data/works';
-import { formatBlogDate, formatFootprintDate } from '../utils/date';
+import { formatPostDate, formatFootprintDate } from '../utils/date';
 import { fetchLatestPosts } from '../utils/feeds';
 
 const posts = await fetchLatestPosts();
@@ -61,19 +62,6 @@ const posts = await fetchLatestPosts();
         </div>
       ))}
     </div>
-
-    <div slot="after" class="reveal mt-[5em]">
-      <h3 class="m-0 mb-[2.2em] flex items-center gap-3.5 text-[17px] font-semibold tracking-[.3em]">{about.footprint.title}<span class="font-latin text-[11px] font-medium tracking-[.4em] text-ink-faint">{about.footprint.subtitle}</span></h3>
-      <ul class="footprint relative m-0 list-none py-0 pr-0 pl-[26px] before:absolute before:top-1.5 before:bottom-1.5 before:left-0 before:w-0.5 before:rounded-sm before:bg-[linear-gradient(to_bottom,var(--color-ink)_0%,rgba(53,48,42,.35)_85%,transparent)] before:content-['']">
-        {about.footprint.entries.map((entry) => (
-          <li class="relative pb-[2.1em] pl-[22px] before:absolute before:top-[9px] before:left-[-26px] before:h-[9px] before:w-[9px] before:translate-x-[-3.5px] before:rotate-8 before:rounded-full before:bg-ink before:shadow-[1.5px_1px_0_rgba(53,48,42,.35)] before:content-[''] last:before:bg-vermilion">
-            <span class="mb-[.35em] block font-latin text-[13px] font-semibold tracking-[.24em] text-vermilion">{formatFootprintDate(entry.year)}</span>
-            <span class="block text-[14.5px] leading-8 tracking-[.1em] text-[#4c453d]">{entry.text}</span>
-            {entry.description && <span class="mt-[.25em] block text-[12.5px] leading-7 tracking-[.08em] text-ink-faint">{entry.description}</span>}
-          </li>
-        ))}
-      </ul>
-    </div>
   </SectionShell>
 </div>
 
@@ -97,19 +85,40 @@ const posts = await fetchLatestPosts();
   </SectionShell>
 </div>
 
-<!-- ============ BLOG ============ -->
-<div class="view" data-route="blog">
-  <SectionShell id="blog" ghost="記" eyebrow={blog.eyebrow} title={blog.title}>
+<!-- ============ EXPERIENCE ============ -->
+<div class="view" data-route="experience">
+  <SectionShell id="experience" ghost="歴" ghostSide="left" eyebrow={experience.eyebrow} title={experience.title}>
+    <div class="mt-[3em]">
+      <h3 class="m-0 mb-[2.2em] flex items-center gap-3.5 text-[17px] font-semibold tracking-[.3em]">{experience.footprint.title}<span class="font-latin text-[11px] font-medium tracking-[.4em] text-ink-faint">{experience.footprint.subtitle}</span></h3>
+      <ul class="footprint relative m-0 list-none py-0 pr-0 pl-[26px] before:absolute before:top-1.5 before:bottom-1.5 before:left-0 before:w-0.5 before:rounded-sm before:bg-[linear-gradient(to_bottom,var(--color-ink)_0%,rgba(53,48,42,.35)_85%,transparent)] before:content-['']">
+        {experience.footprint.entries.map((entry) => (
+          <li class="relative pb-[2.1em] pl-[22px] before:absolute before:top-[9px] before:left-[-26px] before:h-[9px] before:w-[9px] before:translate-x-[-3.5px] before:rotate-8 before:rounded-full before:bg-ink before:shadow-[1.5px_1px_0_rgba(53,48,42,.35)] before:content-[''] last:before:bg-vermilion">
+            <span class="mb-[.35em] block font-latin text-[13px] font-semibold tracking-[.24em] text-vermilion">{formatFootprintDate(entry.year)}</span>
+            <span class="block text-[14.5px] leading-8 tracking-[.1em] text-[#4c453d]">{entry.text}</span>
+            {entry.description && <span class="mt-[.25em] block text-[12.5px] leading-7 tracking-[.08em] text-ink-faint">{entry.description}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </SectionShell>
+</div>
+
+<!-- ============ OUTPUT ============ -->
+<div class="view" data-route="output">
+  <SectionShell id="output" ghost="記" eyebrow={output.eyebrow} title={output.title}>
     <ul class="m-0 mt-[2.6em] list-none border-t border-line p-0">
       {posts.map((post) => (
         <li><a class="group relative flex items-center gap-[1.6em] border-b border-line px-[.4em] py-[1.5em] text-inherit no-underline transition-all duration-350 before:absolute before:top-1/2 before:left-0 before:h-0 before:w-[3px] before:-translate-y-1/2 before:rounded-full before:bg-vermilion before:opacity-0 before:transition-all before:duration-350 before:content-[''] hover:bg-[rgba(177,58,42,.05)] hover:pl-[1em] hover:before:h-[58%] hover:before:opacity-100" href={post.url} target="_blank" rel="noopener noreferrer">
-          <span class="min-w-[6.2em] font-latin text-xs tracking-[.2em] text-ink-faint max-mobile:min-w-[5.4em] max-mobile:text-[11px]">{formatBlogDate(post.pubDate)}</span>
+          <span class="min-w-[6.2em] font-latin text-xs tracking-[.2em] text-ink-faint max-mobile:min-w-[5.4em] max-mobile:text-[11px]">{formatPostDate(post.pubDate)}</span>
           <span class="flex h-6 w-6 flex-none -rotate-2 items-center justify-center rounded-[3px] border-[1.3px] border-ink font-latin text-xs font-semibold transition-all duration-350 group-hover:rotate-1 group-hover:border-vermilion group-hover:bg-vermilion group-hover:text-paper" aria-hidden="true">{post.source}</span>
           <span class="text-[14.5px] leading-[1.9] tracking-[.08em]">{post.title}</span>
         </a></li>
       ))}
     </ul>
-    <p class="mt-[2.2em] mb-[1em] text-[12.5px] tracking-[.14em] text-ink-faint">{blog.note}</p>
+    <p class="mt-[2.2em] mb-[1.4em] text-[12.5px] tracking-[.14em] text-ink-faint">{output.note}</p>
+    <div class="flex flex-wrap gap-[1.6em] font-latin text-[11.5px] font-semibold tracking-[.26em] text-vermilion">
+      {output.profiles.map((profile) => <a class="no-underline underline-offset-4 hover:underline" href={profile.href} target="_blank" rel="noopener noreferrer">{profile.label}</a>)}
+    </div>
   </SectionShell>
 </div>
 

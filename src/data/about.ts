@@ -24,9 +24,9 @@ export const hero = {
   scrollHint: '巡る',
 } as const;
 
-// About セクションの文言
+// About me ページの文言
 export const about = {
-  eyebrow: 'ABOUT — 私',
+  eyebrow: 'ABOUT ME — 私',
   title: 'A little about me',
   introduction: [
     '機械工学を専攻する高専生です。',
@@ -40,20 +40,6 @@ export const about = {
     { title: 'Things I work with:', items: ['C/C++', 'Python', 'HTML / CSS', 'React', 'Astro'] },
     { title: 'Currently exploring:', items: ['LLM', 'Ruby', 'AI', 'AtCoder'] },
   ],
-  footprint: {
-    title: 'FootPrint',
-    subtitle: '— 足跡',
-    // year: 'YYYY.MM' 形式で書くと「Aug 2006」のような表記で表示されます
-    // description: ひとこと説明。'' のままにするとその行は表示されません
-    entries: [
-      { year: '2006.08', text: '誕生', description: '人生の始まり' },
-      { year: '2022.04', text: '茨城高専 本科入学', description: '茨城高専に入学し、高専生の道を始める' },
-      { year: '2024.10', text: 'はじめてのWebサイト開発', description: '第33回茨香祭にてクラスのWebサイトを開発' },
-      { year: '2025.05', text: 'DCON2025 本選出場 - Locker.ai', description: 'LLM×スマートロッカーによる自動応対遺失物管理サービス' },
-      { year: '2025.08', text: '茨城県警 サイバー防犯ボランティア 委嘱', description: '県内の複数にて啓発活動を実施' },
-      { year: '2026.07', text: 'ポートフォリオサイトを公開', description: '自身のポートフォリオサイトを公開' },
-    ],
-  },
 } as const;
 
 // フッターのSNSリンク（href に各プロフィールのURLを設定してください）
