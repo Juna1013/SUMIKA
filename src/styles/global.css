@@ -238,19 +238,23 @@
   body.sky-dusk::after {
     animation: sky-glow 1.9s cubic-bezier(0.4, 0.1, 0.2, 1);
   }
-  /* 夜明け: 下から橙金が差し、上には藍が残る */
-  body.sky-dawn::after {
-    background-image:
-      radial-gradient(1500px 940px at 50% 116%, rgba(246, 188, 124, 0.9), transparent 62%),
-      radial-gradient(1150px 780px at 20% 102%, rgba(228, 138, 118, 0.62), transparent 60%),
-      radial-gradient(1050px 860px at 84% 4%, rgba(74, 86, 144, 0.55), transparent 62%);
+  /* 焼けの絵柄。メニューの層（.nav-list::after）でも同じものを使うため
+     変数にしてある。大きさは面に追従するよう割合で指定する。 */
+  body.sky-dawn {
+    --sky-glow:
+      radial-gradient(150% 112% at 50% 116%, rgba(246, 188, 124, 0.9), transparent 62%),
+      radial-gradient(118% 94% at 20% 102%, rgba(228, 138, 118, 0.62), transparent 60%),
+      radial-gradient(108% 102% at 84% 4%, rgba(74, 86, 144, 0.55), transparent 62%);
   }
-  /* 日暮れ: 茜が広がり、上から紫紺が下りてくる */
+  body.sky-dusk {
+    --sky-glow:
+      radial-gradient(150% 112% at 50% 116%, rgba(242, 162, 96, 0.9), transparent 62%),
+      radial-gradient(118% 96% at 76% 98%, rgba(208, 108, 116, 0.65), transparent 60%),
+      radial-gradient(112% 106% at 24% 2%, rgba(62, 70, 136, 0.62), transparent 62%);
+  }
+  body.sky-dawn::after,
   body.sky-dusk::after {
-    background-image:
-      radial-gradient(1500px 940px at 50% 116%, rgba(242, 162, 96, 0.9), transparent 62%),
-      radial-gradient(1150px 800px at 76% 98%, rgba(208, 108, 116, 0.65), transparent 60%),
-      radial-gradient(1100px 900px at 24% 2%, rgba(62, 70, 136, 0.62), transparent 62%);
+    background-image: var(--sky-glow);
   }
   /* 満ちてから引く。背景の差し替えはこの山の間に起きる */
   @keyframes sky-glow {
@@ -262,7 +266,9 @@
 
   @media (prefers-reduced-motion: reduce) {
     body.sky-dawn::after,
-    body.sky-dusk::after { animation: none; }
+    body.sky-dusk::after,
+    body.sky-dawn .nav-list::after,
+    body.sky-dusk .nav-list::after { animation: none; }
   }
 
   ::selection {
@@ -395,6 +401,23 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   @keyframes twinkle-menu {
     0%, 100% { opacity: 0.7; }
     50%      { opacity: 1; }
+  }
+
+  /* メニューは不透明な面で本文を隠すため、body に敷いた焼けが
+     届かない。同じ絵柄をこの面にも重ねて、開いたまま切り替えても
+     朝焼け／夕焼けが見えるようにする。 */
+  .nav-list::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    background-image: var(--sky-glow, none);
+  }
+  body.sky-dawn .nav-list::after,
+  body.sky-dusk .nav-list::after {
+    animation: sky-glow 1.9s cubic-bezier(0.4, 0.1, 0.2, 1);
   }
 
   .nav-item {
