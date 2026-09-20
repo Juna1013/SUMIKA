@@ -56,13 +56,15 @@ const posts = await fetchLatestPosts();
       {about.skills.map((group) => (
         <div class="mt-[2.2em] first:mt-0">
           <h3 class="m-0 mb-[1.2em] font-latin text-xs font-semibold tracking-[.32em] text-ink-soft">{group.title}</h3>
-          <div class="flex flex-wrap gap-2">
+          <div class="grid w-fit grid-cols-4 gap-x-[2.2em] gap-y-[1.6em]">
             {group.items.map((item) => (
-              <span class="group/skill flex items-center gap-[.55em] rounded-xs border border-line px-[.9em] py-[.45em] font-latin text-[11px] tracking-[.18em] text-ink-soft transition-colors duration-350 hover:border-[rgba(177,58,42,.5)] hover:text-vermilion">
-                {'icon' in item && (
-                  <svg class="h-[13px] w-[13px] flex-none fill-current opacity-70 transition-opacity duration-350 group-hover/skill:opacity-100" viewBox="0 0 24 24" aria-hidden="true"><path d={item.icon.path} /></svg>
+              <span class="flex h-[34px] w-[34px] items-center justify-center text-ink-soft transition-colors duration-350 hover:text-vermilion">
+                {'icon' in item ? (
+                  <svg class="h-[26px] w-[26px] fill-current" viewBox="0 0 24 24" role="img" aria-label={item.label}><title>{item.label}</title><path d={item.icon.path} /></svg>
+                ) : (
+                  /* 公式ロゴはガイドラインに従い色を変えずそのまま表示する */
+                  <img class="h-[34px] w-auto" src={item.image} alt={item.label} loading="lazy" decoding="async" />
                 )}
-                {item.label}
               </span>
             ))}
           </div>

@@ -35,9 +35,10 @@ export const about = {
     'デザインに限らず、情報工学的な理論も好きです。特に==LLM==については力を入れています。',
     'このサイトでは、個人的な制作物や日々の学び、記録などを残していくつもりです。'
   ],
-  // 使っている技術・学んでいるもの
-  // icon: simple-icons のアイコン（https://simpleicons.org/）。
-  //       省略するとその項目だけ従来どおり文字のチップで表示されます
+  // 使っている技術・学んでいるもの（アイコンのみで表示されます）
+  // icon: simple-icons のアイコン（https://simpleicons.org/）。墨色で表示しホバーで朱に変わります
+  // image: 画像ファイルのパス。公式ロゴをそのまま使う場合に指定します（色は変えません）
+  // label はアイコンの代替テキスト（スクリーンリーダー用）として使われます
   skills: [
     {
       title: 'Things I work with:',
@@ -55,8 +56,10 @@ export const about = {
       title: 'Currently exploring:',
       items: [
         { label: 'Ruby', icon: siRuby },
-        // AtCoder は simple-icons にアイコンがないため文字のチップで表示されます
-        { label: 'AtCoder' },
+        // AtCoder は simple-icons にないため公式ロゴを使用
+        // ガイドライン（https://info.atcoder.jp/logoguide）により色の変更が禁止されているため
+        // 墨色化・ホバーでの変色は行わず、配布されている黒のロゴをそのまま表示します
+        { label: 'AtCoder', image: '/atcoder-logo.png' },
       ],
     },
   ],
