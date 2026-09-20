@@ -107,6 +107,61 @@
 .nav-link.current::after { transform: scaleX(1) skewX(-24deg); }
 .nav-link.current { color: var(--color-vermilion); }
 
+/* ハンバーガーメニュー（〜47.5rem）: 三本線 → 墨の×、パネルは和紙色でフェードイン */
+.nav-bar {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--color-ink-soft);
+  transition: transform 0.42s cubic-bezier(0.5, 0.1, 0.3, 1), opacity 0.24s ease, background-color 0.35s ease;
+}
+.nav-toggle:hover .nav-bar { background: var(--color-vermilion); }
+
+body.nav-open .nav-bar:nth-child(1) { transform: translateY(5.5px) rotate(21deg); }
+body.nav-open .nav-bar:nth-child(2) { opacity: 0; transform: scaleX(0.4); }
+body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21deg); }
+
+@media (width <= 47.5rem) {
+  .nav-list {
+    transition: opacity 0.45s cubic-bezier(0.4, 0.1, 0.2, 1), visibility 0.45s;
+    visibility: hidden;
+    /* 背後の桜と本文を完全に隠す（body::before と同じ紙の色味を重ねる） */
+    background-color: var(--color-paper);
+    background-image:
+      radial-gradient(1100px 700px at 12% 4%, rgba(196, 176, 138, 0.15), transparent 60%),
+      radial-gradient(900px 620px at 88% 30%, rgba(190, 168, 128, 0.12), transparent 60%),
+      radial-gradient(1200px 800px at 50% 110%, rgba(172, 150, 112, 0.18), transparent 60%);
+  }
+  .nav-item {
+    transform: translateY(12px);
+    transition: opacity 0.5s cubic-bezier(0.4, 0.1, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0.1, 0.2, 1);
+  }
+
+  body.nav-open { overflow: hidden; }
+  body.nav-open .nav-list {
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
+  }
+  /* 一枚ずつ和紙をめくるように遅らせて現す */
+  body.nav-open .nav-item {
+    opacity: 1;
+    transform: none;
+  }
+  body.nav-open .nav-item:nth-child(1) { transition-delay: 0.1s; }
+  body.nav-open .nav-item:nth-child(2) { transition-delay: 0.17s; }
+  body.nav-open .nav-item:nth-child(3) { transition-delay: 0.24s; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-list,
+  .nav-item,
+  .nav-bar { transition-duration: 0.01ms; }
+  body.nav-open .nav-item { transition-delay: 0s; }
+}
+
 /* 朱の刷毛マーカー（==語== 記法で MarkedText から付与） */
 .marker {
   padding: 0.05em 0.1em;
