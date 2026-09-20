@@ -50,6 +50,9 @@
   --ripple-line: #4c443a;
   /* ヘッダー下端へ向けて消えていく帯 */
   --nav-veil: linear-gradient(to bottom, rgba(240, 232, 213, 0.94) 55%, rgba(240, 232, 213, 0));
+  /* ヘッダーの帳。グラデーションは補間できないので、遷移させる色は
+     単色の変数として別に持つ（下の .site-nav::before で使う） */
+  --nav-tint: #f0e8d5;
   --moon-opacity: 0;
   --star-opacity: 0;
 }
@@ -85,6 +88,7 @@
   --ripple: #cfd6e6;
   --ripple-line: #aab4cc;
   --nav-veil: linear-gradient(to bottom, rgba(20, 22, 31, 0.94) 55%, rgba(20, 22, 31, 0));
+  --nav-tint: #14161f;
   --moon-opacity: 1;
   --star-opacity: 1;
 }
@@ -112,9 +116,26 @@
     transition: background-color var(--theme-fade, 0.5s) ease, color var(--theme-fade, 0.5s) ease;
   }
   /* グラデーションは background-color ではないため個別に指定する。
-     これを外すと空だけが動いて背景が飛び、切替がぐらつく。 */
+     これを外すと空やヘッダーだけが動かずに飛び、切替がぐらつく。 */
   html.theme-ready body::before {
     transition: background var(--theme-fade, 0.5s) ease;
+  }
+  /* ヘッダーの帳は擬似要素に移し、単色 + マスクで描く。
+     グラデーションを変数ごと差し替える形だと補間されず、ヘッダーだけ
+     瞬時に切り替わってしまうため。background-color なら遷移できる。 */
+  .site-nav::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--nav-tint);
+    opacity: 0.94;
+    -webkit-mask: linear-gradient(to bottom, #000 55%, transparent);
+    mask: linear-gradient(to bottom, #000 55%, transparent);
+  }
+  html.theme-ready .site-nav::before {
+    transition: background-color var(--theme-fade, 0.5s) ease;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -122,7 +143,8 @@
     html.theme-ready body,
     html.theme-ready .site-nav,
     html.theme-ready .grain,
-    html.theme-ready body::before { transition-duration: 0.01ms; }
+    html.theme-ready body::before,
+    html.theme-ready .site-nav::before { transition-duration: 0.01ms; }
   }
 
   /* グラデーションはビューポート固定のレイヤーに分離
