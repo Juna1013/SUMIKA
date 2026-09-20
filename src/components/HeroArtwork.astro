@@ -16,92 +16,96 @@
 
     <path id="spetal" d="M0 -5.2 C-0.6 -6.4 -2.4 -7 -3.6 -6 C-5.4 -4.4 -5.6 -0.8 -4.2 2 C-2.9 4.6 -1.4 5.6 0 6.6 C1.4 5.6 2.9 4.6 4.2 2 C5.6 -0.8 5.4 -4.4 3.6 -6 C2.4 -7 0.6 -6.4 0 -5.2 Z"/>
     <g id="sb0">
-      <g fill="#e4afba" stroke="#b97f8e" stroke-width=".5">
+      <g fill="var(--petal-pale)" stroke="var(--petal-pale-line)" stroke-width=".5">
         <use href="#spetal" transform="rotate(0) translate(0 -7.4)" opacity=".95"/>
         <use href="#spetal" transform="rotate(72) translate(0 -7.4)" opacity=".85"/>
         <use href="#spetal" transform="rotate(144) translate(0 -7.4)" opacity=".9"/>
         <use href="#spetal" transform="rotate(216) translate(0 -7.4)" opacity=".82"/>
         <use href="#spetal" transform="rotate(288) translate(0 -7.4)" opacity=".88"/>
       </g>
-      <circle r="1.7" fill="#a75f6f"/>
-      <g fill="#e9d08a" opacity=".95">
+      <circle r="1.7" fill="var(--petal-line)"/>
+      <g fill="var(--bud)" opacity=".95">
         <circle cx="0" cy="-3" r=".6"/><circle cx="2.85" cy="-.95" r=".6"/>
         <circle cx="1.75" cy="2.45" r=".6"/><circle cx="-1.75" cy="2.45" r=".6"/>
         <circle cx="-2.85" cy="-.95" r=".6"/>
       </g>
     </g>
     <g id="sb1">
-      <g fill="#cf8ea0" stroke="#a4677a" stroke-width=".5">
+      <g fill="var(--petal)" stroke="var(--petal-line)" stroke-width=".5">
         <use href="#spetal" transform="rotate(0) translate(0 -7.4)" opacity=".93"/>
         <use href="#spetal" transform="rotate(72) translate(0 -7.4)" opacity=".84"/>
         <use href="#spetal" transform="rotate(144) translate(0 -7.4)" opacity=".9"/>
         <use href="#spetal" transform="rotate(216) translate(0 -7.4)" opacity=".8"/>
         <use href="#spetal" transform="rotate(288) translate(0 -7.4)" opacity=".87"/>
       </g>
-      <circle r="1.7" fill="#8f4c5d"/>
+      <circle r="1.7" fill="var(--petal-line)"/>
     </g>
     <g id="sb2">
-      <g fill="#f0e8d5" stroke="#4a4038" stroke-width=".8">
+      <g fill="var(--petal-open)" stroke="var(--branch-dark)" stroke-width=".8">
         <use href="#spetal" transform="rotate(0) translate(0 -7.4)"/>
         <use href="#spetal" transform="rotate(72) translate(0 -7.4)"/>
         <use href="#spetal" transform="rotate(144) translate(0 -7.4)"/>
         <use href="#spetal" transform="rotate(216) translate(0 -7.4)"/>
         <use href="#spetal" transform="rotate(288) translate(0 -7.4)"/>
       </g>
-      <circle r="1.3" fill="#4a4038"/>
+      <circle r="1.3" fill="var(--branch-dark)"/>
     </g>
     <g id="sbud">
-      <circle r="2.8" fill="#d59aa9"/>
-      <circle r="2.8" fill="none" stroke="#a4677a" stroke-width=".5"/>
-      <path d="M0 1.8 C-2.2 3.2 -3 4.8 -2.8 6.8" stroke="#4a4038" stroke-width="1" fill="none" stroke-linecap="round"/>
+      <circle r="2.8" fill="var(--petal-pale)"/>
+      <circle r="2.8" fill="none" stroke="var(--petal-line)" stroke-width=".5"/>
+      <path d="M0 1.8 C-2.2 3.2 -3 4.8 -2.8 6.8" stroke="var(--branch-dark)" stroke-width="1" fill="none" stroke-linecap="round"/>
     </g>
   </defs>
 </svg>
 
+<!-- 夜桜: 月と星（ダークテーマでのみ見える） -->
+<div class="night-stars pointer-events-none z-0" aria-hidden="true"></div>
+<div class="night-moon pointer-events-none z-0" aria-hidden="true"></div>
+
 <svg class="pointer-events-none absolute top-0 left-0 z-0 h-auto w-full" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
   <path class="hake" pathLength="1"
     d="M-70 330 C300 285 820 275 1270 315"
-    stroke="#35302a" stroke-width="120" fill="none" stroke-linecap="round"
+    stroke="var(--branch-dark)" stroke-width="120" fill="none" stroke-linecap="round"
     filter="url(#hakeRough)"/>
 </svg>
 
 <svg class="pointer-events-none absolute top-[clamp(50px,7vh,84px)] left-0 z-1 h-auto w-full max-mobile:left-[-78%] max-mobile:w-[178%]" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
   <g filter="url(#inkRough)">
     <!-- 幹（三段で先細り・左から横断） -->
-    <path class="stk" pathLength="1" style="--dl:.1s"  stroke="#3b352d" stroke-width="13"  d="M-30 250 C80 238 150 258 260 246 C360 236 420 210 520 202"/>
-    <path class="stk" pathLength="1" style="--dl:.55s" stroke="#43392f" stroke-width="8.5" d="M512 203 C610 196 660 206 750 196 C820 189 856 176 900 170"/>
-    <path class="stk" pathLength="1" style="--dl:.95s" stroke="#4c4034" stroke-width="5"   d="M892 171 C960 160 990 138 1050 126 C1100 116 1140 120 1200 108"/>
-    <path class="stk" pathLength="1" style="--dl:1.35s" stroke="#5d4f41" stroke-width="2.5" d="M1075 122 C1100 108 1112 92 1135 80"/>
+    <path class="stk" pathLength="1" style="--dl:.1s"  stroke="var(--branch-dark)" stroke-width="13"  d="M-30 250 C80 238 150 258 260 246 C360 236 420 210 520 202"/>
+    <path class="stk" pathLength="1" style="--dl:.55s" stroke="var(--branch-dark)" stroke-width="8.5" d="M512 203 C610 196 660 206 750 196 C820 189 856 176 900 170"/>
+    <path class="stk" pathLength="1" style="--dl:.95s" stroke="var(--branch-deep)" stroke-width="5"   d="M892 171 C960 160 990 138 1050 126 C1100 116 1140 120 1200 108"/>
+    <path class="stk" pathLength="1" style="--dl:1.35s" stroke="var(--branch)" stroke-width="2.5" d="M1075 122 C1100 108 1112 92 1135 80"/>
     <!-- 上枝A -->
-    <path class="stk" pathLength="1" style="--dl:.5s"  stroke="#453a30" stroke-width="6"   d="M300 246 C322 214 326 178 356 142"/>
-    <path class="stk" pathLength="1" style="--dl:.85s" stroke="#52453a" stroke-width="3.5" d="M352 146 C372 118 398 100 434 88"/>
-    <path class="stk" pathLength="1" style="--dl:1.15s" stroke="#5d4f41" stroke-width="2"  d="M380 112 C402 104 418 108 442 100"/>
-    <path class="stk" pathLength="1" style="--dl:1.2s"  stroke="#5d4f41" stroke-width="2"  d="M356 140 C344 120 346 100 336 82"/>
+    <path class="stk" pathLength="1" style="--dl:.5s"  stroke="var(--branch-dark)" stroke-width="6"   d="M300 246 C322 214 326 178 356 142"/>
+    <path class="stk" pathLength="1" style="--dl:.85s" stroke="var(--branch-deep)" stroke-width="3.5" d="M352 146 C372 118 398 100 434 88"/>
+    <path class="stk" pathLength="1" style="--dl:1.15s" stroke="var(--branch)" stroke-width="2"  d="M380 112 C402 104 418 108 442 100"/>
+    <path class="stk" pathLength="1" style="--dl:1.2s"  stroke="var(--branch)" stroke-width="2"  d="M356 140 C344 120 346 100 336 82"/>
     <!-- 下枝B -->
-    <path class="stk" pathLength="1" style="--dl:.7s"  stroke="#453a30" stroke-width="5.5" d="M598 203 C622 232 630 266 664 292"/>
-    <path class="stk" pathLength="1" style="--dl:1.05s" stroke="#52453a" stroke-width="3"  d="M660 289 C684 306 714 312 748 314"/>
-    <path class="stk" pathLength="1" style="--dl:1.3s"  stroke="#5d4f41" stroke-width="2"  d="M676 298 C690 312 694 330 710 342"/>
-    <path class="stk" pathLength="1" style="--dl:1.4s"  stroke="#5d4f41" stroke-width="1.8" d="M736 312 C748 296 762 290 780 284"/>
+    <path class="stk" pathLength="1" style="--dl:.7s"  stroke="var(--branch-dark)" stroke-width="5.5" d="M598 203 C622 232 630 266 664 292"/>
+    <path class="stk" pathLength="1" style="--dl:1.05s" stroke="var(--branch-deep)" stroke-width="3"  d="M660 289 C684 306 714 312 748 314"/>
+    <path class="stk" pathLength="1" style="--dl:1.3s"  stroke="var(--branch)" stroke-width="2"  d="M676 298 C690 312 694 330 710 342"/>
+    <path class="stk" pathLength="1" style="--dl:1.4s"  stroke="var(--branch)" stroke-width="1.8" d="M736 312 C748 296 762 290 780 284"/>
     <!-- 上枝C -->
-    <path class="stk" pathLength="1" style="--dl:1s"   stroke="#453a30" stroke-width="5"   d="M828 181 C846 152 842 120 872 96"/>
-    <path class="stk" pathLength="1" style="--dl:1.3s" stroke="#52453a" stroke-width="3"   d="M868 100 C890 82 916 76 946 72"/>
-    <path class="stk" pathLength="1" style="--dl:1.55s" stroke="#5d4f41" stroke-width="2"  d="M884 88 C902 74 906 58 924 44"/>
-    <path class="stk" pathLength="1" style="--dl:1.5s"  stroke="#5d4f41" stroke-width="1.8" d="M946 72 C972 64 992 68 1016 58"/>
+    <path class="stk" pathLength="1" style="--dl:1s"   stroke="var(--branch-dark)" stroke-width="5"   d="M828 181 C846 152 842 120 872 96"/>
+    <path class="stk" pathLength="1" style="--dl:1.3s" stroke="var(--branch-deep)" stroke-width="3"   d="M868 100 C890 82 916 76 946 72"/>
+    <path class="stk" pathLength="1" style="--dl:1.55s" stroke="var(--branch)" stroke-width="2"  d="M884 88 C902 74 906 58 924 44"/>
+    <path class="stk" pathLength="1" style="--dl:1.5s"  stroke="var(--branch)" stroke-width="1.8" d="M946 72 C972 64 992 68 1016 58"/>
     <!-- 小枝D -->
-    <path class="stk" pathLength="1" style="--dl:.9s"  stroke="#52453a" stroke-width="3"   d="M428 222 C446 240 470 250 500 252"/>
+    <path class="stk" pathLength="1" style="--dl:.9s"  stroke="var(--branch-deep)" stroke-width="3"   d="M428 222 C446 240 470 250 500 252"/>
     <!-- 追加：上枝E（左） -->
-    <path class="stk" pathLength="1" style="--dl:.45s" stroke="#52453a" stroke-width="3"   d="M182 248 C192 215 184 185 200 152"/>
-    <path class="stk" pathLength="1" style="--dl:.8s"  stroke="#5d4f41" stroke-width="1.8" d="M196 158 C212 140 228 138 248 128"/>
+    <path class="stk" pathLength="1" style="--dl:.45s" stroke="var(--branch-deep)" stroke-width="3"   d="M182 248 C192 215 184 185 200 152"/>
+    <path class="stk" pathLength="1" style="--dl:.8s"  stroke="var(--branch)" stroke-width="1.8" d="M196 158 C212 140 228 138 248 128"/>
     <!-- 追加：上小枝G（中央） -->
-    <path class="stk" pathLength="1" style="--dl:.95s" stroke="#5d4f41" stroke-width="2.2" d="M700 199 C712 172 706 148 722 122"/>
+    <path class="stk" pathLength="1" style="--dl:.95s" stroke="var(--branch)" stroke-width="2.2" d="M700 199 C712 172 706 148 722 122"/>
     <!-- 追加：下小枝H（左中） -->
-    <path class="stk" pathLength="1" style="--dl:.75s" stroke="#5d4f41" stroke-width="2.2" d="M352 241 C364 263 382 273 408 277"/>
+    <path class="stk" pathLength="1" style="--dl:.75s" stroke="var(--branch)" stroke-width="2.2" d="M352 241 C364 263 382 273 408 277"/>
     <!-- 追加：下枝F（左） -->
-    <path class="stk" pathLength="1" style="--dl:.6s"  stroke="#52453a" stroke-width="2.5" d="M260 246 C272 270 292 282 320 288"/>
+    <path class="stk" pathLength="1" style="--dl:.6s"  stroke="var(--branch-deep)" stroke-width="2.5" d="M260 246 C272 270 292 282 320 288"/>
     <!-- 追加：先端の上小枝 -->
-    <path class="stk" pathLength="1" style="--dl:1.45s" stroke="#5d4f41" stroke-width="1.8" d="M1105 118 C1118 100 1116 82 1128 62"/>
+    <path class="stk" pathLength="1" style="--dl:1.45s" stroke="var(--branch)" stroke-width="1.8" d="M1105 118 C1118 100 1116 82 1128 62"/>
     <!-- 苔点 -->
-    <g class="mdot" fill="#3b352d">
+    <g class="mdot" fill="var(--branch-dark)">
       <ellipse cx="180" cy="245" rx="3.2" ry="2" transform="rotate(-12 180 245)"/>
       <ellipse cx="562" cy="199" rx="2.8" ry="1.8" transform="rotate(8 562 199)"/>
       <ellipse cx="762" cy="192" rx="2.6" ry="1.7" transform="rotate(-6 762 192)"/>

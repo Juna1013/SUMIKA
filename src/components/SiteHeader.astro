@@ -18,7 +18,7 @@ const navItems = [
 ---
 
 <nav class:list={[
-  'site-nav fixed inset-x-0 top-0 z-40 flex items-center justify-between bg-[linear-gradient(to_bottom,rgba(240,232,213,.94)_55%,rgba(240,232,213,0))] px-[4.5vw] py-[18px]',
+  'site-nav fixed inset-x-0 top-0 z-40 flex items-center justify-between bg-[image:var(--nav-veil)] px-[4.5vw] py-[18px]',
   { immediate },
 ]}>
   <a class="relative z-2 flex items-baseline gap-3 text-ink no-underline" href={links.home} data-route={isHome ? 'home' : undefined}>
@@ -26,7 +26,7 @@ const navItems = [
   </a>
 
   <!-- デスクトップ: 横並び / モバイル: 墨色パネルの中に縦並び -->
-  <ul class="nav-list m-0 flex list-none gap-[2em] p-0 max-mobile:pointer-events-none max-mobile:fixed max-mobile:inset-0 max-mobile:z-1 max-mobile:flex-col max-mobile:items-center max-mobile:justify-center max-mobile:gap-[2.2em] max-mobile:opacity-0" id="navList">
+  <ul class="nav-list m-0 flex list-none gap-[2em] p-0 mobile:ml-auto max-mobile:pointer-events-none max-mobile:fixed max-mobile:inset-0 max-mobile:z-1 max-mobile:flex-col max-mobile:items-center max-mobile:justify-center max-mobile:gap-[2.2em] max-mobile:opacity-0" id="navList">
     {navItems.map((item) => (
       <li class="nav-item max-mobile:opacity-0">
         <a
@@ -37,6 +37,25 @@ const navItems = [
       </li>
     ))}
   </ul>
+
+  <!-- テーマ切替（昼 ⇄ 夜桜） -->
+  <button
+    class="theme-toggle relative z-2 ml-auto flex h-11 w-11 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-ink-soft transition-colors duration-350 hover:text-vermilion max-mobile:mr-1"
+    id="themeToggle"
+    type="button"
+    aria-label="ダークテーマに切り替える"
+  >
+    <!-- 昼は月（夜へ切り替える）、夜は日（昼へ切り替える） -->
+    <svg class="theme-icon theme-icon-moon h-[19px] w-[19px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12.3 2.1a.8.8 0 0 0-.9 1.05 7.6 7.6 0 0 0 9.45 9.45.8.8 0 0 1 .95 1.05A9.6 9.6 0 1 1 12.3 2.1Z"/>
+    </svg>
+    <svg class="theme-icon theme-icon-sun h-[19px] w-[19px] fill-current" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="4.2"/>
+      <g stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+        <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/>
+      </g>
+    </svg>
+  </button>
 
   <!-- ハンバーガー（モバイルのみ） -->
   <button
@@ -56,6 +75,40 @@ const navItems = [
 </nav>
 
 <script is:inline>
+  /* テーマ切替。初期値は localStorage → OS設定の順で決める */
+  (function(){
+    var toggle = document.getElementById('themeToggle');
+    if (!toggle) return;
+    var root = document.documentElement;
+
+    function label(theme){
+      return theme === 'dark' ? 'ライトテーマに切り替える' : 'ダークテーマに切り替える';
+    }
+    /* 描画前スクリプトが決めたテーマに合わせてラベルを初期化する */
+    toggle.setAttribute('aria-label', label(root.dataset.theme));
+    function apply(theme){
+      root.dataset.theme = theme;
+      toggle.setAttribute('aria-label', label(theme));
+      try { localStorage.setItem('theme', theme); } catch (e) {}
+      /* 花びらの色など、JS側で色を持つ描画に知らせる */
+      window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: theme } }));
+    }
+
+    toggle.addEventListener('click', function(){
+      apply(root.dataset.theme === 'dark' ? 'light' : 'dark');
+    });
+
+    /* 手動で選ぶまでは OS 設定に追従する */
+    var media = window.matchMedia('(prefers-color-scheme: dark)');
+    function follow(e){
+      var saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (err) {}
+      if (!saved) apply(e.matches ? 'dark' : 'light');
+    }
+    if (media.addEventListener) media.addEventListener('change', follow);
+    else media.addListener(follow);
+  })();
+
   (function(){
     var toggle = document.getElementById('navToggle');
     var list = document.getElementById('navList');

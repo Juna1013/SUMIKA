@@ -37,7 +37,8 @@ export const about = {
   ],
   // 使っている技術・学んでいるもの（アイコンのみで表示されます）
   // icon: simple-icons のアイコン（https://simpleicons.org/）。墨色で表示しホバーで朱に変わります
-  // image: 画像ファイルのパス。公式ロゴをそのまま使う場合に指定します（色は変えません）
+  // image / imageDark: 画像ファイルのパス。公式ロゴをそのまま使う場合に指定します
+  //   （色は変えず、配布されている明暗2種のロゴをテーマごとに出し分けます）
   // label はアイコンの代替テキスト（スクリーンリーダー用）として使われます
   skills: [
     {
@@ -58,8 +59,8 @@ export const about = {
         { label: 'Ruby', icon: siRuby },
         // AtCoder は simple-icons にないため公式ロゴを使用
         // ガイドライン（https://info.atcoder.jp/logoguide）により色の変更が禁止されているため
-        // 墨色化・ホバーでの変色は行わず、配布されている黒のロゴをそのまま表示します
-        { label: 'AtCoder', image: '/atcoder-logo.png' },
+        // 加工はせず、配布されている黒／白のロゴを背景の明暗に応じて使い分けます
+        { label: 'AtCoder', image: '/atcoder-logo.png', imageDark: '/atcoder-logo-white.png' },
       ],
     },
   ],

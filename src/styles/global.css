@@ -1,15 +1,92 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f0e8d5;
-  --color-ink: #35302a;
-  --color-ink-soft: #5d5347;
-  --color-ink-faint: #8a7f70;
-  --color-vermilion: #b13a2a;
-  --color-line: rgba(53, 48, 42, 0.16);
+  /* 実際の値は下の :root / [data-theme] で切り替わります（既定は昼） */
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-vermilion: var(--vermilion);
+  --color-line: var(--line);
   --font-mincho: "Shippori Mincho", serif;
   --font-latin: "Cormorant Garamond", serif;
   --breakpoint-mobile: 47.5rem;
+}
+
+/* ---------- 昼（紙と墨）---------- */
+:root {
+  --paper: #f0e8d5;
+  --ink: #35302a;
+  --ink-soft: #5d5347;
+  --ink-faint: #8a7f70;
+  --vermilion: #b13a2a;
+  --line: rgba(53, 48, 42, 0.16);
+
+  /* 本文中のやや濃い墨（段落・年表など） */
+  --ink-body: #4c453d;
+  /* カード地。紙よりわずかに明るい */
+  --card: rgba(255, 252, 242, 0.4);
+  /* 画面全体にかかる空気感のグラデーション */
+  --sky:
+    radial-gradient(1100px 700px at 12% 4%, rgba(196, 176, 138, 0.15), transparent 60%),
+    radial-gradient(900px 620px at 88% 30%, rgba(190, 168, 128, 0.12), transparent 60%),
+    radial-gradient(1200px 800px at 50% 110%, rgba(172, 150, 112, 0.18), transparent 60%);
+
+  /* 桜（枝・花びら） */
+  --branch: #5d4f41;
+  --branch-deep: #52453a;
+  --branch-dark: #453a30;
+  --petal: #cf8ea0;
+  --petal-line: #a4677a;
+  --petal-pale: #e4afba;
+  --petal-pale-line: #b97f8e;
+  --petal-open: #f0e8d5;
+  --bud: #e9d08a;
+  --petal-glow: none;
+  /* 墨のワイプ */
+  --wipe: linear-gradient(100deg, #1c1814, #241f1a 55%, #2c2620);
+  /* 夜だけ現れる要素 */
+  --ripple: #3a342c;
+  --ripple-line: #4c443a;
+  /* ヘッダー下端へ向けて消えていく帯 */
+  --nav-veil: linear-gradient(to bottom, rgba(240, 232, 213, 0.94) 55%, rgba(240, 232, 213, 0));
+  --moon-opacity: 0;
+  --star-opacity: 0;
+}
+
+/* ---------- 夜（夜桜）---------- */
+:root[data-theme="dark"] {
+  --paper: #14161f;
+  --ink: #e8e3d9;
+  --ink-soft: #b9b3a8;
+  --ink-faint: #8d8778;
+  --vermilion: #d4584a;
+  --line: rgba(232, 227, 217, 0.16);
+
+  --ink-body: #d2ccc1;
+  --card: rgba(232, 227, 217, 0.04);
+  --sky:
+    radial-gradient(1100px 700px at 12% 4%, rgba(60, 72, 110, 0.35), transparent 60%),
+    radial-gradient(900px 620px at 88% 30%, rgba(46, 56, 92, 0.3), transparent 60%),
+    radial-gradient(1200px 800px at 50% 110%, rgba(30, 36, 62, 0.45), transparent 60%);
+
+  /* 月明かりを受けた枝と、彩度を落とした淡紅 */
+  --branch: #6c6c7a;
+  --branch-deep: #5a5a68;
+  --branch-dark: #4a4a57;
+  --petal: #d59fae;
+  --petal-line: #a76d7e;
+  --petal-pale: #e6bac4;
+  --petal-pale-line: #b98795;
+  --petal-open: #2a2d3a;
+  --bud: #d8c089;
+  --petal-glow: drop-shadow(0 0 6px rgba(226, 170, 186, 0.45));
+  --wipe: linear-gradient(100deg, #05060a, #0a0c14 55%, #10131c);
+  --ripple: #cfd6e6;
+  --ripple-line: #aab4cc;
+  --nav-veil: linear-gradient(to bottom, rgba(20, 22, 31, 0.94) 55%, rgba(20, 22, 31, 0));
+  --moon-opacity: 1;
+  --star-opacity: 1;
 }
 
 @layer base {
@@ -27,6 +104,21 @@
     background-color: var(--color-paper);
   }
 
+  /* テーマ切替を一拍おいて馴染ませる（初回描画時は効かせない） */
+  html.theme-ready,
+  html.theme-ready body,
+  html.theme-ready .site-nav,
+  html.theme-ready .grain {
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.theme-ready,
+    html.theme-ready body,
+    html.theme-ready .site-nav,
+    html.theme-ready .grain { transition-duration: 0.01ms; }
+  }
+
   /* グラデーションはビューポート固定のレイヤーに分離
      （body に直接描くと高速スクロール時に塗り残しが白く見えるため） */
   body::before {
@@ -35,28 +127,25 @@
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background:
-      radial-gradient(1100px 700px at 12% 4%, rgba(196, 176, 138, 0.15), transparent 60%),
-      radial-gradient(900px 620px at 88% 30%, rgba(190, 168, 128, 0.12), transparent 60%),
-      radial-gradient(1200px 800px at 50% 110%, rgba(172, 150, 112, 0.18), transparent 60%);
+    background: var(--sky);
   }
 
   ::selection {
-    background: rgba(177, 58, 42, 0.22);
+    background: color-mix(in srgb, var(--color-vermilion) 22%, transparent);
   }
 
   /* 和風スクロールバー（墨色・ホバーで朱） */
   html {
-    scrollbar-color: rgba(138, 127, 112, 0.55) transparent;
+    scrollbar-color: color-mix(in srgb, var(--color-ink-faint) 55%, transparent) transparent;
   }
   ::-webkit-scrollbar { width: 11px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: rgba(138, 127, 112, 0.45);
+    background: color-mix(in srgb, var(--color-ink-faint) 45%, transparent);
     border: 3px solid var(--color-paper);
     border-radius: 999px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(177, 58, 42, 0.6); }
+  ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--color-vermilion) 60%, transparent); }
 
   a:focus-visible,
   button:focus-visible {
@@ -79,12 +168,18 @@
 @keyframes wipe-out { from { transform: translateX(0) skewX(-8deg); } to { transform: translateX(118%) skewX(-8deg); } }
 @keyframes drop-in { 0% { opacity: 0.85; transform: translateY(-16px); } 70% { opacity: 0.8; transform: translateY(0); } 100% { opacity: 0; transform: translateY(0); } }
 @keyframes ripple { 0% { transform: scale(0.1); opacity: 0; } 12% { opacity: 0.5; } 100% { transform: scale(1); opacity: 0; } }
-@keyframes seal-pulse { 0% { box-shadow: 0 0 0 0 rgba(177, 58, 42, 0.4); } 70%, 100% { box-shadow: 0 0 0 11px rgba(177, 58, 42, 0); } }
+@keyframes seal-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-vermilion) 40%, transparent); } 70%, 100% { box-shadow: 0 0 0 11px color-mix(in srgb, var(--color-vermilion) 0%, transparent); } }
 
 /* JavaScript state hooks and dynamically generated SVG animation. */
 .site-nav { opacity: 0; animation: fade-in 1.4s 0.5s forwards; }
 .grain {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.24  0 0 0 0 0.21  0 0 0 0 0.17  0 0 0 0.08 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+/* 夜は暗い紙目を重ねると濁るため、明るい粒子を screen で乗せる */
+:root[data-theme="dark"] .grain {
+  mix-blend-mode: screen;
+  opacity: 0.32;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.78  0 0 0 0 0.80  0 0 0 0 0.90  0 0 0 0.07 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 .site-nav.immediate { opacity: 1; animation: none; }
 
@@ -98,7 +193,7 @@
   left: 0;
   height: 2px;
   border-radius: 2px;
-  background: linear-gradient(90deg, var(--color-vermilion) 10%, rgba(177, 58, 42, 0.25));
+  background: linear-gradient(90deg, var(--color-vermilion) 10%, color-mix(in srgb, var(--color-vermilion) 25%, transparent));
   transform: scaleX(0) skewX(-24deg);
   transform-origin: left;
   transition: transform 0.4s cubic-bezier(0.5, 0.1, 0.3, 1);
@@ -129,10 +224,7 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
     visibility: hidden;
     /* 背後の桜と本文を完全に隠す（body::before と同じ紙の色味を重ねる） */
     background-color: var(--color-paper);
-    background-image:
-      radial-gradient(1100px 700px at 12% 4%, rgba(196, 176, 138, 0.15), transparent 60%),
-      radial-gradient(900px 620px at 88% 30%, rgba(190, 168, 128, 0.12), transparent 60%),
-      radial-gradient(1200px 800px at 50% 110%, rgba(172, 150, 112, 0.18), transparent 60%);
+    background-image: var(--sky);
   }
   .nav-item {
     transform: translateY(12px);
@@ -167,11 +259,11 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   padding: 0.05em 0.1em;
   margin: 0 -0.04em;
   background-image: linear-gradient(100deg,
-    rgba(177, 58, 42, 0) 0.5%,
-    rgba(177, 58, 42, 0.14) 4%,
-    rgba(177, 58, 42, 0.24) 50%,
-    rgba(177, 58, 42, 0.14) 96%,
-    rgba(177, 58, 42, 0) 99.5%);
+    color-mix(in srgb, var(--color-vermilion) 0%, transparent) 0.5%,
+    color-mix(in srgb, var(--color-vermilion) 14%, transparent) 4%,
+    color-mix(in srgb, var(--color-vermilion) 24%, transparent) 50%,
+    color-mix(in srgb, var(--color-vermilion) 14%, transparent) 96%,
+    color-mix(in srgb, var(--color-vermilion) 0%, transparent) 99.5%);
   background-repeat: no-repeat;
   background-size: 100% 0.58em;
   background-position: 0 88%;
@@ -193,7 +285,7 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   width: 100%;
   height: 0.16em;
   border-radius: 999px 4px 999px 3px;
-  background: linear-gradient(90deg, rgba(177, 58, 42, 0.5), rgba(177, 58, 42, 0.14) 80%, rgba(177, 58, 42, 0));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-vermilion) 50%, transparent), color-mix(in srgb, var(--color-vermilion) 14%, transparent) 80%, color-mix(in srgb, var(--color-vermilion) 0%, transparent));
   transform: skewX(-18deg) scaleX(0);
   transform-origin: left;
   transition: transform 0.9s cubic-bezier(0.4, 0.1, 0.2, 1) 0.3s;
@@ -222,8 +314,8 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 
 .wipe.cover { animation: wipe-in 0.36s cubic-bezier(0.6, 0.1, 0.4, 1) forwards; }
 .wipe.out { animation: wipe-out 0.44s cubic-bezier(0.5, 0.1, 0.4, 1) forwards; }
-.rip-drop { fill: #3a342c; opacity: 0; transform-box: fill-box; animation: drop-in 0.38s ease-in forwards; }
-.rip ellipse { fill: none; stroke: #4c443a; stroke-width: 1.1; opacity: 0; transform-box: fill-box; transform-origin: center; animation: ripple 2.2s ease-out forwards; }
+.rip-drop { fill: var(--ripple); opacity: 0; transform-box: fill-box; animation: drop-in 0.38s ease-in forwards; }
+.rip ellipse { fill: none; stroke: var(--ripple-line); stroke-width: 1.1; opacity: 0; transform-box: fill-box; transform-origin: center; animation: ripple 2.2s ease-out forwards; }
 .hake { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.16; animation: hake 0.55s 0.05s ease-in forwards, hake-settle 1.4s 1s ease-out forwards; }
 .stk { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.15s var(--dl, 0s) cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
 .mdot { opacity: 0; animation: fade-in 0.9s 1.95s forwards; }
@@ -247,3 +339,70 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ---------- 夜桜の演出（ダーク時のみ現れる） ---------- */
+/* 月。昼は --moon-opacity: 0 で消える */
+.night-moon {
+  position: absolute;
+  top: clamp(52px, 11vh, 132px);
+  right: clamp(46px, 13vw, 210px);
+  width: clamp(62px, 8vmin, 104px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 34%, #fdf8e8, #f2e6c4 58%, #e3d3a6);
+  box-shadow:
+    0 0 28px rgba(247, 238, 208, 0.36),
+    0 0 74px rgba(226, 212, 166, 0.22);
+  opacity: var(--moon-opacity);
+  transition: opacity 0.6s ease;
+}
+/* かすかな暈（かさ） */
+.night-moon::after {
+  content: "";
+  position: absolute;
+  inset: -46%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 236, 210, 0.13), transparent 68%);
+}
+
+/* 星。3層の radial-gradient を散らして敷く */
+.night-stars {
+  position: absolute;
+  inset: 0;
+  opacity: var(--star-opacity);
+  transition: opacity 0.6s ease;
+  background-image:
+    radial-gradient(1.4px 1.4px at 12% 18%, rgba(255, 253, 244, 0.9), transparent 60%),
+    radial-gradient(1.1px 1.1px at 27% 9%, rgba(255, 253, 244, 0.65), transparent 60%),
+    radial-gradient(1.6px 1.6px at 41% 24%, rgba(255, 253, 244, 0.8), transparent 60%),
+    radial-gradient(1.1px 1.1px at 58% 12%, rgba(255, 253, 244, 0.6), transparent 60%),
+    radial-gradient(1.5px 1.5px at 69% 27%, rgba(255, 253, 244, 0.85), transparent 60%),
+    radial-gradient(1.2px 1.2px at 82% 15%, rgba(255, 253, 244, 0.7), transparent 60%),
+    radial-gradient(1.3px 1.3px at 92% 31%, rgba(255, 253, 244, 0.75), transparent 60%),
+    radial-gradient(1.1px 1.1px at 7% 38%, rgba(255, 253, 244, 0.55), transparent 60%),
+    radial-gradient(1.4px 1.4px at 35% 44%, rgba(255, 253, 244, 0.6), transparent 60%),
+    radial-gradient(1.2px 1.2px at 76% 47%, rgba(255, 253, 244, 0.5), transparent 60%);
+}
+/* ゆっくり瞬く */
+.night-stars { animation: twinkle 6.5s ease-in-out infinite; }
+@keyframes twinkle {
+  0%, 100% { opacity: calc(var(--star-opacity) * 0.72); }
+  50% { opacity: var(--star-opacity); }
+}
+
+/* 夜は花にほのかな発光をのせる */
+#bloomLayer > g { filter: var(--petal-glow); }
+
+@media (prefers-reduced-motion: reduce) {
+  .night-stars { animation: none; }
+}
+
+/* テーマ切替ボタン: 昼は月、夜は日を見せる */
+.theme-icon-sun { display: none; }
+:root[data-theme="dark"] .theme-icon-moon { display: none; }
+:root[data-theme="dark"] .theme-icon-sun { display: block; }
+
+/* 公式ロゴの明暗切替（加工せず配布物を使い分ける） */
+.logo-dark { display: none; }
+:root[data-theme="dark"] .logo-light { display: none; }
+:root[data-theme="dark"] .logo-dark { display: block; }
