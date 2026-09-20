@@ -6,13 +6,14 @@ interface Props {
 
 const { isHome = false, immediate = false } = Astro.props;
 const links = isHome
-  ? { home: '#/', works: '#/works', blog: '#/blog' }
-  : { home: '/', works: '/#/works', blog: '/#/blog' };
+  ? { home: '#/', works: '#/works', experience: '#/experience', output: '#/output' }
+  : { home: '/', works: '/#/works', experience: '/#/experience', output: '/#/output' };
 
 const navItems = [
-  { label: 'ABOUT', route: 'home' },
-  { label: 'WORKS', route: 'works' },
-  { label: 'BLOG', route: 'blog' },
+  { label: 'About me', route: 'home' },
+  { label: 'Works', route: 'works' },
+  { label: 'Experience', route: 'experience' },
+  { label: 'Output', route: 'output' },
 ] as const;
 ---
 
@@ -20,18 +21,70 @@ const navItems = [
   'site-nav fixed inset-x-0 top-0 z-40 flex items-center justify-between bg-[linear-gradient(to_bottom,rgba(240,232,213,.94)_55%,rgba(240,232,213,0))] px-[4.5vw] py-[18px]',
   { immediate },
 ]}>
-  <a class="flex items-baseline gap-3 text-ink no-underline" href={links.home} data-route={isHome ? 'home' : undefined}>
+  <a class="relative z-2 flex items-baseline gap-3 text-ink no-underline" href={links.home} data-route={isHome ? 'home' : undefined}>
     <span class="text-2xl leading-none font-semibold">栖</span><span class="font-latin text-[11.5px] tracking-[.42em] text-ink-faint">SUMIKA</span>
   </a>
-  <ul class="m-0 flex list-none gap-[2.6em] p-0 max-mobile:gap-[1.6em]">
+
+  <!-- デスクトップ: 横並び / モバイル: 墨色パネルの中に縦並び -->
+  <ul class="nav-list m-0 flex list-none gap-[2em] p-0 max-mobile:pointer-events-none max-mobile:fixed max-mobile:inset-0 max-mobile:z-1 max-mobile:flex-col max-mobile:items-center max-mobile:justify-center max-mobile:gap-[2.2em] max-mobile:opacity-0" id="navList">
     {navItems.map((item) => (
-      <li>
+      <li class="nav-item max-mobile:opacity-0">
         <a
-          class="nav-link pb-[3px] font-latin text-[13px] font-medium tracking-[.3em] text-ink-soft no-underline transition-colors duration-350 hover:text-vermilion"
+          class="nav-link pb-[3px] font-latin text-[13.5px] font-medium tracking-[.2em] whitespace-nowrap text-ink-soft no-underline transition-colors duration-350 hover:text-vermilion max-mobile:text-[18px] max-mobile:tracking-[.3em]"
           href={links[item.route]}
           data-route={isHome ? item.route : undefined}
         >{item.label}</a>
       </li>
     ))}
   </ul>
+
+  <!-- ハンバーガー（モバイルのみ） -->
+  <button
+    class="nav-toggle relative z-2 hidden h-11 w-11 cursor-pointer items-center justify-center border-0 bg-transparent p-0 max-mobile:flex"
+    id="navToggle"
+    type="button"
+    aria-controls="navList"
+    aria-expanded="false"
+    aria-label="メニューを開く"
+  >
+    <span class="nav-toggle-bars relative block h-[13px] w-[23px]" aria-hidden="true">
+      <span class="nav-bar top-0"></span>
+      <span class="nav-bar top-[5.5px]"></span>
+      <span class="nav-bar top-[11px]"></span>
+    </span>
+  </button>
 </nav>
+
+<script is:inline>
+  (function(){
+    var toggle = document.getElementById('navToggle');
+    var list = document.getElementById('navList');
+    if (!toggle || !list) return;
+
+    var mobile = window.matchMedia('(max-width: 47.5rem)');
+    var open = false;
+
+    function setOpen(next){
+      open = next;
+      document.body.classList.toggle('nav-open', next);
+      toggle.setAttribute('aria-expanded', next ? 'true' : 'false');
+      toggle.setAttribute('aria-label', next ? 'メニューを閉じる' : 'メニューを開く');
+    }
+
+    toggle.addEventListener('click', function(){ setOpen(!open); });
+
+    /* リンクを押したらメニューを畳む（ハッシュ遷移では hashchange が出ないこともある） */
+    list.addEventListener('click', function(e){
+      if (e.target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && open) { setOpen(false); toggle.focus(); }
+    });
+
+    /* デスクトップ幅に戻したら状態をリセット */
+    function onChange(){ if (!mobile.matches && open) setOpen(false); }
+    if (mobile.addEventListener) mobile.addEventListener('change', onChange);
+    else mobile.addListener(onChange);
+  })();
+</script>
