@@ -56,8 +56,20 @@ const posts = await fetchLatestPosts();
       {about.skills.map((group) => (
         <div class="mt-[2.2em] first:mt-0">
           <h3 class="m-0 mb-[1.2em] font-latin text-xs font-semibold tracking-[.32em] text-ink-soft">{group.title}</h3>
-          <div class="flex flex-wrap gap-2">
-            {group.items.map((item) => <span class="rounded-xs border border-line px-[.9em] py-[.45em] font-latin text-[11px] tracking-[.18em] text-ink-soft transition-colors duration-350 hover:border-[rgba(177,58,42,.5)] hover:text-vermilion">{item}</span>)}
+          <div class="grid max-w-[560px] grid-cols-3 gap-4 mobile:grid-cols-6">
+            {group.items.map((item) => (
+              <span class="group/skill flex flex-col items-center gap-2 px-2 py-4 text-ink-soft transition-colors duration-350 hover:text-vermilion">
+                <span class="flex h-9 items-center justify-center">
+                  {'icon' in item ? (
+                    <svg class="h-9 w-9 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d={item.icon.path} /></svg>
+                  ) : (
+                    /* 公式ロゴはガイドラインに従い色を変えずそのまま表示する */
+                    <img class="h-9 w-auto" src={item.image} alt="" loading="lazy" decoding="async" />
+                  )}
+                </span>
+                <span class="text-center font-latin text-[12.5px] leading-tight tracking-[.1em] text-ink-faint transition-colors duration-350 group-hover/skill:text-vermilion">{item.label}</span>
+              </span>
+            ))}
           </div>
         </div>
       ))}
