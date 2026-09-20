@@ -232,6 +232,40 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
     background-color: var(--color-paper);
     background-image: var(--sky);
   }
+  /* 夜のメニューは紺一色で寂しいため、星を散らす。
+     縦長の面なので上下に広く配りたく、ヒーローの星（上部に寄せた配置）
+     とは別に置いている。 */
+  :root[data-theme="dark"] .nav-list::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1.5px 1.5px at 14% 9%, rgba(255, 253, 244, 0.85), transparent 60%),
+      radial-gradient(1.1px 1.1px at 31% 15%, rgba(255, 253, 244, 0.6), transparent 60%),
+      radial-gradient(1.3px 1.3px at 68% 7%, rgba(255, 253, 244, 0.75), transparent 60%),
+      radial-gradient(1.2px 1.2px at 86% 17%, rgba(255, 253, 244, 0.65), transparent 60%),
+      radial-gradient(1.6px 1.6px at 22% 26%, rgba(255, 253, 244, 0.8), transparent 60%),
+      radial-gradient(1.1px 1.1px at 54% 22%, rgba(255, 253, 244, 0.5), transparent 60%),
+      radial-gradient(1.4px 1.4px at 79% 31%, rgba(255, 253, 244, 0.7), transparent 60%),
+      radial-gradient(1.2px 1.2px at 9% 38%, rgba(255, 253, 244, 0.55), transparent 60%),
+      radial-gradient(1.5px 1.5px at 44% 42%, rgba(255, 253, 244, 0.6), transparent 60%),
+      radial-gradient(1.1px 1.1px at 91% 46%, rgba(255, 253, 244, 0.5), transparent 60%),
+      radial-gradient(1.3px 1.3px at 17% 55%, rgba(255, 253, 244, 0.65), transparent 60%),
+      radial-gradient(1.2px 1.2px at 62% 59%, rgba(255, 253, 244, 0.55), transparent 60%),
+      radial-gradient(1.5px 1.5px at 35% 68%, rgba(255, 253, 244, 0.7), transparent 60%),
+      radial-gradient(1.1px 1.1px at 84% 72%, rgba(255, 253, 244, 0.5), transparent 60%),
+      radial-gradient(1.4px 1.4px at 12% 79%, rgba(255, 253, 244, 0.6), transparent 60%),
+      radial-gradient(1.2px 1.2px at 57% 84%, rgba(255, 253, 244, 0.55), transparent 60%),
+      radial-gradient(1.3px 1.3px at 74% 91%, rgba(255, 253, 244, 0.65), transparent 60%),
+      radial-gradient(1.1px 1.1px at 28% 94%, rgba(255, 253, 244, 0.45), transparent 60%);
+    animation: twinkle-menu 7.5s ease-in-out infinite;
+  }
+  @keyframes twinkle-menu {
+    0%, 100% { opacity: 0.7; }
+    50%      { opacity: 1; }
+  }
+
   .nav-item {
     transform: translateY(12px);
     transition: opacity 0.5s cubic-bezier(0.4, 0.1, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0.1, 0.2, 1);
@@ -258,6 +292,8 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   .nav-item,
   .nav-bar { transition-duration: 0.01ms; }
   body.nav-open .nav-item { transition-delay: 0s; }
+  /* 星は残し、瞬きだけ止める */
+  :root[data-theme="dark"] .nav-list::before { animation: none; opacity: 0.85; }
 }
 
 /* 朱の刷毛マーカー（==語== 記法で MarkedText から付与） */
