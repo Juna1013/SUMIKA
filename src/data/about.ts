@@ -49,16 +49,15 @@ export const about = {
         { label: 'Python', icon: siPython },
         { label: 'HTML', icon: siHtml5 },
         { label: 'CSS', icon: siCss },
-        { label: 'React', icon: siReact },
-        { label: 'Astro', icon: siAstro },
       ],
     },
     {
       title: 'Currently exploring:',
       items: [
+        { label: 'React', icon: siReact },
+        { label: 'Astro', icon: siAstro },
         { label: 'Ruby', icon: siRuby },
         // AtCoder は simple-icons にないため公式ロゴを使用
-        // 他のアイコンと色を揃えるため、ロゴの透明度をマスクとして currentColor で塗る
         { label: 'AtCoder', image: '/atcoder-logo.png' },
       ],
     },

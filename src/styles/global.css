@@ -322,7 +322,10 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 
 /* ---------- 空の帳（テーマ切替の朝焼け／夕焼け） ----------
    明暗が直接入れ替わると眩しいため、空の色を一度かぶせて
-   その陰で切り替える。既定では不可視で、切替中のみ現れる。 */
+   その陰で切り替える。ただし板で覆うと桜と文字が消えてしまうので、
+   ブレンドで色だけを重ね、下の描画は透かしたまま残す。
+   夜明けは screen で暗い背景を持ち上げ、日暮れは multiply で
+   明るい背景を落とす。いずれも形は保たれる。 */
 .sky-veil {
   opacity: 0;
   visibility: hidden;
@@ -333,42 +336,44 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 /* 夜明け: 藍から薄紫、茜、橙金へと下から明けていく */
 .sky-veil.dawn {
   visibility: visible;
+  mix-blend-mode: screen;
   background-image: linear-gradient(
     to top,
-    #f7d9a0 0%,
-    #f0b97f 14%,
-    #e08a76 30%,
-    #b9708f 48%,
-    #6f5f96 68%,
-    #2f3a63 86%,
-    #1b2340 100%);
-  animation: sky-dawn 1.5s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
+    #f0c68e 0%,
+    #e0a071 14%,
+    #c27a72 30%,
+    #8d6a92 48%,
+    #4b4f7e 68%,
+    #1e2742 86%,
+    #10162b 100%);
+  animation: sky-dawn 1.6s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
 }
 /* 日暮れ: 茜金から紫紺、藍へと沈んでいく */
 .sky-veil.dusk {
   visibility: visible;
+  mix-blend-mode: multiply;
   background-image: linear-gradient(
     to top,
-    #f0b56a 0%,
-    #e08a5c 12%,
-    #c66a6e 26%,
-    #9c5f88 42%,
-    #6a5490 58%,
-    #3d4370 78%,
-    #161c33 100%);
-  animation: sky-dusk 1.5s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
+    #f7c07a 0%,
+    #e8905f 12%,
+    #cf6f77 26%,
+    #9c6a9e 42%,
+    #6e6cab 58%,
+    #51619d 78%,
+    #42538f 100%);
+  animation: sky-dusk 1.6s cubic-bezier(0.4, 0.1, 0.2, 1) forwards;
 }
-/* 昇ってから引いていく。山（不透明の頂点）で背景色を差し替える */
+/* 昇ってから引いていく。山で背景色を差し替える */
 @keyframes sky-dawn {
   0%   { opacity: 0;    background-position: center 100%; }
-  34%  { opacity: 0.97; background-position: center 46%; }
-  58%  { opacity: 0.95; background-position: center 24%; }
+  34%  { opacity: 0.88; background-position: center 46%; }
+  58%  { opacity: 0.82; background-position: center 24%; }
   100% { opacity: 0;    background-position: center 0%; }
 }
 @keyframes sky-dusk {
   0%   { opacity: 0;    background-position: center 0%; }
-  34%  { opacity: 0.97; background-position: center 30%; }
-  58%  { opacity: 0.95; background-position: center 54%; }
+  34%  { opacity: 0.88; background-position: center 30%; }
+  58%  { opacity: 0.82; background-position: center 54%; }
   100% { opacity: 0;    background-position: center 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
