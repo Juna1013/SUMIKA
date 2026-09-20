@@ -82,6 +82,25 @@ const posts = await fetchLatestPosts();
         </div>
       ))}
     </div>
+
+    <div class="reveal mt-[5em] border-t border-line pt-[3.4em]">
+      <h3 class="m-0 mb-[2.2em] flex items-center gap-3.5 text-[17px] font-semibold tracking-[.3em]">{works.achievements.title}<span class="font-latin text-[11px] font-medium tracking-[.4em] text-ink-faint">{works.achievements.subtitle}</span></h3>
+      <ul class="m-0 list-none p-0">
+        {works.achievements.entries.map((entry) => (
+          <li class="flex gap-[1.8em] border-b border-line py-[1.35em] last:border-b-0 max-mobile:flex-col max-mobile:gap-[.5em]">
+            <span class="min-w-[6.4em] pt-[.15em] font-latin text-[12.5px] font-semibold tracking-[.24em] text-vermilion">{formatFootprintDate(entry.date)}</span>
+            <span class="flex-1">
+              <span class="block text-[14.5px] leading-8 tracking-[.1em] text-[#4c453d]">{entry.text}{entry.detail && <span class="ml-[.8em] font-latin text-[12.5px] tracking-[.16em] text-ink-faint">{entry.detail}</span>}</span>
+              {entry.awards.length > 0 && (
+                <span class="mt-[.6em] flex flex-wrap gap-2">
+                  {entry.awards.map((award) => <span class="rounded-xs border border-[rgba(177,58,42,.4)] px-[.8em] py-[.3em] text-[11.5px] tracking-[.14em] text-vermilion">{award}</span>)}
+                </span>
+              )}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   </SectionShell>
 </div>
 
