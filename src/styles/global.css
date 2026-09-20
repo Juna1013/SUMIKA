@@ -78,7 +78,7 @@
   --petal-line: #a76d7e;
   --petal-pale: #e6bac4;
   --petal-pale-line: #b98795;
-  --petal-open: #2a2d3a;
+  --petal-open: #eef0f6;
   --bud: #d8c089;
   --petal-glow: drop-shadow(0 0 6px rgba(226, 170, 186, 0.45));
   --wipe: linear-gradient(100deg, #05060a, #0a0c14 55%, #10131c);
@@ -317,6 +317,8 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 .rip-drop { fill: var(--ripple); opacity: 0; transform-box: fill-box; animation: drop-in 0.38s ease-in forwards; }
 .rip ellipse { fill: none; stroke: var(--ripple-line); stroke-width: 1.1; opacity: 0; transform-box: fill-box; transform-origin: center; animation: ripple 2.2s ease-out forwards; }
 .hake { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.16; animation: hake 0.55s 0.05s ease-in forwards, hake-settle 1.4s 1s ease-out forwards; }
+/* 夜桜では刷毛の帯が月に重なるため、ダークテーマでは出さない */
+:root[data-theme="dark"] .hake-layer { display: none; }
 .stk { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.15s var(--dl, 0s) cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
 .mdot { opacity: 0; animation: fade-in 0.9s 1.95s forwards; }
 .bloom-unit { opacity: 0; transform-box: fill-box; transform-origin: center; animation: bloom 0.7s var(--bd, 1.4s) cubic-bezier(0.3, 0.9, 0.35, 1.2) forwards; }
