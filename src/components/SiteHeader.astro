@@ -111,8 +111,11 @@ const navItems = [
       void veil.offsetWidth;         /* 直前のアニメーションを確実に切る */
       veil.classList.add(phase);
 
-      /* 空がいちばん濃くなる頃に背景を入れ替え、切替の瞬間を隠す */
-      var swap = setTimeout(function(){ apply(next); }, 620);
+      /* 背景の変化は空がいちばん濃い窓（約540〜930ms）に収める。
+         空が引き始めるまでに色を決め切ることで、空の動きと背景の
+         動きが重ならず、紺や白へ移るときのぐらつきがなくなる。 */
+      root.style.setProperty('--theme-fade', '0.48s');
+      var swap = setTimeout(function(){ apply(next); }, 600);
 
       veil.addEventListener('animationend', function done(e){
         if (e.target !== veil) return;
@@ -120,6 +123,7 @@ const navItems = [
         clearTimeout(swap);
         if (root.dataset.theme !== next) apply(next);  /* 取りこぼし防止 */
         veil.classList.remove('dawn', 'dusk');
+        root.style.removeProperty('--theme-fade');     /* 既定の尺へ戻す */
         toggle.removeAttribute('aria-busy');
         skyBusy = false;
       });
