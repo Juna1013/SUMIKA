@@ -128,9 +128,7 @@
     return ROUTES.indexOf(h) > -1 ? h : 'home';
   }
   function setView(r){
-    document.querySelectorAll('.view').forEach(function(v){
-      v.classList.toggle('active', v.dataset.route === r);
-    });
+    document.documentElement.dataset.route = r;
     document.querySelectorAll('[data-route]').forEach(function(a){
       if (a.tagName === 'A') a.classList.toggle('current', a.dataset.route === r);
     });

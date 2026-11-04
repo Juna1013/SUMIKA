@@ -30,6 +30,9 @@ const posts = await fetchLatestPosts();
       else if (window.matchMedia('(prefers-color-scheme: light)').matches) theme = 'light';
     } catch (e) {}
     document.documentElement.dataset.theme = theme;
+    /* 表示するページも描画前に確定させる（JSの読み込み前にフッターだけが見えるのを防ぐ） */
+    var route = location.hash.replace(/^#\/?/, '');
+    document.documentElement.dataset.route = ['works', 'experience', 'output'].indexOf(route) > -1 ? route : 'home';
     /* 初回描画では色の遷移を効かせない */
     requestAnimationFrame(function(){
       requestAnimationFrame(function(){ document.documentElement.classList.add('theme-ready'); });
