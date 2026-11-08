@@ -501,8 +501,12 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
   border-radius: 999px;
   animation: seal-pulse 2.8s ease-out 0.8s infinite;
 }
+/* 表示するページは html[data-route]（head のインラインJSと main.js が設定）で決める */
 .view { display: none; }
-.view.active { display: block; }
+html[data-route="home"] .view[data-route="home"],
+html[data-route="works"] .view[data-route="works"],
+html[data-route="experience"] .view[data-route="experience"],
+html[data-route="output"] .view[data-route="output"] { display: block; }
 
 /* Output: 初期表示を超える記事は「もっと見る」まで隠す */
 .post-item.is-extra { display: none; }

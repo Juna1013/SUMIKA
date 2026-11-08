@@ -1,5 +1,5 @@
 // トップページ（index.astro）の文言はこのファイルでまとめて編集できます。
-import { siAstro, siC, siCplusplus, siCss, siGithub, siHtml5, siPython, siQiita, siReact, siRuby, siX, siZenn } from 'simple-icons';
+import { siC, siCplusplus, siGit, siGithub, siMicrobit, siPython, siPytorch, siQiita, siReact, siVuedotjs, siX, siZenn } from 'simple-icons';
 
 // <head> に出力されるページタイトルと説明文
 // title はブログ記事ページのタイトル末尾（記事名 | 栖 - SUMIKA）や og:site_name にも使われます
@@ -20,7 +20,7 @@ export const hero = {
     '日々の記録と、開発したものと、考えたことを==築く場所==。',
     'I built thoughtful web interfaces with clean code and careful attention to detail. Currently exploring frontend development with TypeScript.',
   ],
-  tagline: 'STUDENT · BUILDER — JUNA1013',
+  tagline: 'STUDENT · BUILDER — Juna1013',
   scrollHint: '巡る',
 } as const;
 
@@ -42,23 +42,26 @@ export const about = {
   // label はアイコンの代替テキスト（スクリーンリーダー用）として使われます
   skills: [
     {
-      title: 'Things I work with:',
+      title: 'Languages:',
       items: [
         { label: 'C', icon: siC },
         { label: 'C++', icon: siCplusplus },
         { label: 'Python', icon: siPython },
-        { label: 'HTML', icon: siHtml5 },
-        { label: 'CSS', icon: siCss },
+        // Lean は simple-icons にないため GitHub プロフィールの README と同じロゴを使用
+        { label: 'Lean', image: '/lean-logo.svg' },
       ],
     },
     {
-      title: 'Currently exploring:',
+      title: 'Framework & Tools:',
       items: [
         { label: 'React', icon: siReact },
-        { label: 'Astro', icon: siAstro },
-        { label: 'Ruby', icon: siRuby },
-        // AtCoder は simple-icons にないため公式ロゴを使用
-        { label: 'AtCoder', image: '/atcoder-logo.png' },
+        { label: 'Vue.js', icon: siVuedotjs },
+        { label: 'micro:bit', icon: siMicrobit },
+        { label: 'Git', icon: siGit },
+        { label: 'PyTorch', icon: siPytorch },
+        // Jev は simple-icons にないため GitHub プロフィールの README と同じロゴを使用
+        { label: 'Jev', image: '/jev-logo.svg' },
+        { label: 'GitHub', icon: siGithub },
       ],
     },
   ],
