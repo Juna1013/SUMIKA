@@ -9,6 +9,20 @@ export const experience = {
   // detail / description は '' に、awards は [] にするとその行は表示されません
   entries: [
     {
+      year: '2026.09',
+      text: 'G検定 取得',
+      detail: '',
+      description: '',
+      awards: [],
+    },
+    {
+      year: '2026.09',
+      text: '技育博2026 vol.2 参加',
+      detail: '',
+      description: 'プロダクトとして墨戯を出展',
+      awards: [],
+    },
+    {
       year: '2026.07',
       text: 'ポートフォリオサイトを公開',
       detail: '',
