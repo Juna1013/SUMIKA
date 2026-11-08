@@ -30,6 +30,15 @@ const posts = await fetchLatestPosts();
       else if (window.matchMedia('(prefers-color-scheme: light)').matches) theme = 'light';
     } catch (e) {}
     document.documentElement.dataset.theme = theme;
+    /* ブラウザの上下のバーの色もテーマの地の色に合わせる（昼の色のままだと夜に白い帯が出る） */
+    var PAPER = { light: '#f0e8d5', dawn: '#f2e4dc', dusk: '#f0dcd0', dark: '#14161f' };
+    function syncThemeColor(){
+      var meta = document.querySelector('meta[name="theme-color"]');
+      var color = PAPER[document.documentElement.dataset.theme];
+      if (meta && color) meta.setAttribute('content', color);
+    }
+    syncThemeColor();
+    new MutationObserver(syncThemeColor).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     /* 表示するページも描画前に確定させる（JSの読み込み前にフッターだけが見えるのを防ぐ） */
     var route = location.hash.replace(/^#\/?/, '');
     document.documentElement.dataset.route = ['works', 'experience', 'output'].indexOf(route) > -1 ? route : 'home';

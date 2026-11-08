@@ -166,10 +166,30 @@ const navItems = [
        桜の上に何かを重ねると絵が一度消えてしまうので、覆わずに
        背景と文字の色だけを時間をかけて変える。 */
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var FADE = 1.6;
+    var FADE = 2.6;
     var fadeTimer = null;
     var body = document.body;
     var skyTimer = null;
+
+    /* 切替前の空を写して重ねる層。空のグラデーションは補間できないので、
+       新しい空を先に差し替え、この層の不透明度を下げてなじませる。 */
+    var skyFade = document.createElement('div');
+    skyFade.className = 'sky-fade';
+    skyFade.setAttribute('aria-hidden', 'true');
+    body.appendChild(skyFade);
+    function crossfadeSky(swap){
+      skyFade.style.transition = 'none';
+      /* 夜や昼の空は透けるグラデーションで、明るさの大半は html の地の色が担う。
+         グラデーションだけを写すと切替前の空がほとんど写らず、新しい空が
+         すぐに現れてしまうため、地の色も一緒に写す。 */
+      skyFade.style.backgroundColor = getComputedStyle(root).backgroundColor;
+      skyFade.style.backgroundImage = getComputedStyle(body, '::before').backgroundImage;
+      skyFade.style.opacity = '1';
+      void skyFade.offsetWidth;
+      swap();
+      skyFade.style.transition = 'opacity ' + FADE + 's ease-in-out';
+      skyFade.style.opacity = '0';
+    }
 
     function choose(next){
       var now = current();
@@ -193,8 +213,10 @@ const navItems = [
         skyTimer = setTimeout(function(){
           body.classList.remove('sky-dawn', 'sky-dusk');
         }, 1900);
+        crossfadeSky(function(){ apply(next); });
+      } else {
+        apply(next);
       }
-      apply(next);
       close();
     }
 

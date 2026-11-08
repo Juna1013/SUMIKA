@@ -176,6 +176,9 @@
   html {
     /* オーバースクロール時や描画が追いつかない領域も常にベージュにする */
     background-color: var(--color-paper);
+    /* 端で引っ張ったときの弾み（バウンス）を止める。
+       その間だけ空の層の外側にある地の色が帯のように見えてしまう。 */
+    overscroll-behavior: none;
   }
 
   body {
@@ -195,10 +198,16 @@
   html.theme-ready .grain {
     transition: background-color var(--theme-fade, 0.5s) ease, color var(--theme-fade, 0.5s) ease;
   }
-  /* グラデーションは background-color ではないため個別に指定する。
-     これを外すと空やヘッダーだけが動かずに飛び、切替がぐらつく。 */
-  html.theme-ready body::before {
-    transition: background var(--theme-fade, 0.5s) ease;
+  /* グラデーションは CSS では補間できず、途中でぱっと入れ替わってしまう。
+     そこで空そのものは即座に差し替え、切替前の空を .sky-fade に写して
+     重ね、その不透明度をゆっくり下げてなじませる（SiteHeader の choose）。 */
+  .sky-fade {
+    position: fixed;
+    inset: 0;
+    min-height: 100lvh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
   }
 
 
@@ -206,8 +215,7 @@
     html.theme-ready,
     html.theme-ready body,
     html.theme-ready .site-nav,
-    html.theme-ready .grain,
-    html.theme-ready body::before { transition-duration: 0.01ms; }
+    html.theme-ready .grain { transition-duration: 0.01ms; }
   }
 
   /* グラデーションはビューポート固定のレイヤーに分離
@@ -216,6 +224,9 @@
     content: "";
     position: fixed;
     inset: 0;
+    /* モバイルでアドレスバーが縮んだ瞬間に、下端に隙間ができないよう
+       最大のビューポートの高さを下限にする */
+    min-height: 100lvh;
     z-index: -1;
     pointer-events: none;
     background: var(--sky);
