@@ -158,8 +158,6 @@ const navItems = [
       root.dataset.theme = theme;
       syncMenu(theme);
       try { localStorage.setItem('theme', theme); } catch (e) {}
-      /* 花びらの色など、JS側で色を持つ描画に知らせる */
-      window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: theme } }));
     }
 
     /* 明暗が直接入れ替わると眩しいため、背景の色をゆっくり移す。
@@ -255,7 +253,6 @@ const navItems = [
       var next = e.matches ? 'dark' : 'light';
       root.dataset.theme = next;
       syncMenu(next);
-      window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
     }
     if (media.addEventListener) media.addEventListener('change', follow);
     else media.addListener(follow);

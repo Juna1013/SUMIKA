@@ -42,7 +42,15 @@
   --petal-pale-line: #b97f8e;
   --petal-open: #f0e8d5;
   --bud: #e9d08a;
-  --petal-glow: none;
+  /* 花のまわりの光（夜・朝・夕だけ灯す） */
+  --petal-glow: transparent;
+  --glow-display: none;
+  /* 舞う花びらの五色 */
+  --fall-1: #e2aab6;
+  --fall-2: #d494a4;
+  --fall-3: #c98a9c;
+  --fall-4: #efc9d2;
+  --fall-5: #dda0af;
   /* 墨のワイプ */
   --wipe: linear-gradient(100deg, #1c1814, #241f1a 55%, #2c2620);
   /* 夜だけ現れる要素 */
@@ -88,7 +96,8 @@
   --petal-pale-line: #bf8b97;
   --petal-open: #fdfbfa;
   --bud: #e8c49a;
-  --petal-glow: drop-shadow(0 0 5px rgba(255, 214, 200, 0.55));
+  --petal-glow: rgba(255, 214, 200, 0.55);
+  --glow-display: inline;
   --wipe: linear-gradient(100deg, #1e2a32, #26343d 55%, #2f3f49);
   --ripple: #3c4a54;
   --ripple-line: #4e5e69;
@@ -130,7 +139,8 @@
   --petal-pale-line: #b58393;
   --petal-open: #fbf7f8;
   --bud: #d8b88e;
-  --petal-glow: drop-shadow(0 0 6px rgba(226, 196, 220, 0.5));
+  --petal-glow: rgba(226, 196, 220, 0.5);
+  --glow-display: inline;
   --wipe: linear-gradient(100deg, #1a1b26, #22232f 55%, #2b2c3a);
   --ripple: #3f4152;
   --ripple-line: #525468;
@@ -164,7 +174,13 @@
   --petal-pale-line: #b98795;
   --petal-open: #eef0f6;
   --bud: #d8c089;
-  --petal-glow: drop-shadow(0 0 6px rgba(226, 170, 186, 0.45));
+  --petal-glow: rgba(226, 170, 186, 0.45);
+  --glow-display: inline;
+  --fall-1: #d7a3b1;
+  --fall-2: #c691a1;
+  --fall-3: #bd8798;
+  --fall-4: #e3c0c9;
+  --fall-5: #cf9aa8;
   --wipe: linear-gradient(100deg, #05060a, #0a0c14 55%, #10131c);
   --ripple: #cfd6e6;
   --ripple-line: #aab4cc;
@@ -306,7 +322,8 @@
   }
 }
 
-@keyframes draw { to { stroke-dashoffset: 0; } }
+/* 筆運び。始まるまでは線を消しておく（長さ 0 の線でも丸い端が点として出るため） */
+@keyframes draw { from { opacity: 1; } to { opacity: 1; stroke-dashoffset: 0; } }
 @keyframes fade-in { to { opacity: 1; } }
 @keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes char-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -314,7 +331,6 @@
 @keyframes fall { 0% { transform: translate3d(0, -6vh, 0); opacity: 0; } 6% { opacity: 0.95; } 82% { opacity: 0.9; } 100% { transform: translate3d(var(--drift), 106vh, 0); opacity: 0; } }
 @keyframes sway { from { transform: translateX(-13px) rotate(-72deg); } to { transform: translateX(13px) rotate(58deg); } }
 @keyframes drip { 0% { transform: scaleY(0); opacity: 1; } 55% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
-@keyframes hake { to { stroke-dashoffset: 0; } }
 @keyframes hake-settle { to { opacity: 0.06; } }
 @keyframes wipe-in { to { transform: translateX(0) skewX(-8deg); } }
 @keyframes wipe-out { from { transform: translateX(0) skewX(-8deg); } to { transform: translateX(118%) skewX(-8deg); } }
@@ -528,19 +544,53 @@ html[data-route="output"] .view[data-route="output"] { display: block; }
 .wipe.out { animation: wipe-out 0.44s cubic-bezier(0.5, 0.1, 0.4, 1) forwards; }
 .rip-drop { fill: var(--ripple); opacity: 0; transform-box: fill-box; animation: drop-in 0.38s ease-in forwards; }
 .rip ellipse { fill: none; stroke: var(--ripple-line); stroke-width: 1.1; opacity: 0; transform-box: fill-box; transform-origin: center; animation: ripple 2.2s ease-out forwards; }
-.hake { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0.16; animation: hake 0.55s 0.05s ease-in forwards, hake-settle 1.4s 1s ease-out forwards; }
+/* 刷毛: 焼き込んだ帯を、白い太線のマスクで左から一刷きに見せる */
+.hake { fill: var(--branch-dark); opacity: 0.16; animation: hake-settle 1.4s 1s ease-out forwards; }
+.hake-brush { fill: none; stroke: #fff; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; animation: draw 0.55s 0.05s ease-in forwards; }
 /* 夜桜では刷毛の帯が月に重なるため、ダークテーマでは出さない */
 :root[data-theme="dark"] .hake-layer,
 :root[data-theme="dusk"] .hake-layer { display: none; }
 
 
-.stk { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.15s var(--dl, 0s) cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
-.mdot { opacity: 0; animation: fade-in 0.9s 1.95s forwards; }
+/* ---------- 桜（HeroArtwork） ----------
+   墨のにじみはビルド時に形へ焼き込んであり、ここでは SVG フィルタを使わない。
+   動くのはマスクの線・花の拡大・花びらの transform と opacity だけ。 */
+
+/* 枝。芯をなぞる白い線（マスク）が伸びて、焼き込んだ枝を描き順どおりに見せる */
+.ink-base { fill: var(--branch); }
+.ink-deep { fill: var(--branch-deep); }
+.ink-dark { fill: var(--branch-dark); }
+.stk { fill: none; stroke: #fff; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; animation: draw 1.15s var(--dl, 0s) cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
+.mdot { fill: var(--branch-dark); opacity: 0; animation: fade-in 0.9s 1.95s forwards; }
+
+/* 花。淡紅・濃紅・線描の三種 */
+.bloom-pale .bloom-petals { fill: var(--petal-pale); stroke: var(--petal-pale-line); stroke-width: 0.5; }
+.bloom-deep .bloom-petals { fill: var(--petal); stroke: var(--petal-line); stroke-width: 0.5; }
+.bloom-line .bloom-petals { fill: var(--petal-open); stroke: var(--branch-dark); stroke-width: 0.8; }
+.bloom-pale .bloom-heart,
+.bloom-deep .bloom-heart { fill: var(--petal-line); }
+.bloom-line .bloom-heart { fill: var(--branch-dark); }
+.bloom-stamens { fill: var(--bud); opacity: 0.95; }
+/* 花の後ろに置く光の円。昼は描かない */
+.bloom-glow { display: var(--glow-display); fill: url(#bloomGlow); }
+.glow-stop { stop-color: var(--petal-glow); }
 .bloom-unit { opacity: 0; transform-box: fill-box; transform-origin: center; animation: bloom 0.7s var(--bd, 1.4s) cubic-bezier(0.3, 0.9, 0.35, 1.2) forwards; }
+
+/* 舞う花びら。どれも transform と opacity だけなので合成だけで動く */
 .petal-layer { opacity: 0; animation: fade-in 2.2s 2.2s forwards; }
 .petal-fall { position: absolute; top: 0; left: var(--x0); animation: fall var(--dur) linear var(--delay) infinite; will-change: transform; }
 .petal { display: block; animation: sway var(--sway) ease-in-out infinite alternate; }
 .petal svg { display: block; width: 100%; height: auto; }
+
+/* ヒーローが画面の外にあるあいだは止めておく（main.js が is-idle を付ける） */
+#hero.is-idle .petal-fall,
+#hero.is-idle .petal,
+#hero.is-idle .night-stars::before,
+#hero.is-idle .scroll-line { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .petal-layer { display: none; }
+}
 .hero-name { opacity: 0; animation: char-in 0.9s 2s cubic-bezier(0.2, 0.6, 0.2, 1) forwards; }
 .hero-sub { opacity: 0; animation: fade-up 1.2s 3s forwards; }
 .hero-lead { opacity: 0; animation: fade-up 1.3s 3.3s forwards; }
@@ -582,12 +632,20 @@ html[data-route="output"] .view[data-route="output"] { display: block; }
   background: radial-gradient(circle, rgba(244, 236, 210, 0.13), transparent 68%);
 }
 
-/* 星。3層の radial-gradient を散らして敷く */
+/* 星。radial-gradient を散らして敷く。
+   濃さ（テーマ）は親で、瞬きは ::before で持つ。瞬きの値を固定にすると
+   合成だけで動き、テーマ切替の遷移も瞬きに上書きされない。 */
 .night-stars {
   position: absolute;
   inset: 0;
   opacity: var(--star-opacity);
   transition: opacity var(--theme-fade, 0.6s) ease;
+}
+.night-stars::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  animation: twinkle 6.5s ease-in-out infinite;
   background-image:
     radial-gradient(1.4px 1.4px at 12% 18%, rgba(255, 253, 244, 0.9), transparent 60%),
     radial-gradient(1.1px 1.1px at 27% 9%, rgba(255, 253, 244, 0.65), transparent 60%),
@@ -601,17 +659,13 @@ html[data-route="output"] .view[data-route="output"] { display: block; }
     radial-gradient(1.2px 1.2px at 76% 47%, rgba(255, 253, 244, 0.5), transparent 60%);
 }
 /* ゆっくり瞬く */
-.night-stars { animation: twinkle 6.5s ease-in-out infinite; }
 @keyframes twinkle {
-  0%, 100% { opacity: calc(var(--star-opacity) * 0.72); }
-  50% { opacity: var(--star-opacity); }
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
 }
 
-/* 夜は花にほのかな発光をのせる */
-#bloomLayer > g { filter: var(--petal-glow); }
-
 @media (prefers-reduced-motion: reduce) {
-  .night-stars { animation: none; }
+  .night-stars::before { animation: none; }
 }
 
 /* 配色ボタン: いま選ばれている時刻の絵だけを見せる */
