@@ -5,14 +5,26 @@
 
   /* ---------- 桜 ----------
      絵と花びらは HeroArtwork がビルド時に描いてある。ここでは、ヒーローが
-     画面の外にあるあいだ花びらと星の動きを止めるだけ（読んでいる間に
-     見えない所で描き続けないため）。 */
+     画面の外にあるあいだ花びら・枝のそよぎ・星の動きを止めるだけ
+     （読んでいる間に見えない所で描き続けないため）。 */
   var hero = $('hero');
   if (hero && 'IntersectionObserver' in window){
     new IntersectionObserver(function(entries){
       hero.classList.toggle('is-idle', !entries[entries.length - 1].isIntersecting);
     }).observe(hero);
   }
+
+  /* ---------- ナビの後ろのぼかし ----------
+     本文がナビの下をくぐっている間だけ効かせる（global.css の .site-nav::before）。 */
+  var scrolled = false;
+  function syncScrolled(){
+    var next = window.scrollY > 24;
+    if (next === scrolled) return;
+    scrolled = next;
+    document.documentElement.classList.toggle('is-scrolled', next);
+  }
+  window.addEventListener('scroll', syncScrolled, { passive: true });
+  syncScrolled();
 
   /* ---------- 雫 → 波紋（画面のどこでも） ---------- */
   var rippleLayer = $('rippleLayer');
@@ -55,6 +67,7 @@
     });
     window.scrollTo(0, 0);
     current = r;
+    requestAnimationFrame(revealInView);
   }
   function navigate(r, after){
     if (r === current){
@@ -95,12 +108,29 @@
   setView(routeFromHash());
   if (isAboutAnchor()) requestAnimationFrame(scrollToAbout);
 
-  /* ---------- スクロールで現れる ---------- */
+  /* ---------- スクロールで現れる ----------
+     記事の一覧のように縦に長い塊は、画面に入る割合がなかなか増えない。
+     割合ではなく「上端が画面の下から少し入ったら」で現す。 */
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  }, { threshold: 0.18 });
-  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
-})();
+  }, { rootMargin: '0px 0px -12% 0px' });
+  reveals.forEach(function(el){ io.observe(el); });
 
+  /* ページを切り替えた直後は、いま見えている塊をその場で現す。
+     表示が none から切り替わっただけでは、監視の通知が届かないことがある。 */
+  function revealInView(){
+    var limit = window.innerHeight * 0.88;
+    reveals.forEach(function(el){
+      if (el.classList.contains('in')) return;
+      var box = el.getBoundingClientRect();
+      if (box.height > 0 && box.top < limit && box.bottom > 0){
+        el.classList.add('in');
+        io.unobserve(el);
+      }
+    });
+  }
+  window.addEventListener('load', revealInView);
+})();

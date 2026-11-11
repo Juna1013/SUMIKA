@@ -8,7 +8,10 @@ export type BranchTone = 'base' | 'deep' | 'dark';
 
 export interface Branch {
   tone: BranchTone;
+  /** 描き始めの太さ */
   width: number;
+  /** 描き終わりの太さ。省くと筆を抜くように細る（width の 4 割） */
+  end?: number;
   /** 描き始めるまでの遅れ（秒） */
   delay: number;
   d: string;
@@ -16,9 +19,9 @@ export interface Branch {
 
 export const branches: Branch[] = [
   // 幹（三段で先細り・左から横断）
-  { tone: 'dark', width: 13, delay: 0.1, d: 'M-30 250 C80 238 150 258 260 246 C360 236 420 210 520 202' },
-  { tone: 'dark', width: 8.5, delay: 0.55, d: 'M512 203 C610 196 660 206 750 196 C820 189 856 176 900 170' },
-  { tone: 'deep', width: 5, delay: 0.95, d: 'M892 171 C960 160 990 138 1050 126 C1100 116 1140 120 1200 108' },
+  { tone: 'dark', width: 15, end: 10.5, delay: 0.1, d: 'M-30 250 C80 238 150 258 260 246 C360 236 420 210 520 202' },
+  { tone: 'dark', width: 10.5, end: 6.4, delay: 0.55, d: 'M512 203 C610 196 660 206 750 196 C820 189 856 176 900 170' },
+  { tone: 'deep', width: 6.4, end: 2.6, delay: 0.95, d: 'M892 171 C960 160 990 138 1050 126 C1100 116 1140 120 1200 108' },
   { tone: 'base', width: 2.5, delay: 1.35, d: 'M1075 122 C1100 108 1112 92 1135 80' },
   // 上枝A
   { tone: 'dark', width: 6, delay: 0.5, d: 'M300 246 C322 214 326 178 356 142' },
@@ -59,17 +62,13 @@ export const moss: [number, number, number, number, number][] = [
   [330, 230, 2.2, 1.5, -20],
 ];
 
-/** 刷毛（昼と朝のみ）。枝の後ろを一刷きする帯 */
-export const hake = { width: 120, d: 'M-70 330 C300 285 820 275 1270 315' };
-
-/** 花びら一枚の形（中心が原点、上に切れ込み） */
-export const petalPath =
-  'M0 -5.2 C-0.6 -6.4 -2.4 -7 -3.6 -6 C-5.4 -4.4 -5.6 -0.8 -4.2 2 C-2.9 4.6 -1.4 5.6 0 6.6 C1.4 5.6 2.9 4.6 4.2 2 C5.6 -0.8 5.4 -4.4 3.6 -6 C2.4 -7 0.6 -6.4 0 -5.2 Z';
-
-/** 花の種類。0 淡紅 / 1 濃紅 / 2 線描 */
+/** 花の色。0 淡紅（染井吉野）/ 1 濃紅 / 2 白 */
 export type BlossomKind = 0 | 1 | 2;
 
-/** 桜の配置（満開） [x, y, 大きさ, 種類] */
+/**
+ * 桜の配置（満開） [x, y, 大きさ, 色]。
+ * 向き（正面・横顔・蕾）と花柄は sakura-art.ts が枝との位置関係から決める。
+ */
 export const blossoms: [number, number, number, BlossomKind][] = [
   /* 上枝A（密） */
   [434,86,1.05,0],[452,96,.85,1],[420,71,.8,0],[445,73,.7,2],[458,88,.9,1],
@@ -114,10 +113,59 @@ export const blossoms: [number, number, number, BlossomKind][] = [
   [1128,62,.85,0],[1140,76,.7,1],[1114,52,.7,0],[1190,94,.6,2],[1122,108,.6,1],
 ];
 
-/* 墨のにじみ。以前の SVG フィルタ（inkRough / inkRoughFine / hakeRough）と同じ値 */
+/* 墨のにじみ。枝の縁を荒らす量（feTurbulence と同じ指定のしかた） */
 export const inkRough = { seed: 8, baseFrequency: 0.032, numOctaves: 4, scale: 7 } as const;
-export const inkRoughFine = { seed: 4, baseFrequency: 0.09, numOctaves: 3, scale: 3.5 } as const;
-export const hakeRough = { seed: 13, baseFrequency: [0.018, 0.09], numOctaves: 4, scale: 22 } as const;
+/** 小枝（別ページの枝飾り）用。絵が小さいので荒れも小さくする */
+export const inkRoughFine = { seed: 4, baseFrequency: 0.05, numOctaves: 3, scale: 3.2 } as const;
 
 /** 舞い落ちる花びらの枚数 */
-export const fallingPetalCount = 34;
+export const fallingPetalCount = 36;
+
+/* ---------- 別ページの枝飾り ---------- */
+
+export interface SprigSpec {
+  /** viewBox の幅と高さ */
+  size: [number, number];
+  seed: number;
+  branches: Branch[];
+}
+
+/** 画面の右上から差し出す小枝。左上に置くときは描画側で左右を返す */
+export const sprigs: Record<'works' | 'experience' | 'output', SprigSpec> = {
+  // 下がり枝
+  works: {
+    size: [440, 250],
+    seed: 71,
+    branches: [
+      { tone: 'dark', width: 7, end: 2, delay: 0.1, d: 'M452 14 C380 22 318 50 268 92 C232 122 204 140 158 150' },
+      { tone: 'deep', width: 2.6, delay: 0.5, d: 'M318 54 C310 92 290 116 284 152' },
+      { tone: 'base', width: 2, delay: 0.7, d: 'M240 114 C214 106 196 108 170 98' },
+      { tone: 'base', width: 2.2, delay: 0.35, d: 'M384 26 C376 54 378 76 364 102' },
+      { tone: 'base', width: 1.6, delay: 0.8, d: 'M196 138 C182 152 180 168 166 184' },
+    ],
+  },
+  // 横へ伸びる枝
+  experience: {
+    size: [440, 230],
+    seed: 29,
+    branches: [
+      { tone: 'dark', width: 6.5, end: 1.8, delay: 0.1, d: 'M452 62 C392 52 340 70 290 64 C240 58 204 74 150 92' },
+      { tone: 'deep', width: 2.6, delay: 0.45, d: 'M352 66 C340 96 318 112 306 144' },
+      { tone: 'base', width: 2, delay: 0.6, d: 'M270 64 C258 44 238 36 222 20' },
+      { tone: 'base', width: 1.8, delay: 0.75, d: 'M214 72 C204 96 186 108 176 130' },
+      { tone: 'base', width: 1.8, delay: 0.4, d: 'M404 56 C394 38 378 30 366 14' },
+    ],
+  },
+  // 立ち上がってから垂れる枝
+  output: {
+    size: [440, 250],
+    seed: 113,
+    branches: [
+      { tone: 'dark', width: 7, end: 2, delay: 0.1, d: 'M452 96 C404 70 352 62 304 78 C262 92 236 120 196 132' },
+      { tone: 'deep', width: 2.8, delay: 0.4, d: 'M366 66 C352 44 330 36 308 22' },
+      { tone: 'base', width: 2, delay: 0.65, d: 'M290 84 C282 114 262 136 256 168' },
+      { tone: 'base', width: 1.8, delay: 0.8, d: 'M232 122 C210 116 192 100 172 96' },
+      { tone: 'base', width: 1.8, delay: 0.55, d: 'M412 76 C404 104 386 120 380 146' },
+    ],
+  },
+};

@@ -238,6 +238,50 @@ export function strokeField(line: Point[], width: number): Field {
   };
 }
 
+/**
+ * 太さが芯に沿って変わる線（先細りの枝）。`halfAt` は芯の頂点ごとの半幅。
+ * 丸い端・丸い角になるのは strokeField と同じ。
+ */
+export function taperedStrokeField(line: Point[], halfAt: number[]): Field {
+  const maxHalf = Math.max(...halfAt);
+  const reach = maxHalf + 2;
+  const cell = Math.max(2, reach);
+  const box = boundsOf(line, reach);
+  const cols = Math.ceil((box.x1 - box.x0) / cell) + 1;
+  const rows = Math.ceil((box.y1 - box.y0) / cell) + 1;
+  const buckets: number[][] = Array.from({ length: cols * rows }, () => []);
+  for (let s = 0; s < line.length - 1; s++) {
+    const [ax, ay] = line[s];
+    const [bx, by] = line[s + 1];
+    const c0 = Math.floor((Math.min(ax, bx) - reach - box.x0) / cell);
+    const c1 = Math.floor((Math.max(ax, bx) + reach - box.x0) / cell);
+    const r0 = Math.floor((Math.min(ay, by) - reach - box.y0) / cell);
+    const r1 = Math.floor((Math.max(ay, by) + reach - box.y0) / cell);
+    for (let r = Math.max(0, r0); r <= Math.min(rows - 1, r1); r++) {
+      for (let c = Math.max(0, c0); c <= Math.min(cols - 1, c1); c++) buckets[r * cols + c].push(s);
+    }
+  }
+  return (x, y) => {
+    const c = Math.floor((x - box.x0) / cell);
+    const r = Math.floor((y - box.y0) / cell);
+    if (c < 0 || r < 0 || c >= cols || r >= rows) return -reach;
+    let best = -reach;
+    for (const s of buckets[r * cols + c]) {
+      const [ax, ay] = line[s];
+      const [bx, by] = line[s + 1];
+      const dx = bx - ax;
+      const dy = by - ay;
+      const len2 = dx * dx + dy * dy;
+      let t = len2 ? ((x - ax) * dx + (y - ay) * dy) / len2 : 0;
+      t = t < 0 ? 0 : t > 1 ? 1 : t;
+      const d = Math.hypot(ax + t * dx - x, ay + t * dy - y);
+      const v = halfAt[s] + (halfAt[s + 1] - halfAt[s]) * t - d;
+      if (v > best) best = v;
+    }
+    return best;
+  };
+}
+
 /** 閉じた多角形の内外（符号付き距離） */
 export function polygonField(poly: Point[]): Field {
   return (x, y) => {
@@ -473,12 +517,39 @@ export function bake(field: Field, box: Box, shift: (x: number, y: number) => nu
   return ringsToPath(rings, opts.digits ?? 1);
 }
 
-/** 線を、ずらした後の塗りの輪郭にする */
-export function bakeStroke(d: string, width: number, spec: InkSpec, opts: BakeOptions): string {
+/**
+ * 線を、ずらした後の塗りの輪郭にする。
+ * `endWidth` を渡すと、始点の `width` から終点へ向けて太さが変わる（筆の入りと抜き）。
+ * 細り方は sakura-art.ts の widthAt と同じ式にしてある。
+ */
+export function bakeStroke(
+  d: string,
+  width: number,
+  spec: InkSpec,
+  opts: BakeOptions,
+  endWidth = width,
+  /** true ならまっすぐ細らせる（幹を何本かの線でつなぐとき、継ぎ目で太さが合う） */
+  linear = false,
+): string {
+  const widest = Math.max(width, endWidth);
   // 太い線ほど芯の折れ線は粗くてよい（曲がりが緩いので誤差は出ない）
-  const line = flattenPath(d, Math.min(4, Math.max(0.4, width / 8)))[0];
-  const box = boundsOf(line, width / 2 + maxShift(spec) + opts.res * 2);
-  return bake(strokeField(line, width), box, displacement(spec), opts);
+  const line = flattenPath(d, Math.min(4, Math.max(0.4, widest / 8)))[0];
+  const box = boundsOf(line, widest / 2 + maxShift(spec) + opts.res * 2);
+  if (endWidth === width) return bake(strokeField(line, width), box, displacement(spec), opts);
+  const along = lengthsAlong(line);
+  const total = along[along.length - 1] || 1;
+  const halfAt = along.map((l) => (width + (endWidth - width) * (linear ? l / total : easeTaper(l / total))) / 2);
+  return bake(taperedStrokeField(line, halfAt), box, displacement(spec), opts);
+}
+
+/** 筆の抜き。はじめはゆっくり、終わりへ向けて早く細る */
+const easeTaper = (t: number) => t * t * (0.55 + 0.45 * t);
+
+/** 折れ線の各頂点までの道のり */
+export function lengthsAlong(line: Point[]): number[] {
+  const out = [0];
+  for (let i = 1; i < line.length; i++) out.push(out[i - 1] + dist(line[i - 1], line[i]));
+  return out;
 }
 
 /** 点 c がずらした後にどこへ写るか（P + shift(P) = c を解く） */

@@ -36,12 +36,36 @@
   --branch: #5d4f41;
   --branch-deep: #52453a;
   --branch-dark: #453a30;
+  /* 樹皮の光と横縞、花柄 */
+  --branch-light: #8d7a63;
+  --bark-mark: #2c241d;
+  --stalk: #7c6d48;
+  /* 花びらの色（芯 → 中 → 縁）。0 淡紅 / 1 濃紅 / 2 白 */
+  --p0-core: #de869d;
+  --p0-mid: #f3c3ce;
+  --p0-edge: #fbe8e9;
+  --p1-core: #cb5f80;
+  --p1-mid: #e79db2;
+  --p1-edge: #f3ccd6;
+  --p2-core: #eab0be;
+  --p2-mid: #fbebea;
+  --p2-edge: #fffdf9;
+  /* 萼・花の芯・花糸・葯・雌しべ・蕾 */
+  --calyx: #8f3d50;
+  --heart: #bd4a64;
+  --stamen: #fff6f1;
+  --anther: #e3b74c;
+  --pistil: #a9b56e;
+  --bud-low: #bf4567;
+  --bud-high: #e78ca4;
+  /* 霞。--mist は見出しのすやり霞（昼は金砂子の色）、--mist-soft はヒーローの春霞 */
+  --mist: #c6a15f;
+  --mist-opacity: 0.15;
+  --mist-soft: rgba(203, 170, 108, 0.3);
+  /* 落款の文字（朱の上に抜く色） */
+  --seal-ink: #f8f0e0;
   --petal: #cf8ea0;
   --petal-line: #a4677a;
-  --petal-pale: #e4afba;
-  --petal-pale-line: #b97f8e;
-  --petal-open: #f0e8d5;
-  --bud: #e9d08a;
   /* 花のまわりの光（夜・朝・夕だけ灯す） */
   --petal-glow: transparent;
   --glow-display: none;
@@ -90,12 +114,14 @@
   --branch: #4f5c66;
   --branch-deep: #45515a;
   --branch-dark: #3a444d;
+  --branch-light: #7f8e9a;
+  --bark-mark: #283037;
+  --stalk: #6c6f58;
+  --mist: #ffffff;
+  --mist-opacity: 0.22;
+  --mist-soft: rgba(255, 255, 255, 0.5);
   --petal: #e2a0ac;
   --petal-line: #ab6e7e;
-  --petal-pale: #f2c3cb;
-  --petal-pale-line: #bf8b97;
-  --petal-open: #fdfbfa;
-  --bud: #e8c49a;
   --petal-glow: rgba(255, 214, 200, 0.55);
   --glow-display: inline;
   --wipe: linear-gradient(100deg, #1e2a32, #26343d 55%, #2f3f49);
@@ -133,12 +159,14 @@
   --branch: #4a4b5c;
   --branch-deep: #414252;
   --branch-dark: #373846;
+  --branch-light: #7c7d93;
+  --bark-mark: #272833;
+  --stalk: #696657;
+  --mist: #ffeadd;
+  --mist-opacity: 0.17;
+  --mist-soft: rgba(255, 232, 218, 0.36);
   --petal: #d894a6;
   --petal-line: #a2647a;
-  --petal-pale: #eebac6;
-  --petal-pale-line: #b58393;
-  --petal-open: #fbf7f8;
-  --bud: #d8b88e;
   --petal-glow: rgba(226, 196, 220, 0.5);
   --glow-display: inline;
   --wipe: linear-gradient(100deg, #1a1b26, #22232f 55%, #2b2c3a);
@@ -168,12 +196,19 @@
   --branch: #6c6c7a;
   --branch-deep: #5a5a68;
   --branch-dark: #4a4a57;
+  --branch-light: #8b8b99;
+  --bark-mark: #32323d;
+  --stalk: #858069;
+  /* 月明かりの下では、縁の白をわずかに青へ寄せる */
+  --p0-edge: #f6e6ec;
+  --p1-edge: #edc8d4;
+  --p2-edge: #f6f6fb;
+  --stamen: #f4eef2;
+  --mist: #8c9bd2;
+  --mist-opacity: 0.09;
+  --mist-soft: rgba(132, 148, 208, 0.17);
   --petal: #d59fae;
   --petal-line: #a76d7e;
-  --petal-pale: #e6bac4;
-  --petal-pale-line: #b98795;
-  --petal-open: #eef0f6;
-  --bud: #d8c089;
   --petal-glow: rgba(226, 170, 186, 0.45);
   --glow-display: inline;
   --fall-1: #d7a3b1;
@@ -328,10 +363,53 @@
 @keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes char-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes bloom { 0% { opacity: 0; transform: scale(0.15); } 70% { opacity: 1; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
-@keyframes fall { 0% { transform: translate3d(0, -6vh, 0); opacity: 0; } 6% { opacity: 0.95; } 82% { opacity: 0.9; } 100% { transform: translate3d(var(--drift), 106vh, 0); opacity: 0; } }
-@keyframes sway { from { transform: translateX(-13px) rotate(-72deg); } to { transform: translateX(13px) rotate(58deg); } }
+/* 花びら。外側（fall）が風に流されながら落ち、内側が滑る・傾く・裏返る */
+@keyframes fall {
+  0% { transform: translate3d(0, -8vh, 0); opacity: 0; }
+  5% { opacity: 1; }
+  86% { opacity: 1; }
+  100% { transform: translate3d(var(--drift), 108vh, 0); opacity: 0; }
+}
+/* ひらひら: 左右へ滑り、端で向きを変えるたびに傾きが入れ替わる。
+   滑っている間は少し沈み、端ではふわりと浮く（translate の y）。 */
+@keyframes flutter {
+  0% {
+    translate: calc(var(--amp) * -1) -5px;
+    transform: rotate(var(--rest)) rotateX(calc(var(--tx) * -1)) rotateY(calc(var(--ty) * -1));
+    animation-timing-function: cubic-bezier(0.4, 0, 0.8, 0.6);
+  }
+  50% {
+    translate: 0 5px;
+    transform: rotate(calc(var(--rest) + 16deg)) rotateX(0deg) rotateY(0deg);
+    animation-timing-function: cubic-bezier(0.2, 0.4, 0.6, 1);
+  }
+  100% {
+    translate: var(--amp) -5px;
+    transform: rotate(calc(var(--rest) + 32deg)) rotateX(var(--tx)) rotateY(var(--ty));
+  }
+}
+/* くるくる: 裏返り続けながら、左右へゆっくり流れる */
+@keyframes tumble {
+  from { transform: rotate(var(--rest)) rotateX(0deg) rotateY(0deg); }
+  to { transform: rotate(var(--rest)) rotateX(var(--tx)) rotateY(var(--ty)); }
+}
+@keyframes sway-x {
+  from { translate: calc(var(--amp) * -1) 0; }
+  to { translate: var(--amp) 0; }
+}
+/* 枝のそよぎ。幹の根もとを支点に、不規則に揺り返す */
+@keyframes bough-sway {
+  0%, 100% { transform: rotate(0deg); }
+  21% { transform: rotate(0.34deg); }
+  46% { transform: rotate(-0.16deg); }
+  68% { transform: rotate(0.42deg); }
+  87% { transform: rotate(-0.08deg); }
+}
+@keyframes kasumi-drift {
+  from { transform: translateX(-1.4%); }
+  to { transform: translateX(1.4%); }
+}
 @keyframes drip { 0% { transform: scaleY(0); opacity: 1; } 55% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
-@keyframes hake-settle { to { opacity: 0.06; } }
 @keyframes wipe-in { to { transform: translateX(0) skewX(-8deg); } }
 @keyframes wipe-out { from { transform: translateX(0) skewX(-8deg); } to { transform: translateX(118%) skewX(-8deg); } }
 @keyframes drop-in { 0% { opacity: 0.85; transform: translateY(-16px); } 70% { opacity: 0.8; transform: translateY(0); } 100% { opacity: 0; transform: translateY(0); } }
@@ -351,6 +429,29 @@
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0.78  0 0 0 0 0.80  0 0 0 0 0.90  0 0 0 0.07 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 .site-nav.immediate { opacity: 1; animation: none; }
+
+/* スクロールすると本文がナビの下をくぐる。その間だけ、ナビの後ろをぼかして
+   文字どうしが重なって読めなくなるのを防ぐ（main.js が is-scrolled を付ける）。
+   空の色は配色ごとに違うので、色を塗らずに背後をぼかす。下端はマスクで消す。
+   nav の中に置くと効かない（nav は不透明度を動かすので、ぼかす対象が
+   nav の内側だけになる）ため、nav のすぐ下に別の層として敷く。 */
+.nav-veil {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 39;
+  height: 96px;
+  pointer-events: none;
+  opacity: 0;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  background: color-mix(in srgb, var(--color-paper) 14%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent);
+  mask-image: linear-gradient(to bottom, #000 58%, transparent);
+  transition: opacity 0.4s ease;
+}
+html.is-scrolled .nav-veil { opacity: 1; }
 
 /* ナビリンク: 朱の刷毛アンダーラインが左から走る */
 .nav-link { position: relative; }
@@ -516,18 +617,6 @@ body.nav-open .nav-bar:nth-child(3) { transform: translateY(-5.5px) rotate(-21de
 }
 .reveal.in .section-title::after { transform: skewX(-18deg) scaleX(1); }
 
-/* 年表: 最新（朱点）が静かに鼓動する */
-.footprint li:last-child::after {
-  content: "";
-  position: absolute;
-  top: 9px;
-  left: -26px;
-  width: 9px;
-  height: 9px;
-  transform: translateX(-3.5px);
-  border-radius: 999px;
-  animation: seal-pulse 2.8s ease-out 0.8s infinite;
-}
 /* 表示するページは html[data-route]（head のインラインJSと main.js が設定）で決める */
 .view { display: none; }
 html[data-route="home"] .view[data-route="home"],
@@ -544,56 +633,136 @@ html[data-route="output"] .view[data-route="output"] { display: block; }
 .wipe.out { animation: wipe-out 0.44s cubic-bezier(0.5, 0.1, 0.4, 1) forwards; }
 .rip-drop { fill: var(--ripple); opacity: 0; transform-box: fill-box; animation: drop-in 0.38s ease-in forwards; }
 .rip ellipse { fill: none; stroke: var(--ripple-line); stroke-width: 1.1; opacity: 0; transform-box: fill-box; transform-origin: center; animation: ripple 2.2s ease-out forwards; }
-/* 刷毛: 焼き込んだ帯を、白い太線のマスクで左から一刷きに見せる */
-.hake { fill: var(--branch-dark); opacity: 0.16; animation: hake-settle 1.4s 1s ease-out forwards; }
-.hake-brush { fill: none; stroke: #fff; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; animation: draw 0.55s 0.05s ease-in forwards; }
-/* 夜桜では刷毛の帯が月に重なるため、ダークテーマでは出さない */
-:root[data-theme="dark"] .hake-layer,
-:root[data-theme="dusk"] .hake-layer { display: none; }
-
-
-/* ---------- 桜（HeroArtwork） ----------
+/* ---------- 桜（HeroArtwork / Sprig / SakuraDefs） ----------
    墨のにじみはビルド時に形へ焼き込んであり、ここでは SVG フィルタを使わない。
-   動くのはマスクの線・花の拡大・花びらの transform と opacity だけ。 */
+   動くのはマスクの線・花の拡大・枝と花びらの transform と opacity だけ。 */
 
 /* 枝。芯をなぞる白い線（マスク）が伸びて、焼き込んだ枝を描き順どおりに見せる */
 .ink-base { fill: var(--branch); }
 .ink-deep { fill: var(--branch-deep); }
 .ink-dark { fill: var(--branch-dark); }
 .stk { fill: none; stroke: #fff; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; animation: draw 1.15s var(--dl, 0s) cubic-bezier(0.45, 0.05, 0.35, 1) forwards; }
+/* 樹皮。上の縁に沿う光と、横縞（皮目） */
+.bark-light { fill: none; stroke: var(--branch-light); stroke-linecap: round; stroke-linejoin: round; opacity: 0.36; }
+.bark-mark { fill: none; stroke: var(--bark-mark); stroke-width: 0.9; stroke-linecap: round; opacity: 0.55; }
 .mdot { fill: var(--branch-dark); opacity: 0; animation: fade-in 0.9s 1.95s forwards; }
+/* 花柄。枝から花へ伸びる細い軸 */
+.stalk { fill: none; stroke: var(--stalk); stroke-width: 0.85; stroke-linecap: round; opacity: 0; animation: fade-in 0.9s var(--dl, 1.5s) forwards; }
 
-/* 花。淡紅・濃紅・線描の三種 */
-.bloom-pale .bloom-petals { fill: var(--petal-pale); stroke: var(--petal-pale-line); stroke-width: 0.5; }
-.bloom-deep .bloom-petals { fill: var(--petal); stroke: var(--petal-line); stroke-width: 0.5; }
-.bloom-line .bloom-petals { fill: var(--petal-open); stroke: var(--branch-dark); stroke-width: 0.8; }
-.bloom-pale .bloom-heart,
-.bloom-deep .bloom-heart { fill: var(--petal-line); }
-.bloom-line .bloom-heart { fill: var(--branch-dark); }
-.bloom-stamens { fill: var(--bud); opacity: 0.95; }
+/* 花。色は花びらのグラデーション（#pg0〜2）で決まる */
+.pg0-core { stop-color: var(--p0-core); }
+.pg0-mid { stop-color: var(--p0-mid); }
+.pg0-edge { stop-color: var(--p0-edge); }
+.pg1-core { stop-color: var(--p1-core); }
+.pg1-mid { stop-color: var(--p1-mid); }
+.pg1-edge { stop-color: var(--p1-edge); }
+.pg2-core { stop-color: var(--p2-core); }
+.pg2-mid { stop-color: var(--p2-mid); }
+.pg2-edge { stop-color: var(--p2-edge); }
+.bud-low { stop-color: var(--bud-low); }
+.bud-high { stop-color: var(--bud-high); }
+/* 花びらの縁は細い線でわずかに締める（重なりの境目が分かる程度） */
+.bloom-petals { stroke: var(--petal-line); stroke-width: 0.32; stroke-opacity: 0.5; stroke-linejoin: round; }
+.bloom-back { opacity: 0.86; }
+.bloom-crease { fill: none; stroke: var(--petal-line); stroke-width: 0.3; stroke-linecap: round; opacity: 0.3; }
+.bloom-calyx { fill: var(--calyx); }
+.bloom-heart { fill: var(--heart); opacity: 0.85; }
+.bloom-stamen { fill: none; stroke: var(--stamen); stroke-width: 0.34; stroke-linecap: round; }
+.bloom-anther { fill: var(--anther); }
+.bloom-pistil { fill: var(--pistil); }
+.bud-fold { fill: none; stroke: var(--calyx); stroke-width: 0.35; stroke-linecap: round; opacity: 0.4; }
 /* 花の後ろに置く光の円。昼は描かない */
 .bloom-glow { display: var(--glow-display); fill: url(#bloomGlow); }
 .glow-stop { stop-color: var(--petal-glow); }
 .bloom-unit { opacity: 0; transform-box: fill-box; transform-origin: center; animation: bloom 0.7s var(--bd, 1.4s) cubic-bezier(0.3, 0.9, 0.35, 1.2) forwards; }
 
-/* 舞う花びら。どれも transform と opacity だけなので合成だけで動く */
+/* 春霞（ヒーロー）。横に長い楕円のぼかしを重ねて、枝の後ろにたなびかせる。
+   ぼかしフィルタではなくグラデーションなので、描くのは一度きり。 */
+.hero-mist {
+  aspect-ratio: 3 / 1;
+  background:
+    radial-gradient(ellipse 30% 7% at 20% 63%, var(--mist-soft), transparent 72%),
+    radial-gradient(ellipse 21% 4.5% at 33% 71%, var(--mist-soft), transparent 72%),
+    radial-gradient(ellipse 28% 6% at 74% 57%, var(--mist-soft), transparent 72%),
+    radial-gradient(ellipse 17% 4% at 86% 64%, var(--mist-soft), transparent 72%),
+    radial-gradient(ellipse 20% 4.5% at 9% 19%, var(--mist-soft), transparent 72%),
+    radial-gradient(ellipse 24% 4.5% at 60% 11%, var(--mist-soft), transparent 72%);
+  opacity: 0;
+  animation: fade-in 2.6s 0.3s ease-out forwards, kasumi-drift 44s ease-in-out infinite alternate;
+}
+/* すやり霞（別ページの見出し）。帯の重なりが濃くならないよう、濃さは <g> にまとめてかける */
+.kasumi { pointer-events: none; }
+.kasumi g { fill: var(--mist); opacity: var(--mist-opacity); transition: opacity var(--theme-fade, 0.6s) ease, fill var(--theme-fade, 0.6s) ease; }
+
+/* 舞う花びら。どれも transform / translate / opacity だけなので合成だけで動く */
 .petal-layer { opacity: 0; animation: fade-in 2.2s 2.2s forwards; }
+.petal-layer-stray { animation-delay: 0.9s; }
 .petal-fall { position: absolute; top: 0; left: var(--x0); animation: fall var(--dur) linear var(--delay) infinite; will-change: transform; }
-.petal { display: block; animation: sway var(--sway) ease-in-out infinite alternate; }
-.petal svg { display: block; width: 100%; height: auto; }
+.petal { display: block; }
+.petal.is-flutter { animation: flutter calc(var(--sway) * 2) var(--sd) infinite alternate; }
+.petal.is-tumble { animation: tumble var(--spin) linear var(--sd) infinite, sway-x var(--sway) ease-in-out var(--sd) infinite alternate; }
+/* 奥の花びらは淡く、手前は大きいぶん少し透かす */
+.petal.is-far { opacity: 0.62; }
+.petal.is-mid { opacity: 0.92; }
+.petal.is-near { opacity: 0.8; }
+.petal svg { display: block; width: 100%; height: auto; overflow: visible; }
 
 /* ヒーローが画面の外にあるあいだは止めておく（main.js が is-idle を付ける） */
 #hero.is-idle .petal-fall,
 #hero.is-idle .petal,
+#hero.is-idle .bough,
+#hero.is-idle .hero-mist,
 #hero.is-idle .night-stars::before,
 #hero.is-idle .scroll-line { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
   .petal-layer { display: none; }
 }
-.hero-name { opacity: 0; animation: char-in 0.9s 2s cubic-bezier(0.2, 0.6, 0.2, 1) forwards; }
-.hero-sub { opacity: 0; animation: fade-up 1.2s 3s forwards; }
-.hero-lead { opacity: 0; animation: fade-up 1.3s 3.3s forwards; }
+
+/* ---------- ヒーローの組み ----------
+   枝の絵は幅いっぱいに置くので、高さは画面の幅で決まる（幅の 1/3）。
+   題字とリード文の位置を画面の高さだけで決めると、背の低い画面で絵に
+   重なってしまう。そこで絵の大きさ（--art-w）から位置を割り出し、
+   足りないぶんはヒーローを伸ばしてスクロールさせる。 */
+.hero {
+  --art-top: clamp(50px, 7vh, 84px);
+  --art-w: 100vw;
+  --name-size: clamp(44px, 7.8vmin, 88px);
+  /* 題字は右の枝先の下から。背の高い画面では少し下げて間を取る */
+  --name-top: max(calc(var(--art-top) + var(--art-w) * 0.16), 34svh);
+  /* リード文は、左に垂れる枝のいちばん下より下から */
+  --lead-top: calc(var(--art-top) + var(--art-w) * 0.268);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: max(100svh, calc(var(--name-top) + var(--name-size) * 5.2 + 3rem));
+  padding: var(--lead-top) 6.5vw clamp(90px, 16vh, 160px);
+}
+.hero-art { position: absolute; top: var(--art-top); left: 0; width: 100%; height: auto; pointer-events: none; }
+.bough { transform-origin: 0 62%; animation: bough-sway 13s ease-in-out 4.5s infinite; }
+.hero-title { position: absolute; top: var(--name-top); right: 6.5vw; z-index: 4; display: flex; flex-direction: row-reverse; gap: 2.4vmin; }
+.hero-name { margin: 0; font-size: var(--name-size); font-weight: 500; line-height: 1.08; letter-spacing: 0.16em; writing-mode: vertical-rl; opacity: 0; animation: char-in 0.9s 2s cubic-bezier(0.2, 0.6, 0.2, 1) forwards; }
+.hero-sub { margin: 0; padding-top: 1.7em; color: var(--color-ink-soft); font-size: clamp(12px, 1.9vmin, 17px); letter-spacing: 0.42em; writing-mode: vertical-rl; opacity: 0; animation: fade-up 1.2s 3s forwards; }
+/* 幅は、中ほどから垂れる枝に届かないところまで */
+.hero-lead { position: relative; z-index: 4; margin: auto 0 0; max-width: min(44ch, 44vw); color: var(--color-ink-soft); font-size: 14.5px; line-height: 2.3; letter-spacing: 0.14em; opacity: 0; animation: fade-up 1.3s 3.3s forwards; }
+
+@media (width <= 47.5rem) {
+  /* 絵を大きく見せるため、枝の右側だけを画面に入れる。
+     題字の横にリード文を置く幅はないので、題字の下へ送る。 */
+  .hero {
+    --art-w: 178vw;
+    --name-top: max(calc(var(--art-top) + var(--art-w) * 0.16), 26svh);
+    --lead-top: calc(var(--name-top) + var(--name-size) * 5.1 + 1rem);
+    padding-right: 7vw;
+    padding-bottom: max(13vh, 100px);
+    padding-left: 7vw;
+  }
+  .hero-art { left: -78%; width: 178%; }
+  .hero-title { right: 7vw; }
+  .hero-lead { max-width: none; font-size: 13px; }
+}
+
 .scroll-hint { opacity: 0; animation: fade-in 1.4s 4.2s forwards; }
 .scroll-line { animation: drip 2.3s ease-in-out infinite; }
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity 1.1s ease, transform 1.1s ease; }
@@ -602,6 +771,8 @@ html[data-route="output"] .view[data-route="output"] { display: block; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    /* 遅れも消す。残すと、花が咲き終わるまで花柄だけが先に見えてしまう */
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
@@ -748,4 +919,323 @@ html[data-route="output"] .view[data-route="output"] { display: block; }
   background-color: currentColor;
   -webkit-mask: var(--logo-src) center / contain no-repeat;
   mask: var(--logo-src) center / contain no-repeat;
+}
+
+/* ====================================================================
+   和の意匠（別ページの部品）
+   ==================================================================== */
+
+/* 見出しや題は、文節の切れ目で折る（単語の途中で折れないように）。
+   auto-phrase に対応しないブラウザでは無視される。 */
+.section-title,
+.work-title,
+.fp-text,
+.book-title {
+  word-break: auto-phrase;
+  text-wrap: pretty;
+}
+
+/* 和柄。線だけのタイル（utils/wagara.ts）をマスクにして、色は背景色で塗る */
+.wagara {
+  display: block;
+  -webkit-mask: var(--pattern) center top / var(--pattern-size) repeat;
+  mask: var(--pattern) center top / var(--pattern-size) repeat;
+}
+
+/* 落款。朱の地に文字を白く抜き、内側に細い枠を一本入れる */
+.seal {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  /* 手で彫った印らしく、四隅の丸みを不揃いにする */
+  border-radius: 5px 3px 6px 3px / 3px 6px 3px 5px;
+  background: var(--color-vermilion);
+  box-shadow:
+    inset 0 0 0 2.5px var(--color-vermilion),
+    inset 0 0 0 3.5px color-mix(in srgb, var(--seal-ink) 62%, transparent);
+  color: var(--seal-ink);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1;
+  transform: rotate(-3deg);
+  transition: transform 0.45s cubic-bezier(0.3, 0.9, 0.35, 1.2);
+}
+.group:hover .seal { transform: rotate(2deg) scale(1.05); }
+.seal-sm {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 3px 2px 3px 2px / 2px 3px 2px 3px;
+  box-shadow: none;
+  font-size: 12.5px;
+}
+
+/* ---------- 見出しの飾り（小枝と霞） ---------- */
+.page-crest { position: absolute; top: 0; right: 0; left: 0; pointer-events: none; }
+.page-crest .kasumi {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: clamp(150px, 21.7vw, 320px);
+  opacity: 0;
+  animation: fade-in 1.8s 0.2s ease-out forwards;
+}
+/* ナビの下から差し出す。右上の配色ボタンに枝が重ならない高さにする */
+.sprig {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  width: clamp(230px, 34vw, 440px);
+  height: auto;
+  transform-origin: 100% 18%;
+  animation: bough-sway 12s ease-in-out 3s infinite reverse;
+}
+
+/* ---------- About: 道具を家紋のように丸で囲む ---------- */
+.kamon-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 1.5rem 0.5rem;
+  max-width: 600px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.kamon-item { display: flex; flex-direction: column; align-items: center; gap: 0.7rem; color: var(--color-ink-soft); }
+.kamon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border: 1px solid color-mix(in srgb, currentColor 50%, transparent);
+  border-radius: 50%;
+}
+/* 内側にもう一重（細輪） */
+.kamon::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border-radius: 50%;
+}
+.kamon-label { color: var(--color-ink-faint); font-family: var(--font-latin); font-size: 12.5px; line-height: 1.25; letter-spacing: 0.1em; text-align: center; }
+
+/* ---------- Works: 和柄の帯を締めた札 ---------- */
+.work-list {
+  display: grid;
+  /* 四枚が二列二段に収まる幅。狭い画面では一列 */
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 26px;
+  margin-top: 3em;
+}
+.work-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  background: var(--card);
+  transition: transform 0.45s ease-in-out, border-color 0.45s ease-in-out, box-shadow 0.45s ease-in-out;
+}
+.work-card:hover,
+.book:hover {
+  transform: translateY(-5px);
+  border-color: color-mix(in srgb, var(--color-vermilion) 55%, transparent);
+  box-shadow: 0 14px 30px -18px color-mix(in srgb, var(--color-ink) 40%, transparent);
+}
+/* 帯。色は札ごとの --obi。墨と混ぜるので、夜は明るく、昼は深く出る */
+.work-obi {
+  position: relative;
+  height: 46px;
+  border-bottom: 1px solid color-mix(in srgb, var(--obi) 34%, transparent);
+  background: color-mix(in srgb, var(--obi) 15%, transparent);
+}
+.work-obi .wagara {
+  position: absolute;
+  inset: 0;
+  background-color: color-mix(in srgb, var(--obi) 64%, var(--color-ink));
+  opacity: 0.5;
+}
+/* 番付の短冊。帯の上から下げる */
+.work-no {
+  position: absolute;
+  top: -1px;
+  right: 1.5em;
+  padding: 0.95em 0.5em 0.75em;
+  border: 1px solid var(--color-line);
+  background: var(--color-paper);
+  color: var(--color-ink-soft);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.32em;
+  /* 縦書きのまま一行に収める（高さが足りないと一字ずつ折れてしまう） */
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+  transition: background-color var(--theme-fade, 0.5s) ease;
+}
+.work-body { display: flex; flex: 1; flex-direction: column; gap: 1em; padding: 1.5em 1.7em 1.7em; }
+.work-title { margin: 0; padding-right: 2.2em; font-size: 17.5px; font-weight: 600; letter-spacing: 0.12em; }
+
+/* ---------- Experience: 年ごとの年表 ---------- */
+.era-list { display: grid; gap: 2.8em; margin-top: 3em; }
+.era { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); column-gap: 1.5rem; }
+/* 年は、その年の項目を読んでいる間ついてくる */
+.era-head { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 0.6em; align-self: start; padding-top: 1px; }
+.era-year { font-family: var(--font-latin); font-size: 34px; font-weight: 500; line-height: 1; letter-spacing: 0.08em; }
+.era-wareki { color: var(--color-ink-faint); font-size: 11.5px; letter-spacing: 0.34em; }
+
+.footprint { position: relative; margin: 0; padding: 0 0 0 26px; list-style: none; }
+/* 墨の線。最後の年だけ、下へ向けてかすれて消える */
+.footprint::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  width: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-ink) 82%, transparent);
+}
+.era:last-child .footprint::before {
+  bottom: -2.5em;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--color-ink) 82%, transparent), transparent);
+}
+.fp-item { position: relative; padding: 0 0 2.2em 22px; }
+.fp-item:last-child { padding-bottom: 0.4em; }
+.fp-item::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: -26px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  transform: translateX(-3.5px);
+}
+/* 受賞のある項目は、点の代わりに朱の桜を置く */
+.fp-item.has-award::before,
+.award::before {
+  border-radius: 0;
+  background: var(--color-vermilion);
+  -webkit-mask: var(--sakura-mark) center / contain no-repeat;
+  mask: var(--sakura-mark) center / contain no-repeat;
+}
+.fp-item.has-award::before { top: 5px; width: 17px; height: 17px; transform: translateX(-7.5px); }
+/* いちばん新しい項目は朱の点が静かに鼓動する */
+.era:first-child .fp-item:first-child:not(.has-award)::before { background: var(--color-vermilion); }
+.era:first-child .fp-item:first-child::after {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: -26px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translateX(-3.5px);
+  animation: seal-pulse 2.8s ease-out 0.8s infinite;
+}
+.fp-date {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9em;
+  margin-bottom: 0.35em;
+  color: var(--color-vermilion);
+  font-family: var(--font-latin);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+}
+.fp-month-ja { color: var(--color-ink-faint); font-family: var(--font-mincho); font-size: 11px; font-weight: 400; letter-spacing: 0.3em; }
+.fp-text { display: block; color: var(--ink-body); font-size: 14.5px; line-height: 2; letter-spacing: 0.1em; }
+.award {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.3em 0.8em 0.3em 0.6em;
+  border: 1px solid color-mix(in srgb, var(--color-vermilion) 40%, transparent);
+  border-radius: 1px;
+  color: var(--color-vermilion);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+}
+.award::before { content: ""; flex: none; width: 10px; height: 10px; }
+
+@media (width <= 47.5rem) {
+  .era { grid-template-columns: minmax(0, 1fr); row-gap: 1.3em; }
+  .era-head { position: static; flex-direction: row; align-items: baseline; gap: 1em; }
+  .era-year { font-size: 28px; }
+}
+
+/* ---------- Output: 和綴じの冊子 ---------- */
+.book {
+  --thread: color-mix(in srgb, var(--color-ink-soft) 70%, transparent);
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  height: 100%;
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  background: var(--card);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.45s ease-in-out, border-color 0.45s ease-in-out, box-shadow 0.45s ease-in-out;
+}
+.book:hover { --thread: var(--color-vermilion); }
+/* 背。縦に走るかがり糸と、四つの綴じ目（四つ目綴じ） */
+.book-spine {
+  border-right: 1px solid var(--color-line);
+  background:
+    linear-gradient(var(--thread), var(--thread)) 13px 0 / 1px 100% no-repeat,
+    linear-gradient(var(--thread), var(--thread)) 0 9% / 13px 1px no-repeat,
+    linear-gradient(var(--thread), var(--thread)) 0 36% / 13px 1px no-repeat,
+    linear-gradient(var(--thread), var(--thread)) 0 64% / 13px 1px no-repeat,
+    linear-gradient(var(--thread), var(--thread)) 0 91% / 13px 1px no-repeat,
+    color-mix(in srgb, var(--color-ink) 6%, transparent);
+}
+.book-body { display: flex; flex-direction: column; gap: 1em; min-width: 0; padding: 1.1em; }
+.book-title { font-size: 14px; line-height: 1.95; letter-spacing: 0.08em; overflow-wrap: anywhere; transition: color 0.35s ease; }
+.book:hover .book-title { color: var(--color-vermilion); }
+
+/* ---------- フッター: 足もとの青海波 ---------- */
+.site-footer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4em;
+  overflow: hidden;
+  padding: 8vh 7vw calc(4em + 64px);
+  text-align: center;
+}
+/* 上へ向かって消えていく。和柄のマスクとは別に、親でぼかしのマスクをかける */
+.foot-waves {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 130px;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000 8%, transparent);
+  mask-image: linear-gradient(to top, #000 8%, transparent);
+}
+.foot-waves .wagara {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-ink);
+  opacity: 0.2;
+  -webkit-mask-position: center bottom;
+  mask-position: center bottom;
+}
+.site-footer > :not(.foot-waves) { position: relative; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bough,
+  .sprig,
+  .hero-mist { animation: none; opacity: 1; }
+  .page-crest .kasumi { animation: none; opacity: 1; }
 }

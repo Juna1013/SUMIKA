@@ -1,10 +1,16 @@
 ---
+import Kasumi from './Kasumi.astro';
+import Sprig from './Sprig.astro';
+import type { sprigArt } from '../utils/sakura-art';
+
 interface Props {
   id: string;
   ghost: string;
   eyebrow: string;
   title: string;
   ghostSide?: 'left' | 'right';
+  /** 見出しへ差し出す桜の小枝（別ページのみ）。霞も一緒に敷く */
+  sprig?: keyof typeof sprigArt;
 }
 
 const {
@@ -13,11 +19,18 @@ const {
   eyebrow,
   title,
   ghostSide = 'right',
+  sprig,
 } = Astro.props;
 ---
 
 <main class="relative z-5">
-  <section class="relative mx-auto min-h-[78svh] max-w-[1060px] px-[7vw] pt-[17vh] pb-[13vh] max-mobile:px-[8vw] max-mobile:pt-[14vh] max-mobile:pb-[10vh]" {id}>
+  {sprig && (
+    <div class="page-crest" aria-hidden="true">
+      <Kasumi />
+      <Sprig name={sprig} />
+    </div>
+  )}
+  <section class="relative mx-auto min-h-[78svh] max-w-[1060px] px-[7vw] pt-[17vh] pb-[13vh] max-mobile:px-[8vw] max-mobile:pt-[max(14vh,150px)] max-mobile:pb-[10vh]" {id}>
     <span
       class:list={[
         'pointer-events-none absolute top-1/2 -translate-y-1/2 text-[min(32vmin,320px)] leading-none font-semibold text-ink opacity-5 select-none max-mobile:text-[42vmin]',

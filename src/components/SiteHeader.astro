@@ -17,6 +17,9 @@ const navItems = [
 ] as const;
 ---
 
+<!-- スクロール中、ナビの後ろをぼかす層（global.css の .nav-veil） -->
+<div class="nav-veil" aria-hidden="true"></div>
+
 <nav class:list={[
   'site-nav fixed inset-x-0 top-0 z-40 flex items-center justify-between px-[4.5vw] py-[18px]',
   { immediate },
