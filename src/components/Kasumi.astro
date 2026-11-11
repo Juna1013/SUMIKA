@@ -1,0 +1,23 @@
+---
+/**
+ * すやり霞。絵巻や屏風で場面を区切る、角の丸い横長の霞。
+ * 帯を一段ずつずらして重ね、段のついた一つの霞にする。
+ * 帯どうしが重なっても濃くならないよう、色は不透明で塗り、
+ * 濃さは <g> にまとめてかける（global.css の .kasumi）。
+ */
+/** 一つの霞 = 上から順に重ねる帯 [x, 幅]。高さは H でそろえる */
+const H = 10;
+const CLOUDS: { y: number; bars: [number, number][] }[] = [
+  { y: 50, bars: [[-80, 300], [-20, 470], [130, 330], [260, 150]] },
+  { y: 152, bars: [[430, 330], [490, 480], [660, 290]] },
+  { y: 74, bars: [[880, 400], [960, 320], [1040, 200]] },
+];
+---
+<svg class="kasumi" viewBox="0 0 1200 260" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+  <g>
+    {CLOUDS.map((cloud) => cloud.bars.map(([x, w], i) => (
+      /* 継ぎ目に隙間が出ないよう、下の帯へ少しだけ重ねる */
+      <rect x={x} y={cloud.y + i * H} width={w} height={H + 0.6} rx={H / 2}/>
+    )))}
+  </g>
+</svg>

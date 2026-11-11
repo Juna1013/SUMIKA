@@ -41,7 +41,9 @@ BLOG セクションの記事一覧は、ビルド時に Zenn / Qiita の API �
 
 - レイアウトや余白: 各 Astro ファイルの Tailwind CSS ユーティリティ
 - カラーテーマ・マーカー・アニメーション: `src/styles/global.css`
-- 桜の配置・花びら・波紋・画面遷移などの動き: `src/scripts/main.js`
+- 桜の枝ぶりと花の配置、別ページの小枝: `src/data/sakura.ts`（絵そのものは `src/utils/sakura-art.ts` がビルド時に描きます）
+- 和柄（青海波・麻の葉・七宝・亀甲）: `src/utils/wagara.ts`
+- 波紋・画面遷移・スクロールで現れる動き: `src/scripts/main.js`
 - ファビコン（落款印風の桜ロゴ）: `public/favicon.svg`
 
 ## ディレクトリ構成
@@ -53,10 +55,10 @@ src/
 ├── pages/
 │   └── index.astro
 ├── scripts/
-│   └── main.js    # 桜の描画・花びら・波紋・ハッシュルーティング
+│   └── main.js    # 波紋・ハッシュルーティング・スクロール演出
 ├── styles/
 │   └── global.css
-└── utils/         # 日付整形・Zenn / Qiita のフィード取得
+└── utils/         # 桜の作画・和柄・日付と和暦・Zenn / Qiita のフィード取得
 public/
 └── favicon.svg
 ```

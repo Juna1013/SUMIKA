@@ -1,0 +1,35 @@
+---
+/**
+ * 別ページの見出しへ、画面の右上から差し出す桜の小枝。
+ * 絵はビルド時に描いてあり（sakura-art.ts）、花の型はヒーローと共有する。
+ * ページを開くたびに、枝が伸びて花が咲く。
+ */
+import { sprigArt } from '../utils/sakura-art';
+
+interface Props {
+  name: keyof typeof sprigArt;
+}
+const { name } = Astro.props;
+const art = sprigArt[name];
+const [width, height] = art.size;
+const maskId = `sprig-reveal-${name}`;
+---
+<svg class="sprig" viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
+  <defs>
+    <mask id={maskId} maskUnits="userSpaceOnUse" x="-20" y="-20" width={width + 60} height={height + 40}>
+      {art.branches.map((b) => <path class="stk" pathLength="1" style={`--dl:${b.delay}s`} stroke-width={b.revealWidth} d={b.d}/>)}
+    </mask>
+  </defs>
+  <g mask={`url(#${maskId})`}>
+    {art.branches.map((b) => <path class={`ink-${b.tone}`} d={b.fill}/>)}
+    {art.branches.map((b) => b.bark.light && <path class="bark-light" stroke-width={b.bark.lightWidth} d={b.bark.light}/>)}
+  </g>
+  <path class="stalk" style="--dl:.9s" d={art.stalks}/>
+  <g>
+    {art.flowers.map((fl) => (
+      <g transform={fl.transform}>
+        <use href={fl.href} class="bloom-unit" style={`--bd:${fl.delay}s`}/>
+      </g>
+    ))}
+  </g>
+</svg>

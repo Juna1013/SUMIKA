@@ -1,0 +1,35 @@
+---
+/**
+ * 舞う花びら。動かすのは transform / translate / opacity だけなので、
+ * 描き直しは起きず合成だけで動く。
+ *
+ * 一枚は二重になっている。外側（.petal-fall）が風に流されながら落ち、
+ * 内側（.petal）が左右へ滑りつつ傾く（flutter）か、裏返り続ける（tumble）。
+ */
+import { fallingPetals, strayPetals } from '../utils/sakura-art';
+
+interface Props {
+  /** hero: ヒーローに降らせる。stray: 別ページにまばらに降らせる */
+  mode?: 'hero' | 'stray';
+}
+const { mode = 'hero' } = Astro.props;
+const petals = mode === 'hero' ? fallingPetals : strayPetals;
+---
+<div
+  class:list={[
+    'petal-layer pointer-events-none overflow-hidden',
+    mode === 'hero' ? 'absolute inset-0 z-3' : 'petal-layer-stray fixed inset-0 z-1',
+  ]}
+  aria-hidden="true"
+>
+  {petals.map((p) => (
+    <span class="petal-fall" style={`--x0:${p.x}vw;--drift:${p.drift}vw;--dur:${p.duration}s;--delay:${p.delay}s`}>
+      <span
+        class:list={['petal', p.tumble ? 'is-tumble' : 'is-flutter', `is-${p.depth}`]}
+        style={`width:${p.size}px;--amp:${p.amp}px;--sway:${p.sway}s;--sd:${p.swayDelay}s;--tx:${p.tiltX}deg;--ty:${p.tiltY}deg;--spin:${p.spin}s;--rest:${p.rest}deg;color:var(--fall-${p.tone})`}
+      >
+        <svg viewBox="-7 -14.4 14 15"><use href="#fallPetal"/></svg>
+      </span>
+    </span>
+  ))}
+</div>

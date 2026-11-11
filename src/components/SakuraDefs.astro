@@ -1,0 +1,109 @@
+---
+/**
+ * 桜の共有の形（花の型・花びら・光）。
+ *
+ * ヒーローの桜も別ページの枝飾りも、ここで定義した型を <use> で写す。
+ * どのページでも参照できるよう、ページの切替で隠れる .view の外に一度だけ置く。
+ */
+import { budShapes, fallingPetalPath, frontShapes, sideShapes } from '../utils/sakura-art';
+
+/** 花の色（0 淡紅 / 1 濃紅 / 2 白） */
+const KINDS = [0, 1, 2];
+/** 花びら五枚それぞれの濃さ。重なりに奥行きが出るよう少しずつ変える */
+const PETAL_OPACITY = [1, 0.93, 0.98, 0.9, 0.96];
+---
+<svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- 花びらの色。花の芯から縁へ、紅が抜けて白んでいく -->
+    {KINDS.map((k) => (
+      <radialGradient id={`pg${k}`} gradientUnits="userSpaceOnUse" cx="0" cy="0" r="14.6">
+        <stop offset=".1" class={`pg${k}-core`}/>
+        <stop offset=".42" class={`pg${k}-mid`}/>
+        <stop offset=".86" class={`pg${k}-edge`}/>
+      </radialGradient>
+    ))}
+    <!-- 蕾。萼に近い根もとが濃く、先がほころんで淡い -->
+    <linearGradient id="budGrad" gradientUnits="userSpaceOnUse" x1="0" y1="-2" x2="0" y2="-11">
+      <stop offset="0" class="bud-low"/>
+      <stop offset="1" class="bud-high"/>
+    </linearGradient>
+    <!-- 舞う花びらの、先へ向かう白み -->
+    <linearGradient id="petalSheen" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="-13.4">
+      <stop offset=".05" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="1" stop-color="#fff" stop-opacity=".62"/>
+    </linearGradient>
+    <g id="fallPetal">
+      <path d={fallingPetalPath} fill="currentColor"/>
+      <path d={fallingPetalPath} fill="url(#petalSheen)"/>
+    </g>
+
+    <!-- 夜・朝・夕に花のまわりへ灯る光。花ごとにぼかしをかけると重いので、
+         ぼかしではなく放射グラデーションの円を花の後ろに置く -->
+    <radialGradient id="bloomGlow">
+      <stop offset="0" class="glow-stop"/>
+      <stop offset=".5" class="glow-stop"/>
+      <stop offset=".68" class="glow-stop" stop-opacity=".5"/>
+      <stop offset=".85" class="glow-stop" stop-opacity=".16"/>
+      <stop offset="1" class="glow-stop" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- 正面の花 -->
+    {frontShapes.map((shape, v) => (
+      <Fragment>
+        {shape.petals.map((d, p) => <path id={`fp-${v}-${p}`} d={d}/>)}
+        <path id={`fs-${v}`} d={shape.sepals}/>
+        <path id={`fc-${v}`} d={shape.crease}/>
+        <path id={`ft-${v}`} d={shape.stamens}/>
+        <path id={`fa-${v}`} d={shape.anthers}/>
+        {KINDS.map((k) => (
+          <g id={`bl-f${k}-${v}`}>
+            <circle class="bloom-glow" r="23"/>
+            <use href={`#fs-${v}`} class="bloom-calyx"/>
+            <g class="bloom-petals" fill={`url(#pg${k})`}>
+              {shape.petals.map((_, p) => <use href={`#fp-${v}-${p}`} opacity={PETAL_OPACITY[p]}/>)}
+            </g>
+            <use href={`#fc-${v}`} class="bloom-crease"/>
+            <circle class="bloom-heart" r="2.3"/>
+            <use href={`#ft-${v}`} class="bloom-stamen"/>
+            <use href={`#fa-${v}`} class="bloom-anther"/>
+            <circle class="bloom-pistil" r=".8"/>
+          </g>
+        ))}
+      </Fragment>
+    ))}
+
+    <!-- 横顔の花 -->
+    {sideShapes.map((shape, v) => (
+      <Fragment>
+        {shape.back.map((d, p) => <path id={`sb-${v}-${p}`} d={d}/>)}
+        {shape.front.map((d, p) => <path id={`sf-${v}-${p}`} d={d}/>)}
+        <path id={`sc-${v}`} d={shape.calyx}/>
+        <path id={`st-${v}`} d={shape.stamens}/>
+        <path id={`sa-${v}`} d={shape.anthers}/>
+        {KINDS.map((k) => (
+          <g id={`bl-s${k}-${v}`}>
+            <circle class="bloom-glow" cy="-9" r="19"/>
+            <g class="bloom-petals bloom-back" fill={`url(#pg${k})`}>
+              {shape.back.map((_, p) => <use href={`#sb-${v}-${p}`}/>)}
+            </g>
+            <use href={`#st-${v}`} class="bloom-stamen"/>
+            <use href={`#sa-${v}`} class="bloom-anther"/>
+            <g class="bloom-petals" fill={`url(#pg${k})`}>
+              {shape.front.map((_, p) => <use href={`#sf-${v}-${p}`} opacity={PETAL_OPACITY[p + 1]}/>)}
+            </g>
+            <use href={`#sc-${v}`} class="bloom-calyx"/>
+          </g>
+        ))}
+      </Fragment>
+    ))}
+
+    <!-- 蕾 -->
+    {budShapes.map((shape, v) => (
+      <g id={`bl-b-${v}`}>
+        <path class="bud-body" fill="url(#budGrad)" d={shape.body}/>
+        <path class="bud-fold" d={shape.fold}/>
+        <path class="bloom-calyx" d={shape.calyx}/>
+      </g>
+    ))}
+  </defs>
+</svg>
